@@ -1,0 +1,139 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('$assets/fonts/Inter-VariableFont_slnt,wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('$assets/fonts/SpaceGrotesk-VariableFont_wght.ttf')
+    format('truetype-variations');
+  font-weight: 300 700;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
+  }
+}
+
+@layer components {
+  .tag {
+    @apply bg-white/8 text-zinc-300 px-2 py-1 text-xs font-medium rounded-md whitespace-nowrap select-none;
+  }
+
+  .tag-selected {
+    @apply tag bg-white text-zinc-900;
+  }
+
+  .seperator {
+    @apply w-full h-[1px] bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-40;
+  }
+
+  .seperator-vertical {
+    @apply h-full w-[1px] bg-gradient-to-b from-white/0 via-white/50 to-white/0 opacity-40;
+  }
+
+  .btn-primary {
+    @apply relative rounded-full p-4 block w-full border border-white/10 text-white font-bold transition-all;
+    /* border: 1px solid rgba(255, 255, 255, 0.08); */
+    background: radial-gradient(
+          59.99% 298.08% at 55.32% 100%,
+          rgba(143, 49, 238, 0.48) 0%,
+          rgba(101, 16, 186, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+        42.55% 307.69% at 43.48% 100%,
+        rgba(118, 88, 220, 0.67) 0%,
+        rgba(16, 119, 239, 0) 100%
+      ),
+      #351c87;
+  }
+
+  .btn-primary:active:not([disabled]) {
+    box-shadow: inset 1px 1px 4px 0 rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 1) !important;
+    transform: translateY(1px);
+  }
+
+  .btn-primary:hover:not([disabled]) {
+    background: radial-gradient(
+          69.99% 312.08% at 30.32% 100%,
+          rgba(143, 49, 238, 0.48) 0%,
+          rgba(101, 16, 186, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+        60.55% 250.69% at 65.48% 100%,
+        rgba(118, 88, 220, 0.67) 0%,
+        rgba(16, 119, 239, 0) 100%
+      ),
+      #351c87;
+  }
+
+  .btn-primary[disabled],
+  .btn-primary-icon[disabled] {
+    @apply opacity-50;
+  }
+
+  .btn-primary-icon {
+    @apply p-[7px] rounded-lg border border-white/10;
+    background: radial-gradient(
+          100.1% 128.12% at 55.32% 100%,
+          rgba(143, 49, 238, 0.58) 0%,
+          rgba(101, 16, 186, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+          64.08% 171.88% at 43.48% 100%,
+          rgba(118, 88, 220, 0.67) 0%,
+          rgba(16, 119, 239, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+          58.21% 64.3% at 49.58% 77.88%,
+          rgba(255, 255, 255, 0.28) 0%,
+          rgba(255, 255, 255, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      #342077;
+  }
+
+  .btn-primary-icon:hover:not([disabled]) {
+    background: radial-gradient(
+          80% 200.12% at 60% 100%,
+          rgba(143, 49, 238, 0.58) 0%,
+          rgba(101, 16, 186, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+          80.08% 100.88% at 65.48% 100%,
+          rgba(118, 88, 220, 0.67) 0%,
+          rgba(16, 119, 239, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      radial-gradient(
+          58.21% 64.3% at 49.58% 77.88%,
+          rgba(255, 255, 255, 0.28) 0%,
+          rgba(255, 255, 255, 0) 100%
+        )
+        /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */,
+      #342077;
+  }
+
+  .btn-primary-icon:active:not([disabled]) {
+    box-shadow: inset 1px 1px 2px 0 rgb(0 0 0 / 25%);
+    border-color: rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(1px);
+  }
+}

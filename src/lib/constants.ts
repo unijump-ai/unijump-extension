@@ -1,0 +1,1 @@
+export const SHORTCUT_COMMAND_ID = 'OPEN_UNITEXT';

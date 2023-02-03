@@ -1,0 +1,65 @@
+import browser from 'webextension-polyfill';
+import api from '$lib/api';
+import { SHORTCUT_COMMAND_ID } from '$lib/constants';
+import { listenConnection, listenMessage, sendMessageToTab } from '$lib/messaging';
+import { Connection, Message } from '$lib/messaging/messaging.constants';
+
+const MENU_ITEM_ID = 'unitext.ai';
+
+browser.runtime.onInstalled.addListener(() => {
+  console.debug('Extension installed');
+});
+
+browser.contextMenus.create({
+  id: MENU_ITEM_ID,
+  title: 'UniText',
+  contexts: ['all'],
+});
+
+browser.browserAction.onClicked.addListener(async (tab) => {
+  sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
+});
+
+browser.contextMenus.onClicked.addListener(async (info, tab) => {
+  const { menuItemId } = info;
+
+  if (menuItemId !== MENU_ITEM_ID) return;
+
+  sendMessageToTab(tab.id, Message.OPEN_MODAL);
+});
+
+listenMessage(Message.GET_SESSION, async () => {
+  try {
+    const session = await api.getSession();
+
+    return {
+      message: session,
+    };
+  } catch (error) {
+    return {
+      error: error.message || error,
+    };
+  }
+});
+
+browser.runtime.onConnect.addListener((port) => {
+  port.onDisconnect.addListener(() => {
+    api.abortRequests();
+  });
+
+  listenConnection(port, Connection.CHAT, async (message, respond, error) => {
+    try {
+      await api.conversation(message, (answer, done) => {
+        respond({ answer, done });
+      });
+    } catch (err) {
+      error(err);
+    }
+  });
+});
+
+browser.commands.onCommand.addListener(async (command, tab) => {
+  if (command === SHORTCUT_COMMAND_ID) {
+    sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
+  }
+});

@@ -1,0 +1,53 @@
+{
+  "name": "unitext.ai",
+  "version": "0.0.1",
+  "displayName": "UniText",
+  "author": "Doga Genc <dogagenc@gmail.com>",
+  "description": "UniText Browser Extension",
+  "scripts": {
+    "build:v2": "MANIFEST_VERSTION=2 vite build",
+    "build:v3": "MANIFEST_VERSION=3 vite build",
+    "watch:v2": "MANIFEST_VERSION=2 vite build --watch",
+    "watch:v3": "MANIFEST_VERSION=3 vite build --watch",
+    "dev": "vite --port=2222",
+    "serve:firefox": "web-ext run --start-url \"about:debugging#/runtime/this-firefox\"  --source-dir ./extension-v2",
+    "serve:chrome": "web-ext run -t chromium --start-url \"https://google.com\" --source-dir ./dist/",
+    "check": "svelte-check --tsconfig ./tsconfig.json"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@samrum/vite-plugin-web-extension": "^3.0.0",
+    "@steeze-ui/heroicons": "^2.2.1",
+    "@steeze-ui/svelte-icon": "^1.3.2",
+    "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
+    "@tsconfig/svelte": "^3.0.0",
+    "@types/chrome": "^0.0.206",
+    "@types/webextension-polyfill": "^0.9.2",
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.32.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.3",
+    "prettier-plugin-svelte": "^2.9.0",
+    "svelte": "^3.50.0",
+    "svelte-check": "^3.0.1",
+    "svelte-highlight": "^7.1.2",
+    "svelte-preprocess": "^5.0.0",
+    "tailwindcss": "^3.2.4",
+    "tslib": "^2.4.0",
+    "typescript": "^4.9.4",
+    "vite": "~4.0.3",
+    "vite-imagetools": "^4.0.18",
+    "vite-plugin-svelte-svg": "^2.2.1",
+    "web-ext": "^7.4.0"
+  },
+  "dependencies": {
+    "eventsource-parser": "^0.0.5",
+    "expiry-map": "^2.0.0",
+    "svelte-markdown": "^0.2.3",
+    "webextension-polyfill": "^0.10.0"
+  },
+  "type": "module"
+}
