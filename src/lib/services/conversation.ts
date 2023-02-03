@@ -1,8 +1,8 @@
 import type { ConversationParams } from '$lib/api';
 import type { ChatMessage, ChatMessageSender } from '$lib/types';
 import type { ConnectionHandler } from '$lib/messaging/messaging.types';
-import { openConnection } from '$lib/messaging';
-import { Connection } from '$lib/messaging/messaging.constants';
+import { openConnection, sendMessage } from '$lib/messaging';
+import { Connection, Message } from '$lib/messaging/messaging.constants';
 import { StoreService } from './store';
 import userAvatar from '$assets/images/avatar.png';
 import chatgptAvatar from '$assets/images/chatgptavatar.png';
@@ -154,6 +154,13 @@ export class ConversationService extends StoreService<ConversationState> {
   }
 
   clear() {
+    if (this.id) {
+      sendMessage(Message.SET_CONVERSATION_PROPERTY, {
+        conversationId: this.id,
+        props: { is_visible: false },
+      });
+    }
+
     this.incomingMessage = null;
     this.outgoingMessage = null;
     this.aiMessages = [];

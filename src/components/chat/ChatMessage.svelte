@@ -2,7 +2,6 @@
   import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
   import type { ChatMessage } from '$lib/types';
-  import IconButton from '$components/elements/IconButton.svelte';
 
   export let message: ChatMessage;
 

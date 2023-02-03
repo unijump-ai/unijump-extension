@@ -14,7 +14,7 @@
     const onVisibilityChange = async () => {
       if (document.visibilityState !== 'visible') return;
 
-      const { error } = await sendMessage(Message.GET_SESSION);
+      const { error } = await sendMessage(Message.GET_SESSION, undefined);
 
       if (error) {
         return;

@@ -17,13 +17,13 @@
   }
 
   onMount(() => {
-    const unsubscribeOpenMessage = listenMessage(Message.OPEN_MODAL, (message) => {
+    const unsubscribeOpenMessage = listenMessage(Message.OPEN_MODAL, () => {
       const selection = window.getSelection().toString();
       selectedText.set(selection || '');
       visible = true;
     });
 
-    const unsubscribeToggleMessage = listenMessage(Message.TOGGLE_MODAL, (message) => {
+    const unsubscribeToggleMessage = listenMessage(Message.TOGGLE_MODAL, () => {
       if (visible) {
         closeModal();
         return;

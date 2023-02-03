@@ -1,4 +1,4 @@
-import type { ApiSession, ConversationParams } from '$lib/api';
+import type { ApiSession, ConversationParams, ConversationProperty } from '$lib/api';
 import type { Answer } from '$lib/types';
 import type { Connection, Message } from './messaging.constants';
 
@@ -16,12 +16,17 @@ export type MessagePayloadMap = {
     selectionText?: string;
   };
   [Message.GET_SESSION]: void;
+  [Message.SET_CONVERSATION_PROPERTY]: {
+    conversationId: string;
+    props: Partial<ConversationProperty>;
+  };
 };
 
 export type MessageResponseMap = {
   [Message.OPEN_MODAL]: void;
   [Message.TOGGLE_MODAL]: void;
   [Message.GET_SESSION]: ApiSession;
+  [Message.SET_CONVERSATION_PROPERTY]: boolean;
 };
 
 export type ConnectionPayloadMap = {

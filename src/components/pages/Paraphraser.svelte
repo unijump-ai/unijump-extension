@@ -22,6 +22,7 @@
   $: output = $conversationStore?.incomingMessage?.text || aiMessage?.text || '';
 
   onDestroy(() => {
+    conversationService.clear();
     conversationService.destroy();
   });
 
@@ -39,6 +40,8 @@
   }
 
   function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
+    conversationService.clear();
+
     const { initial, input } = evt.detail;
 
     const text = !aiMessage ? initial : input;

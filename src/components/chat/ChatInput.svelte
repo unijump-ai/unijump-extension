@@ -39,6 +39,9 @@
 
   async function onChatInputFocus() {
     await sleep(200);
+
+    if (!chatInput) return;
+
     chatInput.selectionStart = chatInput.selectionEnd = 10000;
   }
 </script>

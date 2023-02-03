@@ -44,7 +44,7 @@ export const sendMessage = async <
   K extends keyof MessageResponseMap
 >(
   message: T,
-  payload?: MessagePayload<T>
+  payload: MessagePayload<T>
 ): Promise<MessageResponse<K>> => {
   const response = await runtime.sendMessage({ type: message, payload });
 

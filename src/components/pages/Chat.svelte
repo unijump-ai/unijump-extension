@@ -23,6 +23,7 @@
   $: onConversationChange($conversationStore);
 
   onDestroy(() => {
+    conversationService.clear();
     conversationService.destroy();
   });
 

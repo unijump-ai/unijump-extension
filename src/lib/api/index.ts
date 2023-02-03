@@ -16,6 +16,11 @@ export interface ConversationParams {
   messageId?: string;
 }
 
+export interface ConversationProperty {
+  is_visible: boolean;
+  title: string;
+}
+
 export interface ApiSession {
   accessToken: string;
   expires: string;
@@ -98,6 +103,15 @@ export class Api {
     );
   }
 
+  private patch<T>(path: string, body: T) {
+    const bodyString = JSON.stringify(body);
+
+    return this.fetch(path, {
+      body: bodyString,
+      method: 'PATCH',
+    });
+  }
+
   abortRequests() {
     this.abortController?.abort();
   }
@@ -132,6 +146,10 @@ export class Api {
     setCache(CacheKey.SESSION, session);
 
     return session;
+  }
+
+  setConversationProperty(conversationId: string, props: Partial<ConversationProperty>) {
+    return this.patch(`/backend-api/conversation/${conversationId}`, props);
   }
 
   conversation(
@@ -169,7 +187,6 @@ export class Api {
           return;
         }
 
-        console.log('payload', payload);
         const text = message.content?.parts?.[0];
 
         if (text) {

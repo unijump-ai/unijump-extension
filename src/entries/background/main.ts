@@ -35,17 +35,27 @@ listenMessage(Message.GET_SESSION, async () => {
     return {
       message: session,
     };
-  } catch (error) {
+  } catch (err) {
     return {
-      error: error.message || error,
+      error: err.message || err,
     };
   }
 });
 
+listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props }) => {
+  try {
+    await api.setConversationProperty(conversationId, props);
+    return { message: true };
+  } catch (err) {
+    return { error: err.message || err };
+  }
+});
+
 browser.runtime.onConnect.addListener((port) => {
-  port.onDisconnect.addListener(() => {
-    api.abortRequests();
-  });
+  // TODO: This prevents sending remove request after close
+  // port.onDisconnect.addListener(() => {
+  //   api.abortRequests();
+  // });
 
   listenConnection(port, Connection.CHAT, async (message, respond, error) => {
     try {

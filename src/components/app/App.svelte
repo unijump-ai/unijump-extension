@@ -14,7 +14,7 @@
   onMount(checkSession);
 
   async function checkSession() {
-    const { message, error } = await sendMessage(Message.GET_SESSION);
+    const { message, error } = await sendMessage(Message.GET_SESSION, undefined);
 
     if (error) {
       errorStore.set(error);
