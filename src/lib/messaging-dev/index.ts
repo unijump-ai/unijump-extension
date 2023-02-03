@@ -92,7 +92,7 @@ export const openConnection = <T extends keyof ConnectionPayloadMap>(
   const sendMessages = (_type: typeof type, _callback: typeof callback) => {
     const messages = devMessages[type];
     messages.forEach((message: any, index: number) => {
-      const timeout = index * 3000 + 3000;
+      const timeout = index * 1000 + 1000;
       setTimeout(() => callback(message), timeout);
     });
   };

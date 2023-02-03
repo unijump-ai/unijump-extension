@@ -1,8 +1,13 @@
 <script lang="ts">
   import Markdown from '$components/elements/Markdown.svelte';
+  import IconCopy from '$assets/icons/copy.svg?component';
   import type { ChatMessage } from '$lib/types';
 
   export let message: ChatMessage;
+
+  function copyMessage() {
+    navigator.clipboard.writeText(message.text);
+  }
 </script>
 
 <div class="relative">
@@ -12,7 +17,7 @@
     alt="avatar"
   />
   <div
-    class="font-medium inline-flex m-0 px-4 py-3 max-w-full border-1 border-white/10 rounded-[10px] {message
+    class="font-medium relative inline-flex m-0 px-4 py-3 max-w-full border-1 border-white/10 rounded-[10px] {message
       .sender.role === 'user'
       ? 'bg-darkPurple-600'
       : 'bg-white/8'}"
@@ -28,7 +33,17 @@
         <span class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse" />
       </p>
     {:else}
-      <Markdown source={message.text} />
+      {#if message.sender.role !== 'user' && !message.writing}
+        <button
+          class="absolute right-2 top-2 p-1 opacity-30 hover:opacity-100 transition-all"
+          on:click={copyMessage}
+        >
+          <IconCopy width={16} height={16} />
+        </button>
+      {/if}
+      <div class={message.sender.role !== 'user' ? 'pt-1' : ''}>
+        <Markdown source={message.text} />
+      </div>
     {/if}
   </div>
 </div>
