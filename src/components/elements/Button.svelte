@@ -1,5 +1,20 @@
+<script lang="ts">
+  import { inlineClass } from '$lib/utils';
+
+  export let size: 'xs' | 'sm' | 'md' = 'md';
+  export let disabled = false;
+
+  $: buttonClasses = inlineClass({
+    'py-2.5 px-4': size === 'md',
+    'py-1.5 px-3': size === 'sm',
+    'opacity-50 cursor-auto': disabled,
+    'hover:bg-white/20': !disabled,
+  });
+</script>
+
 <button
-  class="btn font-medium text-sm text-white flex border border-white/10 py-[10px] px-6 rounded-full w-full justify-center items-center bg-white/8 hover:bg-white/20 transition-all"
+  class="btn font-medium text-sm text-white cursor flex ring-1 ring-inset ring-white/10 rounded-full w-full justify-center items-center bg-white/8 transition-all {buttonClasses}"
+  {disabled}
   {...$$restProps}
   on:click
 >

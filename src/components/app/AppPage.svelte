@@ -14,7 +14,10 @@
 
 <div class="grid grid-rows-[60px_1fr] h-full">
   <header class="relative flex justify-between items-center px-6">
-    <h1 class="text-xl font-semibold">{title}</h1>
+    <h1 class="flex-1 text-xl font-semibold">{title}</h1>
+    <div class="mr-4">
+      <slot name="header-actions" />
+    </div>
     <IconButton on:click={onClose}>
       <IconClose width={16} />
     </IconButton>

@@ -2,6 +2,7 @@
   import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
   import type { ChatMessage } from '$lib/types';
+  import IconButton from '$components/elements/IconButton.svelte';
 
   export let message: ChatMessage;
 
@@ -22,7 +23,7 @@
       ? 'bg-darkPurple-600'
       : 'bg-white/8'}"
   >
-    {#if message.writing}
+    {#if message.status === 'pending'}
       <p class="flex gap-0.5">
         <span
           class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse animation-delay-500"
@@ -33,17 +34,15 @@
         <span class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse" />
       </p>
     {:else}
-      {#if message.sender.role !== 'user' && !message.writing}
+      {#if message.sender.role !== 'user' && message.status === 'finished'}
         <button
-          class="absolute right-2 top-2 p-1 opacity-30 hover:opacity-100 transition-all"
+          class="absolute -right-8 top-0 p-2 opacity-30 hover:opacity-100 transition-all"
           on:click={copyMessage}
         >
           <IconCopy width={16} height={16} />
         </button>
       {/if}
-      <div class={message.sender.role !== 'user' ? 'pt-1' : ''}>
-        <Markdown source={message.text} />
-      </div>
+      <Markdown source={message.text} />
     {/if}
   </div>
 </div>

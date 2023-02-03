@@ -5,6 +5,7 @@
 
   export let disabled = false;
   export let inputText = '';
+  export const focus = focusInput;
 
   const dispatch = createEventDispatcher();
 
@@ -13,15 +14,19 @@
 
   onMount(async () => {
     await sleep(100);
-    chatInput.focus();
+    focusInput();
   });
+
+  function focusInput() {
+    chatInput.focus();
+  }
 
   function sendMessage() {
     if (disableSend) return;
 
     dispatch('message', inputText);
     inputText = '';
-    chatInput.focus();
+    focusInput();
   }
 
   function onChatKeydown(evt: KeyboardEvent) {

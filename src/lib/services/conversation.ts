@@ -73,14 +73,14 @@ export class ConversationService extends StoreService<ConversationState> {
     text: string,
     sender: ChatMessageSender,
     id = this.createMessageId(),
-    writing?: boolean
+    status?: ChatMessage['status']
   ): ChatMessage {
     return {
       text,
       sender,
       id,
       created: Date.now().toString(),
-      writing,
+      status,
     };
   }
 
@@ -111,7 +111,7 @@ export class ConversationService extends StoreService<ConversationState> {
     const chatMessage = this.createChatMessage(text, this.getSender());
     const connectionMessage = this.createConversationPayload(chatMessage);
     this.outgoingMessage = chatMessage;
-    this.incomingMessage = this.createChatMessage('...', this.getAiSender(), '', true);
+    this.incomingMessage = this.createChatMessage('', this.getAiSender(), '', 'pending');
     this.setStore();
 
     if (this.connectionHandler) {
@@ -131,7 +131,7 @@ export class ConversationService extends StoreService<ConversationState> {
           this.userMessages.push(this.outgoingMessage);
           this.outgoingMessage = null;
 
-          this.aiMessages.push(this.incomingMessage);
+          this.aiMessages.push({ ...this.incomingMessage, status: 'finished' });
           this.incomingMessage = null;
           this.setStore();
           return;
@@ -140,7 +140,8 @@ export class ConversationService extends StoreService<ConversationState> {
         this.incomingMessage = this.createChatMessage(
           payload.answer.text,
           this.getAiSender(),
-          payload.answer.messageId
+          payload.answer.messageId,
+          'writing'
         );
         this.id = payload.answer.conversationId;
         this.setStore();
@@ -150,5 +151,14 @@ export class ConversationService extends StoreService<ConversationState> {
 
   destroy() {
     this.connectionHandler?.disconnect();
+  }
+
+  clear() {
+    this.incomingMessage = null;
+    this.outgoingMessage = null;
+    this.aiMessages = [];
+    this.userMessages = [];
+    this.id = undefined;
+    this.setStore();
   }
 }

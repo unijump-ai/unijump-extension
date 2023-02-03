@@ -22,7 +22,7 @@ export interface ChatMessage {
   id: string;
   text: string;
   created: string;
-  writing?: boolean;
+  status: 'pending' | 'writing' | 'finished';
 }
 
 export interface ChatConversation {

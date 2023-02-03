@@ -3,22 +3,23 @@
   import { onDestroy, tick } from 'svelte';
   import AppPage from '$components/app/AppPage.svelte';
   import ChatInput from '$components/chat/ChatInput.svelte';
-  import { Scroller } from '$components/elements';
+  import { Button, Scroller } from '$components/elements';
   import Conversation from '$components/chat/Conversation.svelte';
   import {
     ConversationService,
     type ConversationState,
   } from '$lib/services/conversation';
   import { errorStore, selectedText } from '$lib/store';
+  import IconPlus from '$assets/icons/plus-circle.svg?component';
 
   const conversationService = new ConversationService();
+  let focusInput: () => void;
   let scrollerController: ScrollerController | null = null;
   let inputText = $selectedText || '';
 
   const { store: conversationStore } = conversationService;
 
-  $: disableSend =
-    $conversationStore.incomingMessage || $conversationStore.outgoingMessage;
+  $: messaging = $conversationStore.incomingMessage || $conversationStore.outgoingMessage;
   $: onConversationChange($conversationStore);
 
   onDestroy(() => {
@@ -43,9 +44,19 @@
 
     conversationService.sendMessage(text);
   }
+
+  function newChat() {
+    conversationService.clear();
+    focusInput?.();
+  }
 </script>
 
 <AppPage title="Chat" on:close>
+  <svelte:fragment slot="header-actions">
+    <Button size="sm" disabled={!!messaging} on:click={newChat}>
+      <IconPlus width={16} /> New Chat
+    </Button>
+  </svelte:fragment>
   {#if $conversationStore}
     <div class="h-full w-full relative">
       <Scroller bind:scrollerController>
@@ -59,8 +70,9 @@
       </Scroller>
       <ChatInput
         {inputText}
-        disabled={!!($errorStore || disableSend)}
+        disabled={!!($errorStore || messaging)}
         on:message={onMessageSend}
+        bind:focus={focusInput}
       />
     </div>
   {/if}

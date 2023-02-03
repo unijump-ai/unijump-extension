@@ -7,8 +7,8 @@
 
 <Highlight code={text} />
 
-<style lang="postcss">
-  :global(code.hljs) {
+<style lang="postcss" global>
+  code.hljs {
     @apply rounded-md mt-2 mb-4 text-xs leading-5;
   }
 </style>
