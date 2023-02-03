@@ -123,6 +123,8 @@ export class ConversationService extends StoreService<ConversationState> {
       connectionMessage,
       (payload, error) => {
         if (error) {
+          this.outgoingMessage = null;
+          this.incomingMessage = null;
           this.setStore(error);
           return;
         }

@@ -55,7 +55,10 @@ export interface PortMessageEvent<T extends keyof ConnectionMessageMap> {
 export interface PortPayloadEvent<T extends keyof ConnectionPayloadMap> {
   type: T;
   payload: ConnectionPayloadMap[T];
-  error: any;
+  error: {
+    name: string;
+    message: string;
+  };
 }
 
 export interface MessageResponse<T extends keyof MessageResponseMap> {

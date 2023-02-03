@@ -49,8 +49,8 @@ export const sendMessage = async <
   const response = await runtime.sendMessage({ type: message, payload });
 
   if (response.error) {
-    const internalException = getExceptionByName(response.error);
-    const exception = new (internalException || Error)();
+    const internalException = getExceptionByName(response.error.name);
+    const exception = new (internalException || Error)(response.error.message);
     return { error: exception };
   }
 
@@ -80,7 +80,9 @@ export const listenConnection = <T extends keyof ConnectionMessageMap>(
     const respond = (payload: ConnectionPayloadMap[T]) =>
       port.postMessage({ type, payload });
 
-    const error = (err: Error) => port.postMessage({ error: err.message, type });
+    const error = (err: Error) => {
+      port.postMessage({ error: { name: err.name, message: err.message }, type });
+    };
 
     callback(portPayloadEvent.payload, respond, error);
   });
@@ -97,7 +99,9 @@ export const openConnection = <T extends keyof ConnectionPayloadMap>(
     if (portMessageEvent.type !== type) return;
 
     const error = portMessageEvent.error
-      ? new (getExceptionByName(portMessageEvent.error) || Error)()
+      ? new (getExceptionByName(portMessageEvent.error.name) || Error)(
+          portMessageEvent.error.message
+        )
       : undefined;
 
     callback(portMessageEvent.payload, error);

@@ -1,4 +1,4 @@
-import { SseException } from '$lib/exceptions';
+import { ApiException } from '$lib/exceptions';
 import { Connection } from '$lib/messaging/messaging.constants';
 import type {
   ConnectionPayloadMap,
@@ -120,5 +120,5 @@ export const sendMessage = <T extends keyof MessagePayloadMap>(
     return { message };
   }
 
-  return { error: new SseException(), message };
+  return { error: new ApiException('Not fund'), message };
 };

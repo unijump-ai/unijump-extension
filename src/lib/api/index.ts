@@ -1,6 +1,7 @@
 import type { Answer } from '$lib/types';
 import { CacheKey, getCache, setCache } from '$lib/cache';
 import {
+  ApiException,
   CloudflareException,
   ServiceBusyException,
   SseException,
@@ -78,6 +79,12 @@ export class Api {
     const response = await fetch(this.getFullUrl(path), requestOptions);
 
     if (!response.ok) {
+      const resBody = await response.json();
+
+      if (resBody?.detail) {
+        throw new ApiException(resBody.detail);
+      }
+
       throw new SseException();
     }
 
@@ -132,6 +139,12 @@ export class Api {
 
       if (response.status === 405) {
         throw new ServiceBusyException();
+      }
+
+      const resBody = await response.json();
+
+      if (resBody?.detail) {
+        throw new ApiException(resBody.detail);
       }
 
       throw new UnknownException();

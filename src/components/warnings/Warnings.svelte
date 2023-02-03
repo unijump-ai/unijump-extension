@@ -1,12 +1,13 @@
 <script lang="ts">
   import { errorStore } from '$lib/store';
   import {
+    ApiException,
     CloudflareException,
-    SseException,
     UnauthorizedException,
   } from '$lib/exceptions';
   import Problem from './Problem.svelte';
   import Session from './Session.svelte';
+  import ApiWarning from './Api.svelte';
   import { fade } from 'svelte/transition';
 
   $: Warning = getWarningComponent($errorStore);
@@ -16,6 +17,10 @@
 
     if (error instanceof CloudflareException || error instanceof UnauthorizedException) {
       return Session;
+    }
+
+    if (error instanceof ApiException) {
+      return ApiWarning;
     }
 
     // TODO: Make better warning flow

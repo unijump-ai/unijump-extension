@@ -27,13 +27,10 @@
     conversationService.destroy();
   });
 
-  async function onConversationChange({ error, outgoingMessage }: ConversationState) {
+  async function onConversationChange({ error }: ConversationState) {
     if (error) {
       errorStore.set(error);
-
-      if (outgoingMessage) {
-        inputText = outgoingMessage.text;
-      }
+      return;
     }
 
     await tick();
