@@ -9,6 +9,6 @@
 
 <style lang="postcss">
   :global(code.hljs) {
-    @apply rounded-md my-2 text-xs leading-5;
+    @apply rounded-md mt-2 mb-4 text-xs leading-5;
   }
 </style>

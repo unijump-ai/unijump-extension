@@ -1,4 +1,4 @@
-import { CloudflareException, SseException } from '$lib/exceptions';
+import { SseException } from '$lib/exceptions';
 import { Connection } from '$lib/messaging/messaging.constants';
 import type {
   ConnectionPayloadMap,
@@ -51,7 +51,7 @@ const devMessages: ConnectionPayloadMapArray = {
     {
       done: false,
       answer: {
-        text: message.substring(0, 100),
+        text: message.substring(0, 300),
         conversationId: 'a',
         messageId: 'b',
       },
@@ -59,7 +59,7 @@ const devMessages: ConnectionPayloadMapArray = {
     {
       done: false,
       answer: {
-        text: message.substring(0, 300),
+        text: message.substring(0, 600),
         conversationId: 'a',
         messageId: 'b',
       },

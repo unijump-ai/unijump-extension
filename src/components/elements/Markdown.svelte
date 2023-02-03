@@ -7,10 +7,26 @@
   const renderers = {
     code: Code,
   };
+
+  $: transformedSource = transformSource(source);
+
+  function transformSource(source: string) {
+    return matchBackticks(source);
+  }
+
+  function matchBackticks(source: string) {
+    const backTicksLength = (source.match(/\`\`\`/g) || []).length;
+
+    if (backTicksLength % 2 !== 0) {
+      return `${source}\n\`\`\``;
+    }
+
+    return source;
+  }
 </script>
 
 <div class="marked-own text-sm font-medium w-full">
-  <SvelteMarkdown {source} {renderers} />
+  <SvelteMarkdown source={transformedSource} {renderers} />
 </div>
 
 <style lang="postcss" global>

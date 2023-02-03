@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CloudflareException, UnauthorizedException } from '$lib/exceptions';
+  import { UnauthorizedException } from '$lib/exceptions';
   import { sendMessage } from '$lib/messaging';
   import { Message } from '$lib/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
