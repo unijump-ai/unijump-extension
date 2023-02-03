@@ -30,6 +30,7 @@ const sharedManifest: Partial<chrome.runtime.ManifestV2> &
     [SHORTCUT_COMMAND_ID]: {
       suggested_key: {
         default: 'Ctrl+U',
+        windows: 'Alt+U',
       },
       description: 'Open UniText',
     },
