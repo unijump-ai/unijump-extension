@@ -1,4 +1,3 @@
-import { ArrowTopRightOnSquare } from '@steeze-ui/heroicons';
 import { PromptArgType, type PromptConfig } from '../lib/prompt/prompt.types';
 
 type ParaphraserArgs = 'modes' | 'tones';
