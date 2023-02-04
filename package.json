@@ -5,6 +5,9 @@
   "author": "Doga Genc <dogagenc@gmail.com>",
   "description": "UniText Browser Extension",
   "scripts": {
+    "bump:patch": "npm version patch -m 'Upgrade version to v%s'",
+    "bump:minor": "npm version minor -m 'Upgrade version to v%s'",
+    "bump:major": "npm version major -m 'Upgrade version to v%s'",
     "build:v2": "MANIFEST_VERSTION=2 vite build",
     "build:v3": "MANIFEST_VERSION=3 vite build",
     "watch:v2": "MANIFEST_VERSION=2 vite build --watch",
