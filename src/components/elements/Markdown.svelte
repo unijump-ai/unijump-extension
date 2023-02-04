@@ -25,7 +25,7 @@
   }
 </script>
 
-<div class="marked-own text-sm font-medium w-full">
+<div class="marked-own text-sm font-medium w-full select-text">
   <SvelteMarkdown source={transformedSource} {renderers} />
 </div>
 
