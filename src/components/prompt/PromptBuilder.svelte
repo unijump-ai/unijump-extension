@@ -47,10 +47,6 @@
 
   function onInputKeydown(evt: KeyboardEvent) {
     evt.stopPropagation();
-
-    if (evt.key === 'Enter' && evt.shiftKey) {
-      buildPrompt();
-    }
   }
 </script>
 
