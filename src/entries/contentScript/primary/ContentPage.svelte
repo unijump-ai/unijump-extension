@@ -6,6 +6,7 @@
   import App from '$components/app/App.svelte';
   import { Message } from '$lib/messaging/messaging.constants';
   import browser from 'webextension-polyfill';
+  import AppCurtain from '$components/app/AppCurtain.svelte';
 
   setContext('getURL', (url: string) => browser.runtime.getURL(url));
 
@@ -41,14 +42,10 @@
   });
 </script>
 
-<div
-  class="fixed w-full h-full left-0 text-sm top-0 p-4 z-[9999999] transition-all {visible
-    ? 'opacity-100 visible bg-white/30'
-    : 'opacity-0 invisible'}"
->
+<AppCurtain {visible} on:close={closeModal}>
   <div class="h-full w-full max-w-5xl mx-auto">
     {#if visible}
       <App on:close={closeModal} />
     {/if}
   </div>
-</div>
+</AppCurtain>
