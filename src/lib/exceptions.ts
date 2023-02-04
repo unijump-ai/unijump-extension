@@ -1,33 +1,40 @@
 export class CloudflareException extends Error {
   constructor() {
-    super(CloudflareException.name);
+    super();
+    this.name = CloudflareException.name;
   }
 }
+
 export class UnauthorizedException extends Error {
   constructor() {
-    super(UnauthorizedException.name);
+    super();
+    this.name = UnauthorizedException.name;
   }
 }
 
 export class ServiceBusyException extends Error {
   constructor() {
-    super(ServiceBusyException.name);
+    super();
+    this.name = ServiceBusyException.name;
   }
 }
 export class UnknownException extends Error {
-  constructor() {
-    super(UnknownException.name);
+  constructor(message?: string) {
+    super(message);
+    this.name = UnknownException.name;
   }
 }
 export class SseException extends Error {
-  constructor() {
-    super(SseException.name);
+  constructor(message?: string) {
+    super(message);
+    this.name = SseException.name;
   }
 }
 
 export class ApiException extends Error {
-  constructor(message: string) {
+  constructor(message?: string) {
     super(message);
+    this.name = ApiException.name;
   }
 }
 

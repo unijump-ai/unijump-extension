@@ -38,7 +38,7 @@ listenMessage(Message.GET_SESSION, async () => {
     };
   } catch (err) {
     return {
-      error: err.message || err,
+      error: err,
     };
   }
 });

@@ -20,6 +20,10 @@
     }
 
     if (error instanceof ApiException) {
+      setTimeout(() => {
+        errorStore.set(null);
+      }, 3000);
+
       return ApiWarning;
     }
 

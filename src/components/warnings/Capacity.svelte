@@ -1,1 +1,1 @@
-<p>Open ai is at full capacity right now</p>
+<p>ChatGPT is at full capacity right now. Please try again later...</p>
