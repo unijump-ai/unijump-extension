@@ -2,6 +2,6 @@
 **/node_modules
 .DS_Store
 .vscode
-extension-v2
-extension-v3
+extension-mv2
+extension-mv3
 releases

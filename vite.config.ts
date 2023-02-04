@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const development = env.NODE_ENV === 'development';
   const manifestVersion = env.MANIFEST_VERSION || '2';
+  const outDir = `extension-mv${manifestVersion}`;
 
   const sharedConfig = {
     resolve: {
@@ -22,9 +23,7 @@ export default defineConfig(({ mode }) => {
         $prompts: path.resolve(__dirname, './src/prompts'),
       },
     },
-    build: {
-      // assetsInlineLimit: 4096 * 1024 * 1024,
-    },
+    build: {},
     plugins: [svelte(), svelteSVG(), imagetools()],
   } satisfies UserConfigExport;
 
@@ -46,7 +45,7 @@ export default defineConfig(({ mode }) => {
     ...sharedConfig,
     build: {
       ...sharedConfig.build,
-      outDir: `extension-v${manifestVersion}`,
+      outDir,
       rollupOptions: {
         output: {
           entryFileNames: `assets/[name].js`,
