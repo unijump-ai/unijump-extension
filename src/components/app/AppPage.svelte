@@ -18,7 +18,7 @@
     <div class="mr-4">
       <slot name="header-actions" />
     </div>
-    <IconButton on:click={onClose}>
+    <IconButton on:click={onClose} label="Close App">
       <IconClose width={16} />
     </IconButton>
     <div class="absolute left-0 bottom-0 seperator" />

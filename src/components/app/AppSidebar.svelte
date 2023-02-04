@@ -26,6 +26,7 @@
           on:click={() => navigate(page.name)}
         >
           <svelte:component this={page.icon} width={24} height={24} />
+          <span class="sr-only">{page.name}</span>
         </button>
       </li>
     {/each}
