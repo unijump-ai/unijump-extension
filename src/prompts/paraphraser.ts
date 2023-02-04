@@ -13,7 +13,7 @@ export default {
       .map((tag) => `more ${tag}`)
       .join(',');
 
-    return `${formattedArgs}:\n "${userInput}"`;
+    return `${formattedArgs}:\n ${userInput}`;
   },
   args: [
     {
