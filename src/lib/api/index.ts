@@ -1,4 +1,4 @@
-import { CacheKey, getCache, setCache } from '$lib/cache';
+import { Cache } from '$lib/decorators/cache.method';
 import {
   ApiException,
   CloudflareException,
@@ -128,13 +128,8 @@ export class Api {
     this.abortController?.abort();
   }
 
+  @Cache(1000 * 60) // 60 seconds
   async getSession(): Promise<ApiSession> {
-    const sessionCache = getCache(CacheKey.SESSION);
-
-    if (sessionCache) {
-      return sessionCache;
-    }
-
     const response = await fetch(this.getFullUrl('/api/auth/session'));
 
     if (!response.ok) {
@@ -160,8 +155,6 @@ export class Api {
     if (!session.accessToken) {
       throw new UnauthorizedException();
     }
-
-    setCache(CacheKey.SESSION, session);
 
     return session;
   }
