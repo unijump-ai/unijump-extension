@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ImageToolsSource } from '$lib/types';
+  import type { ImageToolsSource } from 'src/types/image-tools';
 
   export let image: ImageToolsSource;
   export let alt: string;

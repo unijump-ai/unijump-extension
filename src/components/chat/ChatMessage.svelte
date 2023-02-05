@@ -1,9 +1,9 @@
 <script lang="ts">
+  import type { ConversationMessage } from '$lib/services/conversation';
   import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
-  import type { ChatMessage } from '$lib/types';
 
-  export let message: ChatMessage;
+  export let message: ConversationMessage;
 
   function copyMessage() {
     navigator.clipboard.writeText(message.text);

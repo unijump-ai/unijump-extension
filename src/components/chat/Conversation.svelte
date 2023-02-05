@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { ChatMessage as ChatMessageType } from '$lib/types';
+  import type { ConversationMessage } from '$lib/services/conversation';
   import ChatMessage from './ChatMessage.svelte';
 
-  export let messages: ChatMessageType[];
-  export let incomingMessage: ChatMessageType;
-  export let outgoingMessage: ChatMessageType;
+  export let messages: ConversationMessage[];
+  export let incomingMessage: ConversationMessage;
+  export let outgoingMessage: ConversationMessage;
 </script>
 
 <ul class="mx-auto max-w-2xl pl-7">
