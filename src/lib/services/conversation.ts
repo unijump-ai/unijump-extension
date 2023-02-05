@@ -1,7 +1,7 @@
 import type { ConversationParams } from '$lib/api';
-import type { ConnectionHandler } from '$lib/messaging/messaging.types';
-import { openConnection, sendMessage } from '$lib/messaging';
-import { Connection, Message } from '$lib/messaging/messaging.constants';
+import type { ConnectionHandler } from '$lib/extension/messaging/messaging.types';
+import { openConnection, sendMessage } from '$lib/extension/messaging';
+import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 import { StoreService } from './store';
 import userAvatar from '$assets/images/avatar.png';
 import chatgptAvatar from '$assets/images/chatgptavatar.png';

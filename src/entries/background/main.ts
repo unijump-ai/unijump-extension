@@ -1,8 +1,12 @@
 import browser from 'webextension-polyfill';
 import api from '$lib/api';
 import { SHORTCUT_COMMAND_ID } from '$lib/constants';
-import { listenConnection, listenMessage, sendMessageToTab } from '$lib/messaging';
-import { Connection, Message } from '$lib/messaging/messaging.constants';
+import {
+  listenConnection,
+  listenMessage,
+  sendMessageToTab,
+} from '$lib/extension/messaging';
+import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 
 const MENU_ITEM_ID = 'unitext.ai';
 

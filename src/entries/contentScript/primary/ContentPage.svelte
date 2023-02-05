@@ -1,10 +1,10 @@
 <script lang="ts">
   import '../../../app.css';
   import { onMount, setContext } from 'svelte';
-  import { listenMessage } from '$lib/messaging';
+  import { listenMessage } from '$lib/extension/messaging';
   import { errorStore, selectedText } from '$lib/store';
   import App from '$components/app/App.svelte';
-  import { Message } from '$lib/messaging/messaging.constants';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
   import browser from 'webextension-polyfill';
   import AppCurtain from '$components/app/AppCurtain.svelte';
 

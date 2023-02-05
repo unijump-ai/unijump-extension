@@ -2,12 +2,12 @@
   import type { ApiSession } from '$lib/api';
   import { onMount } from 'svelte';
   import { fade } from 'svelte/transition';
-  import Chat from '$components/pages/Chat.svelte';
-  import Paraphraser from '$components/pages/Paraphraser.svelte';
-  import { sendMessage } from '$lib/messaging';
-  import { Message } from '$lib/messaging/messaging.constants';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
   import { PageName } from '$lib/navigation';
   import { activePage, errorStore, user } from '$lib/store';
+  import Chat from '$components/pages/Chat.svelte';
+  import Paraphraser from '$components/pages/Paraphraser.svelte';
   import AppSidebar from './AppSidebar.svelte';
   import Warnings from '$components/warnings/Warnings.svelte';
 

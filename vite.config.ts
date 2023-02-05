@@ -1,11 +1,11 @@
-import { defineConfig, loadEnv, UserConfigExport, Plugin } from 'vite';
+import path from 'path';
+import { defineConfig, loadEnv, UserConfigExport } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import webExtension from '@samrum/vite-plugin-web-extension';
 import svelteSVG from 'vite-plugin-svelte-svg';
 import { imagetools } from 'vite-imagetools';
-import path from 'path';
-import { readFileSync } from 'fs';
 import { getManifest } from './src/manifest';
+import { pluginDevImport } from './build/vite-plugin-dev-import';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -30,7 +30,14 @@ export default defineConfig(({ mode }) => {
   if (development) {
     return {
       ...sharedConfig,
-      plugins: [...sharedConfig.plugins, pluginDevImport()],
+      plugins: [
+        ...sharedConfig.plugins,
+        pluginDevImport({
+          match: /lib\/extension\/(.+)\/index.ts/,
+          replace: ['index.ts', 'index.dev.ts'],
+          required: true,
+        }),
+      ],
       build: {
         ...sharedConfig.build,
         minify: false,
@@ -64,19 +71,3 @@ export default defineConfig(({ mode }) => {
     ],
   } satisfies UserConfigExport;
 });
-
-function pluginDevImport(): Plugin {
-  return {
-    name: 'vite-plugin-dev-import',
-    load(id, source) {
-      if (id.includes('lib/messaging/index.ts')) {
-        const devMessaging = readFileSync(
-          path.resolve(__dirname, './src/lib/messaging-dev/index.ts'),
-          'utf-8'
-        );
-
-        return devMessaging;
-      }
-    },
-  };
-}

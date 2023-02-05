@@ -1,7 +1,7 @@
 <script lang="ts">
   import { UnauthorizedException } from '$lib/exceptions';
-  import { sendMessage } from '$lib/messaging';
-  import { Message } from '$lib/messaging/messaging.constants';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
   import { onMount } from 'svelte';
 

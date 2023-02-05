@@ -1,0 +1,3 @@
+code.hljs {
+  @apply rounded-md mt-2 mb-4 text-xs leading-5;
+}
