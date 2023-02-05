@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import archiver from 'archiver';
 
 const SOURCE_DIRS = ['../dist/mv2', '../dist/mv3'];
-const RELEASE_DIR = '../releases';
+const RELEASE_DIR = './releases';
 
 (async () => {
   !fs.existsSync(RELEASE_DIR) && fs.mkdirSync(RELEASE_DIR);
@@ -10,7 +10,7 @@ const RELEASE_DIR = '../releases';
   for (const sourceDir of SOURCE_DIRS) {
     try {
       const manifest = (
-        await import(`./${sourceDir}/manifest.json`, {
+        await import(`${sourceDir}/manifest.json`, {
           assert: { type: 'json' },
         })
       ).default;
