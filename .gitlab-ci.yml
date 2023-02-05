@@ -1,0 +1,18 @@
+image: sleavely/node-awscli:16.x
+
+stages:
+  - release
+
+variables:
+  BUCKET_NAME: cdn.designerdailyreport.com/unitext
+  RELEASE_DIR: ./release
+
+deploy:
+  stage: release
+  only:
+    - stage
+  before_script:
+    - yarn
+    - yarn release
+  script:
+    - aws s3 sync $RELEASE_DIR s3://$BUCKET_NAME/
