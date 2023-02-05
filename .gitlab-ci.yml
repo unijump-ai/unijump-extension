@@ -5,7 +5,7 @@ stages:
 
 variables:
   BUCKET_NAME: cdn.designerdailyreport.com/unitext
-  RELEASE_DIR: ./release
+  RELEASE_DIR: ./releases
 
 deploy:
   stage: release
