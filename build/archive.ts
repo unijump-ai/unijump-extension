@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import archiver from 'archiver';
 
-const SOURCE_DIRS = ['extension-mv2', 'extension-mv3'];
-const RELEASE_DIR = 'releases';
+const SOURCE_DIRS = ['../dist/mv2', '../dist/mv3'];
+const RELEASE_DIR = '../releases';
 
 (async () => {
   !fs.existsSync(RELEASE_DIR) && fs.mkdirSync(RELEASE_DIR);
@@ -16,7 +16,7 @@ const RELEASE_DIR = 'releases';
       ).default;
 
       const fileName = `${manifest.name}-v${manifest.version}.zip`;
-      const fileDir = `${RELEASE_DIR}/v${manifest.manifest_version}`;
+      const fileDir = `${RELEASE_DIR}/mv${manifest.manifest_version}`;
 
       !fs.existsSync(fileDir) && fs.mkdirSync(fileDir);
 
