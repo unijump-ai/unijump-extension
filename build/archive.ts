@@ -1,19 +1,16 @@
 import * as fs from 'fs';
 import archiver from 'archiver';
 
-const SOURCE_DIRS = ['../dist/mv2', '../dist/mv3'];
-const RELEASE_DIR = './releases';
+const SOURCE_DIRS = ['dist/mv2', 'dist/mv3'];
+const RELEASE_DIR = 'releases';
 
 (async () => {
   !fs.existsSync(RELEASE_DIR) && fs.mkdirSync(RELEASE_DIR);
 
   for (const sourceDir of SOURCE_DIRS) {
     try {
-      const manifest = (
-        await import(`${sourceDir}/manifest.json`, {
-          assert: { type: 'json' },
-        })
-      ).default;
+      const manifestString = fs.readFileSync(`${sourceDir}/manifest.json`, 'utf-8');
+      const manifest = JSON.parse(manifestString);
 
       const fileName = `${manifest.name}-v${manifest.version}.zip`;
       const fileDir = `${RELEASE_DIR}/mv${manifest.manifest_version}`;
