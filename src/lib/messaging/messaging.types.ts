@@ -1,5 +1,9 @@
-import type { ApiSession, ConversationParams, ConversationProperty } from '$lib/api';
-import type { Answer } from '$lib/types';
+import type {
+  ApiSession,
+  ConversationParams,
+  ConversationProperty,
+  ConversationResponse,
+} from '$lib/api';
 import type { Connection, Message } from './messaging.constants';
 
 export interface ConnectionMessage {
@@ -31,7 +35,7 @@ export type MessageResponseMap = {
 
 export type ConnectionPayloadMap = {
   [Connection.CHAT]: {
-    answer: Answer;
+    response: ConversationResponse;
     done: boolean;
   };
   [Connection.ANOTHER]: void;

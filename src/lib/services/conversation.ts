@@ -1,5 +1,4 @@
 import type { ConversationParams } from '$lib/api';
-import type { ChatMessage, ChatMessageSender } from '$lib/types';
 import type { ConnectionHandler } from '$lib/messaging/messaging.types';
 import { openConnection, sendMessage } from '$lib/messaging';
 import { Connection, Message } from '$lib/messaging/messaging.constants';
@@ -7,22 +6,38 @@ import { StoreService } from './store';
 import userAvatar from '$assets/images/avatar.png';
 import chatgptAvatar from '$assets/images/chatgptavatar.png';
 
+export type ConversationRole = 'assistant' | 'user';
+
+export interface ConversationSender {
+  name: string;
+  role: ConversationRole;
+  picture?: string;
+}
+
+export interface ConversationMessage {
+  sender: ConversationSender;
+  id: string;
+  text: string;
+  created: string;
+  status: 'pending' | 'writing' | 'finished';
+}
+
 export interface ConversationState {
-  messages: ChatMessage[];
-  incomingMessage: ChatMessage;
-  outgoingMessage: ChatMessage;
+  messages: ConversationMessage[];
+  incomingMessage: ConversationMessage;
+  outgoingMessage: ConversationMessage;
   id?: string;
   error?: Error;
 }
 
 export class ConversationService extends StoreService<ConversationState> {
-  private incomingMessage: ChatMessage = null;
-  private outgoingMessage: ChatMessage = null;
+  private incomingMessage: ConversationMessage = null;
+  private outgoingMessage: ConversationMessage = null;
   private connectionHandler: ConnectionHandler<Connection.CHAT>;
 
   constructor(
-    private userMessages: ChatMessage[] = [],
-    private aiMessages: ChatMessage[] = [],
+    private userMessages: ConversationMessage[] = [],
+    private aiMessages: ConversationMessage[] = [],
     private id?: string
   ) {
     super(null);
@@ -53,7 +68,7 @@ export class ConversationService extends StoreService<ConversationState> {
     return crypto.randomUUID();
   }
 
-  private getAiSender(): ChatMessageSender {
+  private getAiSender(): ConversationSender {
     return {
       role: 'assistant',
       name: 'Bot',
@@ -61,7 +76,7 @@ export class ConversationService extends StoreService<ConversationState> {
     };
   }
 
-  private getSender(): ChatMessageSender {
+  private getSender(): ConversationSender {
     return {
       role: 'user',
       name: 'Test',
@@ -71,10 +86,10 @@ export class ConversationService extends StoreService<ConversationState> {
 
   private createChatMessage(
     text: string,
-    sender: ChatMessageSender,
+    sender: ConversationSender,
     id = this.createMessageId(),
-    status?: ChatMessage['status']
-  ): ChatMessage {
+    status?: ConversationMessage['status']
+  ): ConversationMessage {
     return {
       text,
       sender,
@@ -84,7 +99,7 @@ export class ConversationService extends StoreService<ConversationState> {
     };
   }
 
-  private createConversationPayload(message: ChatMessage): ConversationParams {
+  private createConversationPayload(message: ConversationMessage): ConversationParams {
     const conversationParams: ConversationParams = {
       text: message.text,
     };
@@ -140,12 +155,12 @@ export class ConversationService extends StoreService<ConversationState> {
         }
 
         this.incomingMessage = this.createChatMessage(
-          payload.answer.text,
+          payload.response.text,
           this.getAiSender(),
-          payload.answer.messageId,
+          payload.response.messageId,
           'writing'
         );
-        this.id = payload.answer.conversationId;
+        this.id = payload.response.conversationId;
         this.setStore();
       }
     );

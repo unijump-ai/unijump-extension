@@ -15,11 +15,13 @@ declare module '*svg?component' {
 }
 
 declare module '*&imagetools' {
+  import { ImageToolsImage } from './types/image-tools';
+
   export default ImageToolsImage;
 }
 
 declare module '*&picture&imagetools' {
-  import { ImageToolsSource } from './image-tools';
+  import { ImageToolsSource } from './types/image-tools';
 
   export default ImageToolsSource;
 }

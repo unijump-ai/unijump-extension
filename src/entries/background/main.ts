@@ -60,8 +60,8 @@ browser.runtime.onConnect.addListener((port) => {
 
   listenConnection(port, Connection.CHAT, async (message, respond, error) => {
     try {
-      await api.conversation(message, (answer, done) => {
-        respond({ answer, done });
+      await api.conversation(message, (response, done) => {
+        respond({ response, done });
       });
     } catch (err) {
       error(err);

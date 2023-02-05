@@ -51,7 +51,7 @@ const devMessages: ConnectionPayloadMapArray = {
   [Connection.CHAT]: [
     {
       done: false,
-      answer: {
+      response: {
         text: message.substring(0, 300),
         conversationId: 'a',
         messageId: 'b',
@@ -59,7 +59,7 @@ const devMessages: ConnectionPayloadMapArray = {
     },
     {
       done: false,
-      answer: {
+      response: {
         text: message.substring(0, 600),
         conversationId: 'a',
         messageId: 'b',
@@ -67,7 +67,7 @@ const devMessages: ConnectionPayloadMapArray = {
     },
     {
       done: false,
-      answer: {
+      response: {
         text: message,
         conversationId: 'a',
         messageId: 'b',
@@ -75,7 +75,7 @@ const devMessages: ConnectionPayloadMapArray = {
     },
     {
       done: true,
-      answer: {
+      response: {
         text: '',
         conversationId: 'a',
         messageId: 'b',

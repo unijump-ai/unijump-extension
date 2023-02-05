@@ -28,3 +28,8 @@ export interface PromptConfig<T extends string = any> {
   input: (args: SelectedPromptArgs<T> & PromptUserArg, userInput: string) => string;
   args: PromptArg[];
 }
+
+export interface PromptEventPayload {
+  input: string;
+  initial: string;
+}

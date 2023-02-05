@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ChatMessage, PromptEventPayload } from '$lib/types';
+  import type { PromptEventPayload } from '$lib/prompt/prompt.types';
+  import type { ConversationMessage } from '$lib/services/conversation';
   import { onDestroy } from 'svelte';
   import { fade } from 'svelte/transition';
   import AppPage from '../app/AppPage.svelte';
@@ -13,7 +14,7 @@
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
 
-  let aiMessage: ChatMessage = null;
+  let aiMessage: ConversationMessage = null;
 
   $: onConversationChange($conversationStore);
   $: loading = !!(

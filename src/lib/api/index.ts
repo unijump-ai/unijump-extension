@@ -1,4 +1,3 @@
-import type { Answer } from '$lib/types';
 import { CacheKey, getCache, setCache } from '$lib/cache';
 import {
   ApiException,
@@ -15,6 +14,12 @@ export interface ConversationParams {
   conversationId?: string;
   parentMessageId?: string;
   messageId?: string;
+}
+
+export interface ConversationResponse {
+  text: string;
+  conversationId: string;
+  messageId: string;
 }
 
 export interface ConversationProperty {
@@ -167,7 +172,7 @@ export class Api {
 
   conversation(
     params: ConversationParams,
-    onMessage: (message: Answer, done: boolean) => void
+    onMessage: (message: ConversationResponse, done: boolean) => void
   ) {
     const conversationBody: ConversationBody = {
       action: 'next',
