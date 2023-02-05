@@ -1,19 +1,22 @@
 <script lang="ts">
   import type { PromptEventPayload } from '$lib/prompt/prompt.types';
   import type { ConversationMessage } from '$lib/services/conversation';
-  import { onDestroy } from 'svelte';
+  import type { ScrollerController } from '$components/elements/Scroller.controller';
+  import { onDestroy, tick } from 'svelte';
   import { fade } from 'svelte/transition';
+  import { OutputAction } from '$lib/prompt/output.constants';
+  import { ConversationService } from '$lib/services/conversation';
   import AppPage from '../app/AppPage.svelte';
   import paraphraserConfig from '$prompts/paraphraser';
   import PromptBuilder from '../prompt/PromptBuilder.svelte';
   import TextOutputActions from '$components/output/TextOutputActions.svelte';
-  import { OutputAction } from '$lib/prompt/output.constants';
   import Output from '$components/output/Output.svelte';
-  import { ConversationService } from '$lib/services/conversation';
+  import Scroller from '$components/elements/Scroller.svelte';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
 
+  let outputScroller: ScrollerController | null = null;
   let aiMessage: ConversationMessage = null;
 
   $: onConversationChange($conversationStore);
@@ -27,7 +30,7 @@
     conversationService.destroy();
   });
 
-  function onConversationChange(conversation: typeof $conversationStore) {
+  async function onConversationChange(conversation: typeof $conversationStore) {
     if (conversation.incomingMessage || conversation.outgoingMessage) {
       aiMessage = null;
       return;
@@ -38,6 +41,8 @@
     if (!latestAiMessage) return;
 
     aiMessage = latestAiMessage;
+    await tick();
+    outputScroller?.scrollBottom();
   }
 
   function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
@@ -79,17 +84,23 @@
 <AppPage title="Paraphraser" on:close>
   {#if $conversationStore}
     <div class="grid grid-cols-2 h-full">
-      <div class="h-full p-6 overflow-y-auto">
-        <PromptBuilder config={paraphraserConfig} on:prompt={onPromptBuilt} />
-      </div>
-      <div class="relative h-full p-6 overflow-y-auto">
+      <Scroller>
+        <div class="p-6">
+          <PromptBuilder config={paraphraserConfig} on:prompt={onPromptBuilt} />
+        </div>
+      </Scroller>
+      <div class="relative h-full overflow-hidden">
         <div class="absolute left-0 top-0 seperator-vertical" />
-        <Output type="markdown" {output} {loading} />
-        {#if aiMessage && !$conversationStore.incomingMessage}
-          <div class="mt-4" in:fade={{ duration: 100 }}>
-            <TextOutputActions {output} on:action={onOutputAction} />
+        <Scroller bind:scrollerController={outputScroller}>
+          <div class="p-6">
+            <Output type="markdown" {output} {loading} />
+            {#if aiMessage && !$conversationStore.incomingMessage}
+              <div class="mt-4" in:fade={{ duration: 100 }}>
+                <TextOutputActions {output} on:action={onOutputAction} />
+              </div>
+            {/if}
           </div>
-        {/if}
+        </Scroller>
       </div>
     </div>
   {/if}
