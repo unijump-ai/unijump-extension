@@ -1,10 +1,7 @@
 <script lang="ts">
   import './app.css';
   import App from '$components/app/App.svelte';
-  import { setContext } from 'svelte';
   import AppCurtain from '$components/app/AppCurtain.svelte';
-
-  setContext('getURL', (url: string) => url);
 
   let visible = true;
 

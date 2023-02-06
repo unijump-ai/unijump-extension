@@ -1,14 +1,11 @@
 <script lang="ts">
   import '../../../app.css';
-  import { onMount, setContext } from 'svelte';
+  import { onMount } from 'svelte';
   import { listenMessage } from '$lib/extension/messaging';
   import { errorStore, selectedText } from '$lib/store';
-  import App from '$components/app/App.svelte';
   import { Message } from '$lib/extension/messaging/messaging.constants';
-  import browser from 'webextension-polyfill';
+  import App from '$components/app/App.svelte';
   import AppCurtain from '$components/app/AppCurtain.svelte';
-
-  setContext('getURL', (url: string) => browser.runtime.getURL(url));
 
   let visible = false;
 

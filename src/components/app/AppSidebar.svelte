@@ -1,12 +1,8 @@
 <script lang="ts">
   import { PageName, pages } from '$lib/navigation';
   import { activePage } from '$lib/store';
-  import unitextLogo from '$assets/logo.png';
-  import { getContext } from 'svelte';
-
-  // TODO: Find a better way
-  const getUrl = getContext('getURL') as (url: string) => string;
-  const logoUrl = getUrl(unitextLogo);
+  import unitextLogo from '$assets/logo.png?w=28;56&format=webp;png&picture&imagetools';
+  import Picture from '$components/elements/Picture.svelte';
 
   function navigate(pageName: PageName) {
     activePage.set(pageName);
@@ -14,7 +10,7 @@
 </script>
 
 <div class="py-4 flex flex-col border-r justify-between items-center border-r-white/8">
-  <img class="w-7" src={logoUrl} alt="Unitext icon" />
+  <Picture width={28} image={unitextLogo} alt="Unitext icon" />
   <ul>
     {#each pages as page}
       <li>
@@ -23,6 +19,7 @@
           page.name
             ? 'text-zinc-100 bg-white/8 border-white/10'
             : 'border-transparent'}"
+          title={page.name}
           on:click={() => navigate(page.name)}
         >
           <svelte:component this={page.icon} width={24} height={24} />
