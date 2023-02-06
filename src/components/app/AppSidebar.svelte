@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PageName, pages } from '$lib/navigation';
   import { activePage } from '$lib/store';
-  import unitextLogo from '$assets/logo.png?w=28;56&format=webp;png&picture&imagetools';
+  import unitextLogo from '$assets/logo.png?w=28;56&format=webp;png&picture';
   import Picture from '$components/elements/Picture.svelte';
 
   function navigate(pageName: PageName) {

@@ -11,8 +11,6 @@
 
     return `${ratio}x`;
   };
-
-  $: console.log(image);
 </script>
 
 <picture>

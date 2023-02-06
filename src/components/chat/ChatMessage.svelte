@@ -2,6 +2,7 @@
   import type { ConversationMessage } from '$lib/services/conversation';
   import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
+  import Picture from '$components/elements/Picture.svelte';
 
   export let message: ConversationMessage;
 
@@ -11,11 +12,13 @@
 </script>
 
 <div class="relative">
-  <img
-    class="absolute -left-7 w-[20px] h-[20px]"
-    src={message.sender.picture}
-    alt="avatar"
-  />
+  <div class="absolute -left-7">
+    <Picture
+      width={20}
+      image={message.sender.picture}
+      alt="{message.sender.name} avatar"
+    />
+  </div>
   <div
     class="font-medium relative inline-flex m-0 px-4 py-3 max-w-full border-1 border-white/10 rounded-[10px] {message
       .sender.role === 'user'

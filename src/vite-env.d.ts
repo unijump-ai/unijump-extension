@@ -14,13 +14,13 @@ declare module '*svg?component' {
   export default icon;
 }
 
-declare module '*&imagetools' {
+declare module '*&image' {
   import { ImageToolsImage } from './types/image-tools';
 
   export default ImageToolsImage;
 }
 
-declare module '*&picture&imagetools' {
+declare module '*&picture' {
   import { ImageToolsSource } from './types/image-tools';
 
   export default ImageToolsSource;

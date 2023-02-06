@@ -1,17 +1,18 @@
 import type { ConversationParams } from '$lib/api';
 import type { ConnectionHandler } from '$lib/extension/messaging/messaging.types';
+import type { ImageToolsSource } from 'src/types/image-tools';
 import { openConnection, sendMessage } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 import { StoreService } from './store';
-import userAvatar from '$assets/images/avatar.png';
-import chatgptAvatar from '$assets/images/chatgptavatar.png';
+import userAvatar from '$assets/images/avatar.png?w=20;40&format=webp;png&picture';
+import chatgptAvatar from '$assets/images/chatgptavatar.png?w=20;40&format=webp;png&picture';
 
 export type ConversationRole = 'assistant' | 'user';
 
 export interface ConversationSender {
   name: string;
   role: ConversationRole;
-  picture?: string;
+  picture?: ImageToolsSource;
 }
 
 export interface ConversationMessage {
