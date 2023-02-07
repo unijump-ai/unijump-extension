@@ -3,17 +3,18 @@
 
   export let size: 'xs' | 'sm' | 'md' = 'md';
   export let disabled = false;
-
-  $: buttonClasses = inlineClass({
-    'py-2.5 px-4': size === 'md',
-    'py-1.5 px-3': size === 'sm',
-    'opacity-50 cursor-auto': disabled,
-    'hover:bg-white/20': !disabled,
-  });
 </script>
 
 <button
-  class="btn font-medium text-sm text-white cursor flex ring-1 ring-inset ring-white/10 rounded-full w-full justify-center items-center bg-white/8 transition-all {buttonClasses}"
+  class={inlineClass(
+    'btn font-medium text-sm text-white cursor flex ring-1 ring-inset ring-white/10 rounded-full w-full justify-center items-center bg-white/8 transition-all',
+    {
+      'py-2.5 px-4': size === 'md',
+      'py-1.5 px-3': size === 'sm',
+      'opacity-50 cursor-auto': disabled,
+      'hover:bg-white/20': !disabled,
+    }
+  )}
   {disabled}
   {...$$restProps}
   on:click

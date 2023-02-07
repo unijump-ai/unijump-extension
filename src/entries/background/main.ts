@@ -20,7 +20,7 @@ browser.contextMenus.create({
   contexts: ['all'],
 });
 
-// TODO: Manifest v2/v3 differences
+// Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
   sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
 });

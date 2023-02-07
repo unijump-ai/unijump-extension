@@ -1,1 +1,6 @@
-<h1>Options page</h1>
+<script lang="ts">
+  import '../../app.css';
+  import Options from '$components/options/Options.svelte';
+</script>
+
+<Options />

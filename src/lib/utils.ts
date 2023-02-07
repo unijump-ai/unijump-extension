@@ -1,6 +1,9 @@
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const inlineClass = (classObject: Record<string, boolean>): string => {
+export const inlineClass = (
+  defaultClasses: string,
+  classObject: Record<string, boolean>
+): string => {
   const validClasses: string[] = [];
 
   Object.keys(classObject).forEach((className) => {
@@ -11,5 +14,5 @@ export const inlineClass = (classObject: Record<string, boolean>): string => {
     validClasses.push(className);
   });
 
-  return validClasses.join(' ');
+  return `${defaultClasses} ${validClasses.join(' ')}`;
 };

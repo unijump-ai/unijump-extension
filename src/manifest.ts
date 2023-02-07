@@ -25,7 +25,7 @@ const sharedManifest: Partial<chrome.runtime.ManifestV2> &
     page: 'src/entries/options/index.html',
     open_in_tab: true,
   },
-  permissions: ['contextMenus', 'activeTab'],
+  permissions: ['contextMenus', 'activeTab', 'storage'],
   commands: {
     [SHORTCUT_COMMAND_ID]: {
       suggested_key: {

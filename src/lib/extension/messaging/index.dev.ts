@@ -1,4 +1,3 @@
-import { ApiException } from '$lib/exceptions';
 import { Connection } from '$lib/extension/messaging/messaging.constants';
 import type {
   ConnectionPayloadMap,
@@ -108,17 +107,9 @@ export const openConnection = <T extends keyof ConnectionPayloadMap>(
   };
 };
 
-// TODO: Temp;
-let counter = 0;
-
 export const sendMessage = <T extends keyof MessagePayloadMap>(
   message: T,
   payload?: MessagePayload<T>
 ) => {
-  counter++;
-  if (counter % 2 === 0) {
-    return { message };
-  }
-
-  return { error: new ApiException('Not fund'), message };
+  return { message };
 };

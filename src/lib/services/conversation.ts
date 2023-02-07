@@ -27,6 +27,7 @@ export interface ConversationState {
   messages: ConversationMessage[];
   incomingMessage: ConversationMessage;
   outgoingMessage: ConversationMessage;
+  title?: string;
   id?: string;
   error?: Error;
 }
@@ -35,6 +36,7 @@ export class ConversationService extends StoreService<ConversationState> {
   private incomingMessage: ConversationMessage = null;
   private outgoingMessage: ConversationMessage = null;
   private connectionHandler: ConnectionHandler<Connection.CHAT>;
+  private title?: string;
 
   constructor(
     private userMessages: ConversationMessage[] = [],
@@ -55,6 +57,7 @@ export class ConversationService extends StoreService<ConversationState> {
       incomingMessage: this.incomingMessage,
       outgoingMessage: this.outgoingMessage,
       id: this.id,
+      title: this.title,
     };
   }
 
@@ -167,6 +170,10 @@ export class ConversationService extends StoreService<ConversationState> {
     );
   }
 
+  setTitle(title: string) {
+    this.title = title;
+  }
+
   destroy() {
     this.connectionHandler?.disconnect();
   }
@@ -184,6 +191,7 @@ export class ConversationService extends StoreService<ConversationState> {
     this.aiMessages = [];
     this.userMessages = [];
     this.id = undefined;
+    this.title = undefined;
     this.setStore();
   }
 }
