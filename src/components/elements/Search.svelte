@@ -6,7 +6,7 @@
 </script>
 
 <div
-  class="px-4 flex items-center bg-white/8 border text-zinc-300 border-white/10 rounded-full"
+  class="px-4 flex items-center bg-white/8 border text-zinc-300 border-white/10 rounded-full transition-all focus-within:border-white"
 >
   <IconSearch width={16} />
   <input

@@ -87,7 +87,7 @@
   {#if $conversationStore}
     <div class="h-full w-full relative">
       <Scroller bind:scrollerController>
-        <div class="p-6 pb-20">
+        <div class="p-6 pb-24">
           {#if hasConversation}
             <Conversation
               messages={$conversationStore.messages}
