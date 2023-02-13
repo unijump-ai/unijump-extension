@@ -51,7 +51,7 @@
 
 <div
   class="absolute bottom-0 left-0 w-full h-auto bg-black/20 px-6 py-4 backdrop-blur-[100px] transition-all {disabled
-    ? 'pointer-events-none opacity-50'
+    ? 'pointer-events-none'
     : ''}"
 >
   <div
