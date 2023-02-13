@@ -1,9 +1,9 @@
 {
   "name": "unitext.ai",
   "version": "0.1.1",
-  "displayName": "UniText",
+  "displayName": "UniText - #1 Free ChatGPT Shortcut",
   "author": "Doga Genc <dogagenc@gmail.com>",
-  "description": "UniText Browser Extension",
+  "description": "#1 Shortcut for ChatGPT with Superpowers",
   "scripts": {
     "bump:patch": "npm version patch -m 'Upgrade version to v%s'",
     "bump:minor": "npm version minor -m 'Upgrade version to v%s'",
