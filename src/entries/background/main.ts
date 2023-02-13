@@ -1,6 +1,5 @@
 import browser from 'webextension-polyfill';
 import api from '$lib/api';
-import { SHORTCUT_COMMAND_ID } from '$lib/constants';
 import {
   listenConnection,
   listenMessage,
@@ -8,29 +7,25 @@ import {
 } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 
-const MENU_ITEM_ID = 'unitext.ai';
-
 browser.runtime.onInstalled.addListener(() => {
   console.debug('Extension installed');
+
+  browser.contextMenus.create({
+    id: 'Unitext.ai',
+    title: 'UniText',
+    contexts: ['all'],
+  });
 });
 
-browser.contextMenus.create({
-  id: MENU_ITEM_ID,
-  title: 'UniText',
-  contexts: ['all'],
+browser.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId !== 'Unitext.ai') return;
+
+  sendMessageToTab(tab.id, Message.OPEN_MODAL);
 });
 
 // Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
   sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
-});
-
-browser.contextMenus.onClicked.addListener(async (info, tab) => {
-  const { menuItemId } = info;
-
-  if (menuItemId !== MENU_ITEM_ID) return;
-
-  sendMessageToTab(tab.id, Message.OPEN_MODAL);
 });
 
 listenMessage(Message.GET_SESSION, async () => {
@@ -71,10 +66,4 @@ browser.runtime.onConnect.addListener((port) => {
       error(err);
     }
   });
-});
-
-browser.commands.onCommand.addListener(async (command, tab) => {
-  if (command === SHORTCUT_COMMAND_ID) {
-    sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
-  }
 });

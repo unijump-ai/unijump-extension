@@ -14,7 +14,10 @@
 
   onMount(async () => {
     await sleep(100);
-    focusInput();
+
+    if (!disabled) {
+      focusInput();
+    }
   });
 
   function focusInput() {

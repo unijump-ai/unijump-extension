@@ -1,4 +1,3 @@
-import { SHORTCUT_COMMAND_ID } from './lib/constants';
 import pkg from '../package.json';
 
 const sharedManifest: Partial<chrome.runtime.ManifestV2> &
@@ -26,15 +25,6 @@ const sharedManifest: Partial<chrome.runtime.ManifestV2> &
     open_in_tab: true,
   },
   permissions: ['contextMenus', 'activeTab', 'storage'],
-  commands: {
-    [SHORTCUT_COMMAND_ID]: {
-      suggested_key: {
-        default: 'Ctrl+U',
-        windows: 'Alt+U',
-      },
-      description: 'Open UniText',
-    },
-  },
 };
 
 const browserAction = {
