@@ -11,7 +11,7 @@
   }
 </script>
 
-<div class="relative">
+<div class="relative select-text">
   <div class="absolute -left-7">
     <Picture
       width={20}
