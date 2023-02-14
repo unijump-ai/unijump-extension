@@ -11,8 +11,10 @@ const RELEASE_DIR = 'releases';
     try {
       const manifestString = fs.readFileSync(`${sourceDir}/manifest.json`, 'utf-8');
       const manifest = JSON.parse(manifestString);
+      const packageString = fs.readFileSync('./package.json', 'utf-8');
+      const pkg = JSON.parse(packageString);
 
-      const fileName = `${manifest.name}-v${manifest.version}.zip`;
+      const fileName = `${pkg.name}-v${manifest.version}.zip`;
       const fileDir = `${RELEASE_DIR}/mv${manifest.manifest_version}`;
 
       !fs.existsSync(fileDir) && fs.mkdirSync(fileDir);
