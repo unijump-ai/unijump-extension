@@ -4,7 +4,7 @@ export enum PromptArgType {
 }
 
 export interface PromptArgItem {
-  title: string;
+  label: string;
   value: string;
 }
 
@@ -16,16 +16,16 @@ export interface PromptArg {
 }
 
 export interface PromptUserArg {
-  user: string[];
+  user: PromptArgItem[];
 }
 
-export type SelectedPromptArgs<T extends string = any> = Record<T, string[]>;
+export type SelectedPromptArgs<T extends string = any> = Record<T, PromptArgItem[]>;
 export type AllPromptArgs<T extends string = any> = SelectedPromptArgs<T> & PromptUserArg;
 
 export interface PromptConfig<T extends string = any> {
   name: string;
   initialPrompt: (input: string) => string;
-  input: (args: SelectedPromptArgs<T> & PromptUserArg, userInput: string) => string;
+  input: (args: AllPromptArgs<T>, userInput: string) => string;
   args: PromptArg[];
 }
 

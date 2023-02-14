@@ -9,8 +9,8 @@ export default {
     const { modes, tones, user } = args;
 
     const formattedArgs = [...modes, ...tones, ...user]
-      .map((tag) => `more ${tag}`)
-      .join(',');
+      .map((tag) => `more ${tag.value}`)
+      .join(', ');
 
     return `${formattedArgs}:\n ${userInput}`;
   },
@@ -21,39 +21,39 @@ export default {
       type: PromptArgType.MULTI_SELECT,
       list: [
         {
-          title: '👔 Formal',
+          label: '👔 Formal',
           value: 'formal',
         },
         {
-          title: '🐬 Fluent',
+          label: '🐬 Fluent',
           value: 'fluent',
         },
         {
-          title: '🧐 Serious',
+          label: '🧐 Serious',
           value: 'serious',
         },
         {
-          title: '🥸 Professional',
+          label: '🥸 Professional',
           value: 'professional',
         },
         {
-          title: '⚡ Motivating',
+          label: '⚡ Motivating',
           value: 'motivating',
         },
         {
-          title: '🙏 Respectful',
+          label: '🙏 Respectful',
           value: 'respectful',
         },
         {
-          title: '💪 Assertive',
+          label: '💪 Assertive',
           value: 'assertive',
         },
         {
-          title: '😍 Captivating',
+          label: '😍 Captivating',
           value: 'captivating',
         },
         {
-          title: '🚨 Urgent',
+          label: '🚨 Urgent',
           value: 'urgent',
         },
       ],
@@ -64,39 +64,39 @@ export default {
       type: PromptArgType.MULTI_SELECT,
       list: [
         {
-          title: '😐 Neutral',
+          label: '😐 Neutral',
           value: 'neutral',
         },
         {
-          title: '😌 Confident',
+          label: '😌 Confident',
           value: 'confident',
         },
         {
-          title: '👉 Direct',
+          label: '👉 Direct',
           value: 'direct',
         },
         {
-          title: '🥰 Friendly',
+          label: '🥰 Friendly',
           value: 'friendly',
         },
         {
-          title: '😊 Smiley',
+          label: '😊 Smiley',
           value: 'smiley',
         },
         {
-          title: '🙂 Polite',
+          label: '🙂 Polite',
           value: 'polite',
         },
         {
-          title: '👍 Helpful',
+          label: '👍 Helpful',
           value: 'helpful',
         },
         {
-          title: '😡 Angry',
+          label: '😡 Angry',
           value: 'angry',
         },
         {
-          title: '😂 Funny',
+          label: '😂 Funny',
           value: 'funny',
         },
       ],

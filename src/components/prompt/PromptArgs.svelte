@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { PromptArg } from '$lib/prompt/prompt.types';
+  import type { PromptArg, PromptArgItem } from '$lib/prompt/prompt.types';
 
   export let arg: PromptArg;
-  export let selectedKeys: string[] = [];
+  export let selectedValues: PromptArgItem[] = [];
 
   const groupId = `group-${arg.key}`;
 </script>
@@ -14,8 +14,8 @@
       {#each arg.list as argItem}
         <li class="inline-flex mr-1 mb-1">
           <label
-            class="cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 {selectedKeys.includes(
-              argItem.value
+            class="cursor-pointer focus-within:ring-2 focus-within:ring-blue-500 {selectedValues.includes(
+              argItem
             )
               ? 'tag-selected'
               : 'tag'}"
@@ -23,10 +23,10 @@
             <input
               class="absolute opacity-0 h-0 w-0"
               type="checkbox"
-              bind:group={selectedKeys}
-              value={argItem.value}
+              bind:group={selectedValues}
+              value={argItem}
             />
-            <span>{argItem.title}</span>
+            <span>{argItem.label}</span>
           </label>
         </li>
       {/each}

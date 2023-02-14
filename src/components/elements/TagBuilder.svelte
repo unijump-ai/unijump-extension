@@ -1,14 +1,15 @@
 <script lang="ts">
+  import type { PromptArgItem } from '$lib/prompt/prompt.types';
   import { tick } from 'svelte';
 
-  export let tags: string[] = [];
+  export let tags: PromptArgItem[] = [];
 
   let isAdding = false;
   let tagInput: HTMLSpanElement;
   let addButton: HTMLButtonElement;
 
   async function addTag(value: string) {
-    tags = [...tags, value];
+    tags = [...tags, { value, label: value }];
   }
 
   async function toggleAdding(adding: boolean) {
