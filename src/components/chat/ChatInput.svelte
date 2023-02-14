@@ -2,6 +2,7 @@
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import IconSend from '$assets/icons/send.svg?component';
   import { sleep } from '$lib/utils';
+  import { bindKeyPress } from '$lib/a11y';
 
   export let disabled = false;
   export let inputText = '';
@@ -32,13 +33,13 @@
     focusInput();
   }
 
-  function onChatKeydown(evt: KeyboardEvent) {
-    evt.stopPropagation();
+  // function onChatKeydown(evt: KeyboardEvent) {
+  //   evt.stopPropagation();
 
-    if (evt.key === 'Enter') {
-      sendMessage();
-    }
-  }
+  //   if (evt.key === 'Enter') {
+  //     sendMessage();
+  //   }
+  // }
 
   async function onChatInputFocus() {
     await sleep(200);
@@ -58,13 +59,14 @@
     class="flex bg-white/8 border p-[7px] pl-3 border-white/10 rounded-[10px] focus-within:ring-1 focus-within:ring-white/80"
   >
     <input
+      type="text"
       class="flex-1 bg-transparent outline-none font-medium placeholder-zinc-500"
       placeholder="Write your message..."
       bind:this={chatInput}
       bind:value={inputText}
-      on:keydown={onChatKeydown}
+      on:keydown|stopPropagation={() => {}}
+      on:keypress|stopPropagation={bindKeyPress(['Enter'], () => sendMessage())}
       on:focus={onChatInputFocus}
-      type="text"
     />
     <button
       class="btn-primary-icon"

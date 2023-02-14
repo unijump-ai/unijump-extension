@@ -46,10 +46,6 @@
       [argKey]: selectedArgs,
     };
   }
-
-  function onInputKeydown(evt: KeyboardEvent) {
-    evt.stopPropagation();
-  }
 </script>
 
 <div>
@@ -59,7 +55,8 @@
     bind:value={inputText}
     class="block mb-6 w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md resize-none focus:ring-1 focus:ring-white/80 focus:outline-none"
     rows={6}
-    on:keydown={onInputKeydown}
+    on:keydown|stopPropagation={() => {}}
+    on:keypress|stopPropagation={() => {}}
   />
   {#each config.args as arg}
     <PromptArgs {arg} bind:selectedValues={selectedPromptArgs[arg.key]} />
