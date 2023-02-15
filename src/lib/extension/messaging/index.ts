@@ -16,6 +16,17 @@ import { getExceptionByName } from '$lib/exceptions';
 import { runtime, tabs, type Runtime } from 'webextension-polyfill';
 import { Message } from './messaging.constants';
 
+export const messageError = (
+  err: Error
+): { error: { name: string; message: string } } => {
+  return {
+    error: {
+      name: err.name || 'Error',
+      message: err.message || '',
+    },
+  };
+};
+
 export const listenMessage = <
   T extends keyof MessagePayloadMap,
   K extends keyof MessageResponseMap
@@ -49,6 +60,7 @@ export const sendMessage = async <
   const response = await runtime.sendMessage({ type: message, payload });
 
   if (response.error) {
+    console.log('reserr', response.error.name);
     const internalException = getExceptionByName(response.error.name);
     const exception = new (internalException || Error)(response.error.message);
     return { error: exception };

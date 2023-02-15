@@ -3,6 +3,7 @@ import api from '$lib/api';
 import {
   listenConnection,
   listenMessage,
+  messageError,
   sendMessageToTab,
 } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
@@ -36,9 +37,7 @@ listenMessage(Message.GET_SESSION, async () => {
       message: session,
     };
   } catch (err) {
-    return {
-      error: err,
-    };
+    return messageError(err);
   }
 });
 
@@ -47,16 +46,11 @@ listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props 
     await api.setConversationProperty(conversationId, props);
     return { message: true };
   } catch (err) {
-    return { error: err.message || err };
+    return messageError(err);
   }
 });
 
 browser.runtime.onConnect.addListener((port) => {
-  // TODO: This prevents sending remove request after close
-  // port.onDisconnect.addListener(() => {
-  //   api.abortRequests();
-  // });
-
   listenConnection(port, Connection.CHAT, async (message, respond, error) => {
     try {
       await api.conversation(message, (response, done) => {

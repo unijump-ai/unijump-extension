@@ -50,6 +50,12 @@ const ManifestV2: Partial<chrome.runtime.ManifestV2> = {
     chrome_style: false,
   },
   permissions: [...sharedManifest.permissions, '*://*/*'],
+  browser_specific_settings: {
+    gecko: {
+      id: 'unitext@example.com',
+      strict_min_version: '42.0',
+    },
+  },
 };
 
 const ManifestV3: Partial<chrome.runtime.ManifestV3> = {

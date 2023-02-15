@@ -15,9 +15,7 @@ export const parseStream = async <Res>(
         try {
           const parsed = JSON.parse(response);
           onMessage(parsed, false);
-        } catch (error) {
-          // TODO: Sometimes getting timestamp strings
-        }
+        } catch (error) {} //  We're getting timestamp strings sometimes
       }
     }
   });
