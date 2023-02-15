@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PageName, pages } from '$lib/navigation';
   import { activePage } from '$lib/store';
-  import unitextLogo from '$assets/logo.png?w=28;56&format=webp;png&picture';
+  import unitextLogo from '$assets/logo.png?w=40;80&format=webp;png&picture';
   import Picture from '$components/elements/Picture.svelte';
 
   function navigate(pageName: PageName) {
@@ -10,7 +10,7 @@
 </script>
 
 <div class="py-4 flex flex-col border-r justify-between items-center border-r-white/8">
-  <Picture width={28} image={unitextLogo} alt="Unitext icon" />
+  <Picture width={40} image={unitextLogo} alt="Unitext icon" />
   <ul>
     {#each pages as page}
       <li>

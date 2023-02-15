@@ -1,10 +1,17 @@
 <script lang="ts">
+  import { bindKeyPress } from '$lib/a11y';
   import type { PromptArg, PromptArgItem } from '$lib/prompt/prompt.types';
 
   export let arg: PromptArg;
   export let selectedValues: PromptArgItem[] = [];
 
   const groupId = `group-${arg.key}`;
+
+  function toggleArg(evt: KeyboardEvent) {
+    const input = evt.target as HTMLInputElement;
+
+    input.click();
+  }
 </script>
 
 <div class="mb-5">
@@ -24,6 +31,7 @@
               class="absolute opacity-0 h-0 w-0"
               type="checkbox"
               bind:group={selectedValues}
+              on:keypress={bindKeyPress(['Enter', 'Space'], toggleArg)}
               value={argItem}
             />
             <span>{argItem.label}</span>
