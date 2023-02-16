@@ -24,17 +24,17 @@
   h6 {
     @apply font-bold;
   }
-}
 
-@layer components {
   #unitext-app {
-    @apply antialiased;
+    @apply antialiased font-sans;
   }
 
   #unitext-options {
-    @apply antialiased h-full;
+    @apply antialiased h-full font-sans;
   }
+}
 
+@layer components {
   .tag {
     @apply bg-white/8 text-zinc-300 px-2 py-1 text-xs font-medium rounded-md whitespace-nowrap select-none;
   }

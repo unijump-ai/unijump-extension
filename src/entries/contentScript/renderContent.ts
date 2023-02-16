@@ -5,11 +5,11 @@ export default async function renderContent(
   render: (appRoot: HTMLElement) => void
 ) {
   const appContainer = document.createElement('div');
-  appContainer.setAttribute('id', 'unitext-app');
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });
   const appRoot = document.createElement('div');
+  appRoot.setAttribute('id', 'unitext-app');
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(
