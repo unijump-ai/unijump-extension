@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ScrollerController } from '$components/elements/Scroller.controller';
   import type { ListPrompt } from '$lib/services/prompt-list';
-  import { onDestroy, onMount, tick } from 'svelte';
+  import { onDestroy, tick } from 'svelte';
   import AppPage from '$components/app/AppPage.svelte';
   import ChatInput from '$components/chat/ChatInput.svelte';
   import { Button, Scroller } from '$components/elements';
@@ -13,24 +13,17 @@
   import { errorStore, selectedText } from '$lib/store';
   import IconPlus from '$assets/icons/plus-circle.svg?component';
   import PromptList from '$components/prompt/PromptList.svelte';
-  import { ExtensionStorage } from '$lib/extension/storage';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
-  const promptsStorage = new ExtensionStorage<boolean>('prompts');
 
   let focusInput: () => void;
   let scrollerController: ScrollerController | null = null;
   let inputText = $selectedText || '';
-  let promptListEnabled = false;
 
   $: messaging = $conversationStore.incomingMessage || $conversationStore.outgoingMessage;
   $: hasConversation = $conversationStore.messages.length || messaging;
   $: onConversationChange($conversationStore);
-
-  onMount(async () => {
-    promptListEnabled = (await promptsStorage.get()) || false;
-  });
 
   onDestroy(() => {
     conversationService.clear();
@@ -55,12 +48,6 @@
   function onMessageSend(evt: CustomEvent<string>) {
     const text = evt.detail;
 
-    if (text === '/enable-prompt-list') {
-      promptListEnabled = true;
-      promptsStorage.set(true);
-      return;
-    }
-
     conversationService.sendMessage(text);
   }
 
@@ -72,8 +59,7 @@
   function onPromptListSelect(evt: CustomEvent<ListPrompt>) {
     const listPrompt = evt.detail;
 
-    conversationService.setTitle(listPrompt.title);
-    conversationService.sendMessage(listPrompt.prompt);
+    inputText = listPrompt.prompt;
     focusInput?.();
   }
 </script>
@@ -94,7 +80,7 @@
               incomingMessage={$conversationStore.incomingMessage}
               outgoingMessage={$conversationStore.outgoingMessage}
             />
-          {:else if promptListEnabled}
+          {:else}
             <PromptList on:select={onPromptListSelect} />
           {/if}
         </div>

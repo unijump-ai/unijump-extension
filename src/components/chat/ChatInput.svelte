@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount, tick } from 'svelte';
   import IconSend from '$assets/icons/send.svg?component';
   import { inlineStyle, sleep } from '$lib/utils';
   import { bindKeyEvent } from '$lib/a11y';
@@ -9,9 +9,9 @@
   export const focus = focusInput;
 
   const dispatch = createEventDispatcher();
-
-  let inputLines = 1;
+  let inputHeight = 24;
   let chatInput: HTMLTextAreaElement;
+
   $: disableSend = disabled || !inputText;
   $: onInputTextChange(inputText);
 
@@ -23,8 +23,14 @@
     }
   });
 
-  function onInputTextChange(inputText: string) {
-    inputLines = Math.max(inputText.split('\n').length, 1);
+  async function onInputTextChange(inputText: string) {
+    inputHeight = 24;
+    await tick();
+
+    if (!inputText || !chatInput) return;
+
+    inputHeight = chatInput.scrollHeight;
+    chatInput.scrollTop = chatInput.scrollHeight;
   }
 
   function focusInput() {
@@ -66,7 +72,7 @@
     <textarea
       class="flex-1 h-8 bg-transparent outline-none font-medium placeholder-zinc-500 resize-none max-h-48 self-center"
       style={inlineStyle({
-        height: `${inputLines * 24}px`,
+        height: `${inputHeight}px`,
       })}
       cols={1}
       placeholder="Write your message..."
