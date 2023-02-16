@@ -46,8 +46,6 @@
   }
 
   function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
-    conversationService.clear();
-
     const { initial, input } = evt.detail;
 
     const text = !aiMessage ? initial : input;

@@ -70,7 +70,7 @@
     class="flex bg-white/8 border p-[7px] pl-3 border-white/10 rounded-[10px] focus-within:ring-1 focus-within:ring-white/80"
   >
     <textarea
-      class="flex-1 h-8 bg-transparent outline-none font-medium placeholder-zinc-500 resize-none max-h-48 self-center"
+      class="flex-1 h-8 bg-transparent outline-none font-medium text-base  placeholder-zinc-500 resize-none max-h-48 self-center"
       style={inlineStyle({
         height: `${inputHeight}px`,
       })}
