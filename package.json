@@ -1,9 +1,9 @@
 {
   "name": "unitext",
   "version": "0.2.0",
-  "displayName": "UniText - #1 Free ChatGPT Shortcut",
+  "displayName": "UniText - Shortcut for ChatGPT",
+  "description": "Shortcut for ChatGPT with Superpowers",
   "author": "Doga Genc <dogagenc@gmail.com>",
-  "description": "#1 Shortcut for ChatGPT with Superpowers",
   "scripts": {
     "bump:patch": "npm version patch -m 'Upgrade version to v%s'",
     "bump:minor": "npm version minor -m 'Upgrade version to v%s'",
