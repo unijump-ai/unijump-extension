@@ -8,6 +8,7 @@
   import PromptArgs from './PromptArgs.svelte';
   import { errorStore, selectedText } from '$lib/store';
   import TagBuilder from '$components/elements/TagBuilder.svelte';
+  import { bindKeyEvent } from '$lib/a11y';
 
   export let config: PromptConfig;
 
@@ -55,7 +56,7 @@
     bind:value={inputText}
     class="block mb-6 w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md resize-none focus:ring-1 focus:ring-white/80 focus:outline-none"
     rows={6}
-    on:keydown|stopPropagation={() => {}}
+    on:keydown|stopPropagation={bindKeyEvent(['Escape'], () => inputEl.blur())}
     on:keypress|stopPropagation={() => {}}
   />
   {#each config.args as arg}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { bindKeyPress } from '$lib/a11y';
+  import { bindKeyEvent } from '$lib/a11y';
   import { promptListService, type ListPrompt } from '$lib/services/prompt-list';
   import { errorStore } from '$lib/store';
   import { Icon } from '@steeze-ui/svelte-icon';
@@ -56,7 +56,7 @@
           title={prompt.title}
           tabindex="0"
           on:click={() => onPromptClick(prompt)}
-          on:keypress={bindKeyPress(['Space', 'Enter'], () => onPromptClick(prompt))}
+          on:keypress={bindKeyEvent(['Space', 'Enter'], () => onPromptClick(prompt))}
         >
           <h5 class="text-xs pr-3">{prompt.title}</h5>
           <p
@@ -73,7 +73,7 @@
               }
             )}
             on:click|preventDefault|stopPropagation={() => onFavoriteClick(prompt)}
-            on:keypress|preventDefault|stopPropagation={bindKeyPress(
+            on:keypress|preventDefault|stopPropagation={bindKeyEvent(
               ['Space', 'Enter'],
               () => onFavoriteClick(prompt)
             )}
@@ -92,7 +92,7 @@
         <button
           class="flex items-center justify-center px-4 py-2.5 bg-white/8 border border-white/10 rounded-full transition-all hover:bg-white/15"
           on:click={() => showMorePrompts()}
-          on:keypress={bindKeyPress(['Space', 'Enter'], () => showMorePrompts())}
+          on:keypress={bindKeyEvent(['Space', 'Enter'], () => showMorePrompts())}
         >
           <span class="inline-flex -rotate-90">
             <IconArrowLeft width={16} />

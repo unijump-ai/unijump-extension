@@ -1,3 +1,11 @@
+<script context="module" lang="ts">
+  const modalCloseFunctions = [];
+
+  export const closeModals = () => {
+    modalCloseFunctions.forEach((fn) => fn());
+  };
+</script>
+
 <script lang="ts">
   import SveltePortal from 'svelte-portal';
   import { createEventDispatcher, getContext, setContext } from 'svelte';
@@ -17,6 +25,7 @@
   const modalStore = createModalStore(id, close);
 
   setContext(AppContext.Modal, modalStore);
+  modalCloseFunctions.push(close);
 
   $: props = {
     'aria-labelledby': $modalStore.title ? `${id}-title` : null,
@@ -45,7 +54,6 @@
       aria-modal="true"
       tabindex="-1"
       use:focus
-      use:overflow
       on:click|self={close}
       {...props}
       transition:fade={{ duration: 100 }}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { bindKeyPress } from '$lib/a11y';
+  import { bindKeyEvent } from '$lib/a11y';
   import type { PromptArg, PromptArgItem } from '$lib/prompt/prompt.types';
 
   export let arg: PromptArg;
@@ -31,7 +31,7 @@
               class="absolute opacity-0 h-0 w-0"
               type="checkbox"
               bind:group={selectedValues}
-              on:keypress={bindKeyPress(['Enter', 'Space'], toggleArg)}
+              on:keypress={bindKeyEvent(['Enter', 'Space'], toggleArg)}
               value={argItem}
             />
             <span>{argItem.label}</span>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
   import unitextLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
-  import { bindKeyPress } from '$lib/a11y';
+  import { bindKeyEvent } from '$lib/a11y';
   import { getShortcut } from '$lib/shortcuts';
   import { inlineClass } from '$lib/utils';
   import Picture from '$components/elements/Picture.svelte';
@@ -67,7 +67,7 @@
     on:focus={() => (expanded = true)}
     on:blur={() => (expanded = false)}
     on:click={() => dispatch('activate')}
-    on:keypress={bindKeyPress(['Enter'], () => dispatch('activate'))}
+    on:keypress={bindKeyEvent(['Enter'], () => dispatch('activate'))}
   >
     <div
       class={inlineClass('icon absolute top-1 pointer-events-none', [

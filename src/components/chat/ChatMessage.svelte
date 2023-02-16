@@ -44,7 +44,11 @@
           <IconCopy width={16} height={16} />
         </button>
       {/if}
-      <Markdown source={message.text} />
+      {#if message.sender.role === 'user'}
+        <p class="whitespace-pre-wrap">{message.text}</p>
+      {:else}
+        <Markdown source={message.text} />
+      {/if}
     {/if}
   </div>
 </div>

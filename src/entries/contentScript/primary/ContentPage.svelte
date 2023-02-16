@@ -7,7 +7,7 @@
   import { getShortcut, registerShortcut } from '$lib/shortcuts';
   import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
   import { options } from '$lib/store';
-  import Modal from '$components/modal/Modal.svelte';
+  import Modal, { closeModals } from '$components/modal/Modal.svelte';
   import App from '$components/app/App.svelte';
   import Draggable, {
     type DraggablePosition,
@@ -28,6 +28,10 @@
       evt.preventDefault();
 
       toggleModal();
+    });
+
+    registerShortcut('Esc', () => {
+      closeModals();
     });
 
     listenMessage(Message.OPEN_MODAL, () => {

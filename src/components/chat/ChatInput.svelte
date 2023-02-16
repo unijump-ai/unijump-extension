@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount, tick } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import IconSend from '$assets/icons/send.svg?component';
-  import { sleep } from '$lib/utils';
-  import { bindKeyPress } from '$lib/a11y';
+  import { inlineStyle, sleep } from '$lib/utils';
+  import { bindKeyEvent } from '$lib/a11y';
 
   export let disabled = false;
   export let inputText = '';
@@ -10,8 +10,10 @@
 
   const dispatch = createEventDispatcher();
 
-  let chatInput: HTMLInputElement;
+  let inputLines = 1;
+  let chatInput: HTMLTextAreaElement;
   $: disableSend = disabled || !inputText;
+  $: onInputTextChange(inputText);
 
   onMount(async () => {
     await sleep(100);
@@ -20,6 +22,10 @@
       focusInput();
     }
   });
+
+  function onInputTextChange(inputText: string) {
+    inputLines = Math.max(inputText.split('\n').length, 1);
+  }
 
   function focusInput() {
     chatInput.focus();
@@ -40,6 +46,13 @@
 
     chatInput.selectionStart = chatInput.selectionEnd = 10000;
   }
+
+  function onKeyPress(evt: KeyboardEvent) {
+    if (evt.key === 'Enter' && !evt.shiftKey) {
+      evt.preventDefault();
+      sendMessage();
+    }
+  }
 </script>
 
 <div
@@ -50,18 +63,21 @@
   <div
     class="flex bg-white/8 border p-[7px] pl-3 border-white/10 rounded-[10px] focus-within:ring-1 focus-within:ring-white/80"
   >
-    <input
-      type="text"
-      class="flex-1 bg-transparent outline-none font-medium placeholder-zinc-500"
+    <textarea
+      class="flex-1 h-8 bg-transparent outline-none font-medium placeholder-zinc-500 resize-none max-h-48 self-center"
+      style={inlineStyle({
+        height: `${inputLines * 24}px`,
+      })}
+      cols={1}
       placeholder="Write your message..."
       bind:this={chatInput}
       bind:value={inputText}
-      on:keydown|stopPropagation={() => {}}
-      on:keypress|stopPropagation={bindKeyPress(['Enter'], () => sendMessage())}
+      on:keydown|stopPropagation={bindKeyEvent(['Escape'], () => chatInput.blur())}
+      on:keypress|stopPropagation={onKeyPress}
       on:focus={onChatInputFocus}
     />
     <button
-      class="btn-primary-icon"
+      class="btn-primary-icon self-end"
       disabled={disableSend}
       on:click={() => sendMessage()}
     >
