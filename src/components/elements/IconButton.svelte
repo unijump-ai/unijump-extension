@@ -3,7 +3,7 @@
 </script>
 
 <button
-  class="p-1 bg-white/5 rounded-full hover:bg-white/20 transition-all"
+  class="p-1 bg-white/5 rounded-full hover:bg-white/15 transition-all"
   {...$$props}
   on:click
 >

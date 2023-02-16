@@ -27,7 +27,7 @@
 </script>
 
 <div
-  class="relative app grid grid-cols-[64px_1fr] rounded-[20px] text-white select-none font-sans antialiased overflow-hidden"
+  class="relative bg-modal h-full grid grid-cols-[64px_1fr] rounded-[20px] text-white select-none font-sans overflow-hidden"
   transition:fade={{ duration: 130 }}
 >
   <AppSidebar />
@@ -40,16 +40,3 @@
   </main>
   <Warnings />
 </div>
-
-<style>
-  .app {
-    height: 100%;
-    background: url('$assets/bg-grain.png'),
-      radial-gradient(
-        80.4% 41.5% at 50% 0%,
-        rgba(255, 255, 255, 0.16) 0%,
-        rgba(255, 255, 255, 0) 100%
-      ),
-      rgba(23, 18, 43, 1);
-  }
-</style>

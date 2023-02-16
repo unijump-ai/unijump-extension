@@ -27,6 +27,10 @@
 }
 
 @layer components {
+  #unitext-app {
+    @apply antialiased;
+  }
+
   .tag {
     @apply bg-white/8 text-zinc-300 px-2 py-1 text-xs font-medium rounded-md whitespace-nowrap select-none;
   }
@@ -41,6 +45,16 @@
 
   .seperator-vertical {
     @apply h-full w-[1px] bg-gradient-to-b from-white/0 via-white/50 to-white/0 opacity-40;
+  }
+
+  .bg-modal {
+    background: url('$assets/bg-grain.png'),
+      radial-gradient(
+        80.4% 41.5% at 50% 0%,
+        rgba(255, 255, 255, 0.16) 0%,
+        rgba(255, 255, 255, 0) 100%
+      ),
+      rgba(23, 18, 43, 1);
   }
 
   .btn-primary {

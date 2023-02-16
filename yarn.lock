@@ -4363,6 +4363,11 @@ svelte-markdown@^0.2.3:
     "@types/marked" "^4.0.1"
     marked "^4.0.10"
 
+svelte-portal@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-portal/-/svelte-portal-2.2.0.tgz#794bdd7626e88a7023cd0ff3832c547af827deaf"
+  integrity sha512-jhtZWtD6cUE2nMw46dJ5VXWYiqnER+JH+V/BmNBQ5fNP/YdsJCpJi+DemUy9msklqGb0f+wLhJPBtKHLWQvzjg==
+
 svelte-preprocess@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-5.0.1.tgz#3dd21a17eb508347d4b26a0d98059d23e2d1b9a0"

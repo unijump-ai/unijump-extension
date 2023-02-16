@@ -33,14 +33,6 @@
     focusInput();
   }
 
-  // function onChatKeydown(evt: KeyboardEvent) {
-  //   evt.stopPropagation();
-
-  //   if (evt.key === 'Enter') {
-  //     sendMessage();
-  //   }
-  // }
-
   async function onChatInputFocus() {
     await sleep(200);
 

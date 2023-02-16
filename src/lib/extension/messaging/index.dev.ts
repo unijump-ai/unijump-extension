@@ -113,3 +113,5 @@ export const sendMessage = <T extends keyof MessagePayloadMap>(
 ) => {
   return { message };
 };
+
+export const listenMessage = () => {};

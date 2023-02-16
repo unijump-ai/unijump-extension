@@ -56,6 +56,7 @@
     "expiry-map": "^2.0.0",
     "hotkeys-js": "^3.10.1",
     "svelte-markdown": "^0.2.3",
+    "svelte-portal": "^2.2.0",
     "webextension-polyfill": "^0.10.0"
   },
   "type": "module"

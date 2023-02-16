@@ -5,6 +5,7 @@ export default async function renderContent(
   render: (appRoot: HTMLElement) => void
 ) {
   const appContainer = document.createElement('div');
+  appContainer.setAttribute('id', 'unitext-app');
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });

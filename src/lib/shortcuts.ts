@@ -1,5 +1,23 @@
 import hotkeys from 'hotkeys-js';
+import { isMac } from './utils';
+hotkeys.filter = () => true; // Work anywhere including input, textarea...
 
-hotkeys.filter = () => true;
+interface PlatformShortcuts {
+  mac: string;
+  default: string;
+}
 
-export const shortcut = hotkeys;
+const shortcuts = {
+  app: {
+    mac: '⌘+u',
+    default: 'ctrl+u',
+  },
+} satisfies Record<string, PlatformShortcuts>;
+
+export const getShortcut = <T extends keyof typeof shortcuts>(key: T) => {
+  const shortcut = shortcuts[key];
+
+  return isMac() ? shortcut.mac : shortcut.default;
+};
+
+export const registerShortcut = hotkeys;

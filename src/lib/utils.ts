@@ -2,17 +2,42 @@ export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve
 
 export const inlineClass = (
   defaultClasses: string,
-  classObject: Record<string, boolean>
+  conditinalClasses: Record<string, boolean> | string[]
 ): string => {
-  const validClasses: string[] = [];
+  let validClasses: string[] = [];
 
-  Object.keys(classObject).forEach((className) => {
-    const value = classObject[className];
+  if (Array.isArray(conditinalClasses)) {
+    validClasses = conditinalClasses;
+  } else {
+    Object.keys(conditinalClasses).forEach((className) => {
+      const value = conditinalClasses[className];
+
+      if (!value) return;
+
+      validClasses.push(className);
+    });
+  }
+
+  return `${defaultClasses} ${validClasses.join(' ')}`;
+};
+
+export const inlineStyle = (styleObject: Partial<CSSStyleDeclaration>): string => {
+  const validStyles = [];
+
+  Object.keys(styleObject).forEach((key) => {
+    const value = styleObject[key];
 
     if (!value) return;
 
-    validClasses.push(className);
+    validStyles.push(`${key}: ${value};`);
   });
 
-  return `${defaultClasses} ${validClasses.join(' ')}`;
+  return validStyles.join('');
+};
+
+export const isMac = () => {
+  const platform = ((window.navigator as any).userAgentData?.platform ||
+    window.navigator.platform) as string;
+
+  return platform.toLowerCase().includes('mac');
 };
