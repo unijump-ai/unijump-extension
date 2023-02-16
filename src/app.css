@@ -31,6 +31,10 @@
     @apply antialiased;
   }
 
+  #unitext-options {
+    @apply antialiased h-full;
+  }
+
   .tag {
     @apply bg-white/8 text-zinc-300 px-2 py-1 text-xs font-medium rounded-md whitespace-nowrap select-none;
   }
@@ -53,8 +57,8 @@
         80.4% 41.5% at 50% 0%,
         rgba(255, 255, 255, 0.16) 0%,
         rgba(255, 255, 255, 0) 100%
-      ),
-      rgba(23, 18, 43, 1);
+      );
+    @apply bg-darkPurple-900;
   }
 
   .btn-primary {

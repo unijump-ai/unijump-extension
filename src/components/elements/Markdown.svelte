@@ -52,7 +52,7 @@
   }
 
   .marked-own h1,
-  h2 {
+  .marked-own h2 {
     @apply text-2xl;
   }
 
@@ -73,7 +73,7 @@
   }
 
   .marked-own ul,
-  ol {
+  .marked-own ol {
     @apply pl-4;
   }
 
@@ -90,7 +90,7 @@
   }
 
   .marked-own th,
-  td {
+  .marked-own td {
     @apply border border-white/20;
   }
 

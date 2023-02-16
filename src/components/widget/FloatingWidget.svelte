@@ -11,6 +11,7 @@
   import ModalTitle from '$components/modal/ModalTitle.svelte';
   import ModalDescription from '$components/modal/ModalDescription.svelte';
   import Button from '$components/elements/Button.svelte';
+  import { options } from '$lib/store';
 
   export let direction: 'left' | 'right';
   export let expanded = false;
@@ -36,10 +37,6 @@
       document.removeEventListener('selectionchange', onSelectionChange);
     };
   });
-
-  function hideWidget(host: string) {
-    dispatch('hide', host);
-  }
 </script>
 
 <div
@@ -99,10 +96,12 @@
       > shortcut or by clicking on the Unitext icon in the browser toolbar.</ModalDescription
     >
     <div class="grid grid-cols-2 gap-2 mt-6">
-      <Button on:click={() => hideWidget(window.location.host)}
+      <Button on:click={() => options.toggleWidgetHost(window.location.host)}
         >Hide for this website</Button
       >
-      <Button clean on:click={() => hideWidget('*')}>Hide for all websites</Button>
+      <Button clean on:click={() => options.updateWidgetDisabled(true)}
+        >Hide for all websites</Button
+      >
     </div>
   </ModalDialog>
 </Modal>

@@ -11,7 +11,9 @@ module.exports = {
       colors: {
         'darkPurple': {
           600: '#4B4471',
-          800: '#201B37'
+          700: '#3A325C',
+          800: '#201B37',
+          900: '#17122B'
         }
       },
       opacity: {

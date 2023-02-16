@@ -5,16 +5,20 @@
   import ContentPage from './entries/contentScript/primary/ContentPage.svelte';
 
   const pages = {
-    '/options': Options,
-  };
+    '/options': {
+      id: 'unitext-options',
+      component: Options,
+    },
+  } as const;
+
   const page = pages[window.location.pathname];
 
   setContext(AppContext.Root, '#unitext-app');
 </script>
 
 {#if page}
-  <div id="app">
-    <svelte:component this={page} />
+  <div id={page.id}>
+    <svelte:component this={page.component} />
   </div>
 {:else}
   <div class="max-w-3xl mx-auto pt-8">
@@ -44,8 +48,7 @@
       />
     </div>
   </div>
+  <div id="unitext-app">
+    <ContentPage />
+  </div>
 {/if}
-
-<div id="unitext-app">
-  <ContentPage />
-</div>
