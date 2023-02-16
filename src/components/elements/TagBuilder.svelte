@@ -71,7 +71,8 @@
   contenteditable="true"
   class="tag mr-1 mb-1 focus:outline-none {isAdding ? 'inline-block' : 'hidden'}"
   bind:this={tagInput}
-  on:keydown={onInputKeydown}
+  on:keypress|stopPropagation={() => {}}
+  on:keydown|stopPropagation={onInputKeydown}
   on:blur={onInputBlur}
 />
 <button
