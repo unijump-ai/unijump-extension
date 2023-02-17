@@ -72,10 +72,11 @@
     handlePosition="bottom"
     on:dragend={() => floatingWidgetPositionStorage.set(draggablePosition)}
     let:hovered
+    let:dragging
   >
     <FloatingWidget
       direction={!!draggablePosition.left ? 'right' : 'left'}
-      expanded={hovered}
+      expanded={hovered || dragging}
       visible={!appModalVisible}
       on:activate={openModal}
     />

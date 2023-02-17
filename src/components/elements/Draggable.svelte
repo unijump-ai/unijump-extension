@@ -24,6 +24,8 @@
   let grabbed = false;
   let x: number;
   let y: number;
+  let diffX: number;
+  let diffY: number;
   let draggableEl: HTMLDivElement;
 
   $: style = inlineStyle({
@@ -34,13 +36,15 @@
   });
   $: isHandleVisible = showHandle || isHovered;
 
-  function calculatePosition() {
-    const boundingRectangle = draggableEl.getBoundingClientRect();
+  function getElementRect() {
+    return draggableEl.getBoundingClientRect();
+  }
 
-    x = boundingRectangle.x;
-    y = boundingRectangle.y;
+  function calculateDiff(mouseX: number, mouseY: number) {
+    const boundingRectangle = getElementRect();
 
-    updatePosition();
+    diffX = mouseX - boundingRectangle.x;
+    diffY = mouseY - boundingRectangle.y;
   }
 
   function updatePosition() {
@@ -65,17 +69,15 @@
   }
 
   function onMouseDown(evt: MouseEvent) {
-    if (!x || !y) {
-      calculatePosition();
-    }
+    calculateDiff(evt.clientX, evt.clientY);
     grabbed = true;
   }
 
   function onMouseMove(evt: MouseEvent) {
     if (!grabbed) return;
 
-    x += evt.movementX;
-    y += evt.movementY;
+    x = evt.clientX - diffX;
+    y = evt.clientY - diffY;
     updatePosition();
   }
 
@@ -87,7 +89,14 @@
   }
 
   function onWindowResize() {
-    calculatePosition();
+    if (!x || !y) {
+      const boundingRect = getElementRect();
+
+      x = boundingRect.x;
+      y = boundingRect.y;
+    }
+
+    updatePosition();
   }
 </script>
 
@@ -104,7 +113,7 @@
   on:mouseleave={() => (isHovered = false)}
 >
   <div class={inlineClass('z-20', { 'order-2': handlePosition === 'top' })}>
-    <slot hovered={isHovered} />
+    <slot hovered={isHovered} dragging={grabbed} />
   </div>
   <div
     class={inlineClass('text-center z-10', {
