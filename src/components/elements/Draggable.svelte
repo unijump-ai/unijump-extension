@@ -34,7 +34,7 @@
     right: position.right ? `${position.right}px` : 'auto',
     bottom: position.bottom ? `${position.bottom}px` : 'auto',
   });
-  $: isHandleVisible = showHandle || isHovered;
+  $: isHandleVisible = showHandle || isHovered || grabbed;
 
   function getElementRect() {
     return draggableEl.getBoundingClientRect();
@@ -106,7 +106,7 @@
   on:resize={onWindowResize}
 />
 <div
-  class={inlineClass('fixed flex flex-col select-none z-[9999999]', [])}
+  class={inlineClass('fixed select-none z-[9999999]', [])}
   {style}
   bind:this={draggableEl}
   on:mouseenter={() => (isHovered = true)}
@@ -116,12 +116,13 @@
     <slot hovered={isHovered} dragging={grabbed} />
   </div>
   <div
-    class={inlineClass('text-center z-10', {
+    class={inlineClass('absolute left-1/2 -translate-x-1/2 -z-10', {
       'cursor-grabbing': grabbed,
       'cursor-grab': !grabbed,
       'order-1': handlePosition === 'top',
       'translate-y-0 opacity-100 visible transition-all delay-700': isHandleVisible,
-      'opacity-0 invisible transition-none delay-75': !isHandleVisible,
+      'opacity-0 invisible transition-none delay-75 pointer-events-none':
+        !isHandleVisible,
       '-translate-y-1/2': !isHandleVisible && handlePosition === 'bottom',
       'translate-y-1/2': !isHandleVisible && handlePosition === 'top',
     })}
@@ -134,7 +135,7 @@
     >
       <IconDraggerHandle />
       <span
-        class="text-zinc-400 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:text-zinc-600"
+        class="text-zinc-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:text-zinc-700"
       >
         <IconDrag />
       </span>

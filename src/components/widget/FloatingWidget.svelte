@@ -6,6 +6,7 @@
   import { inlineClass } from '$lib/utils';
   import Picture from '$components/elements/Picture.svelte';
   import IconClose from '$assets/icons/close.svg?component';
+  import IconDraggerHandle from '$assets/icons/dragger-handle.svg?component';
   import ModalDialog from '$components/modal/ModalDialog.svelte';
   import Modal from '$components/modal/Modal.svelte';
   import ModalTitle from '$components/modal/ModalTitle.svelte';
@@ -40,19 +41,10 @@
 </script>
 
 <div
-  class={inlineClass('group relative transition-all', [
+  class={inlineClass('group/floating relative transition-all', [
     visible ? 'opacity-100 visible' : 'opacity-0 invisible',
   ])}
 >
-  <button
-    class={inlineClass(
-      'absolute p-1 text-zinc-400 -right-3.5 -top-3.5 opacity-0 invisible transition-opacity delay-75',
-      ['group-hover:opacity-100 group-hover:visible group-hover:delay-700']
-    )}
-    on:click={() => (isCloseModalActive = true)}
-  >
-    <IconClose width={16} />
-  </button>
   <div
     class={inlineClass(
       'relative p-3 text-white font-medium text-sm rounded-full cursor-pointer min-w-[44px] min-h-[44px] transition-all outline-none',
@@ -84,6 +76,26 @@
       {getShortcut('app')}
     </div>
   </div>
+  <button
+    class={inlineClass(
+      'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
+      [
+        'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
+      ]
+    )}
+    on:click={() => (isCloseModalActive = true)}
+  >
+    <IconDraggerHandle />
+    <span
+      class={inlineClass(
+        'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
+        []
+      )}
+    >
+      <IconClose width={16} />
+    </span>
+    <span class="sr-only">Close widget</span>
+  </button>
 </div>
 
 <Modal bind:active={isCloseModalActive} id="floating-close">
