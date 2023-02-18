@@ -5,6 +5,8 @@
   import { errorStore } from '$lib/store';
   import { onMount } from 'svelte';
 
+  const chatGptUrl = 'https://chat.openai.com/chat';
+
   $: message =
     $errorStore instanceof UnauthorizedException
       ? 'Please Login at'
@@ -29,9 +31,14 @@
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   });
+
+  function onChatGptClick(evt: MouseEvent) {
+    evt.preventDefault();
+    sendMessage(Message.OPEN_CHATGPT_TAB, chatGptUrl);
+  }
 </script>
 
-<a href="https://chat.openai.com/chat" target="_blank" rel="noreferrer">
+<a href={chatGptUrl} target="_blank" rel="noreferrer" on:click={onChatGptClick}>
   <p>
     {message} <span class="underline">chat.openai.com ↗</span> to continue using UniText.
   </p>

@@ -50,6 +50,42 @@ listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props 
   }
 });
 
+listenMessage(Message.OPEN_CHATGPT_TAB, (urlString) => {
+  const url = new URL(urlString);
+  url.searchParams.set('ut', '1');
+  browser.tabs
+    .create({
+      url: url.toString(),
+    })
+    .then((tab) => {
+      let updatedUrl: string;
+      let title: string;
+
+      const onTabUpdated = (
+        _: number,
+        changeInfo: browser.Tabs.OnUpdatedChangeInfoType
+      ) => {
+        if (changeInfo.url) {
+          updatedUrl = changeInfo.url;
+        }
+        if (changeInfo.title) {
+          title = changeInfo.title;
+        }
+
+        if (updatedUrl === url.toString() && title === 'New chat') {
+          removeListener();
+          browser.tabs.remove(tab.id);
+        }
+      };
+
+      const removeListener = () => {
+        browser.tabs.onUpdated.removeListener(onTabUpdated);
+      };
+
+      browser.tabs.onUpdated.addListener(onTabUpdated);
+    });
+});
+
 browser.runtime.onConnect.addListener((port) => {
   listenConnection(port, Connection.CHAT, async (message, respond, error) => {
     try {

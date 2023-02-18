@@ -8,7 +8,7 @@ interface OptionsState {
 
 const defaultOptions = {
   widgetDisabled: false,
-  disabledWidgetHosts: [],
+  disabledWidgetHosts: ['auth0.openai.com', 'chat.openai.com'],
 };
 
 const optionsStorage = new ExtensionStorage<OptionsState>('options');

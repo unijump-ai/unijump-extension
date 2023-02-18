@@ -3,9 +3,9 @@ export enum Message {
   TOGGLE_MODAL = 'toggle-modal',
   GET_SESSION = 'get-session',
   SET_CONVERSATION_PROPERTY = 'set-conversation-property',
+  OPEN_CHATGPT_TAB = 'open-chatgpt-tab',
 }
 
 export enum Connection {
   CHAT = 'chat',
-  ANOTHER = 'another',
 }

@@ -24,6 +24,7 @@ export type MessagePayloadMap = {
     conversationId: string;
     props: Partial<ConversationProperty>;
   };
+  [Message.OPEN_CHATGPT_TAB]: string;
 };
 
 export type MessageResponseMap = {
@@ -38,12 +39,10 @@ export type ConnectionPayloadMap = {
     response: ConversationResponse;
     done: boolean;
   };
-  [Connection.ANOTHER]: void;
 };
 
 export type ConnectionMessageMap = {
   [Connection.CHAT]: ConversationParams;
-  [Connection.ANOTHER]: void;
 };
 
 export interface MessageEvent<T extends keyof MessagePayloadMap> {
