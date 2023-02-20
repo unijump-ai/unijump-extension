@@ -35,12 +35,13 @@ export const listenMessage = <
   callback: MessageCallback<T, K>
 ): MessageUnsubsriber => {
   const onMessage = (
-    messageEvent: MessageEvent<T>
+    messageEvent: MessageEvent<T>,
+    sender: Runtime.MessageSender
   ): ReturnType<MessageCallback<T, K>> => {
     if (!Object.values(Message).includes(message) || messageEvent.type !== message)
       return;
 
-    return callback(messageEvent.payload);
+    return callback(messageEvent.payload, sender);
   };
 
   runtime.onMessage.addListener(onMessage);

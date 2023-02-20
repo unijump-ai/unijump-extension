@@ -4,6 +4,7 @@ import type {
   ConversationProperty,
   ConversationResponse,
 } from '$lib/api';
+import type { Runtime } from 'webextension-polyfill';
 import type { Connection, Message } from './messaging.constants';
 
 export interface ConnectionMessage {
@@ -79,5 +80,8 @@ export type MessagePayload<T extends keyof MessagePayloadMap> = MessagePayloadMa
 export type MessageCallback<
   T extends keyof MessagePayloadMap,
   K extends keyof MessageResponseMap
-> = (payload: MessagePayload<T>) => Promise<MessageResponse<K>> | void;
+> = (
+  payload: MessagePayload<T>,
+  sender: Runtime.MessageSender
+) => Promise<MessageResponse<K>> | void;
 export type MessageUnsubsriber = () => void;

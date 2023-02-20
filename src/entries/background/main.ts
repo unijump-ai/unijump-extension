@@ -50,7 +50,7 @@ listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props 
   }
 });
 
-listenMessage(Message.OPEN_CHATGPT_TAB, (urlString) => {
+listenMessage(Message.OPEN_CHATGPT_TAB, (urlString, sender) => {
   const url = new URL(urlString);
   url.searchParams.set('ut', '1');
   browser.tabs
@@ -74,6 +74,7 @@ listenMessage(Message.OPEN_CHATGPT_TAB, (urlString) => {
 
         if (updatedUrl === url.toString() && title === 'New chat') {
           removeListener();
+          browser.tabs.update(sender.tab.id, { active: true });
           browser.tabs.remove(tab.id);
         }
       };
