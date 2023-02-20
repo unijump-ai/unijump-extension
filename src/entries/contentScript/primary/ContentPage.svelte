@@ -21,7 +21,7 @@
   onMount(async () => {
     draggablePosition = (await floatingWidgetPositionStorage.get()) || {
       top: 80,
-      right: 16,
+      right: 6,
     };
 
     registerShortcut(getShortcut('app'), (evt) => {
@@ -70,6 +70,8 @@
     bind:position={draggablePosition}
     showHandle={false}
     handlePosition="bottom"
+    paddingX={6}
+    paddingY={16}
     on:dragend={() => floatingWidgetPositionStorage.set(draggablePosition)}
     let:hovered
     let:dragging

@@ -15,7 +15,8 @@
 
   export let position: DraggablePosition;
   export let handlePosition: 'top' | 'bottom' = 'bottom';
-  export let padding = 16;
+  export let paddingX = 16;
+  export let paddingY = 16;
   export let showHandle = true;
 
   const dispatch = createEventDispatcher();
@@ -35,6 +36,11 @@
     bottom: position.bottom ? `${position.bottom}px` : 'auto',
   });
   $: isHandleVisible = showHandle || isHovered || grabbed;
+  $: sticked =
+    position.left === paddingX ||
+    position.right === paddingX ||
+    position.top === paddingY ||
+    position.bottom === paddingY;
 
   function getElementRect() {
     return draggableEl.getBoundingClientRect();
@@ -48,11 +54,11 @@
   }
 
   function updatePosition() {
-    const newX = window.innerWidth - padding - draggableEl.clientWidth;
-    const newY = window.innerHeight - padding - draggableEl.clientHeight;
+    const newX = window.innerWidth - paddingX - draggableEl.clientWidth;
+    const newY = window.innerHeight - paddingY - draggableEl.clientHeight;
 
-    x = Math.max(Math.min(newX, x), padding);
-    y = Math.max(Math.min(newY, y), padding);
+    x = Math.max(Math.min(newX, x), paddingX);
+    y = Math.max(Math.min(newY, y), paddingY);
 
     position = {
       left: x < window.innerWidth / 2 ? x : null,
@@ -89,6 +95,8 @@
   }
 
   function onWindowResize() {
+    if (sticked) return;
+
     if (!x || !y) {
       const boundingRect = getElementRect();
 
