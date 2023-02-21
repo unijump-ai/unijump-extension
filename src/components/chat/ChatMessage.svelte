@@ -20,7 +20,7 @@
     />
   </div>
   <div
-    class="font-medium relative inline-flex m-0 px-4 py-3 max-w-full border-1 border-white/10 rounded-[10px] {message
+    class="font-medium relative inline-flex text-sm select-text m-0 px-4 py-3 max-w-full border-1 border-white/10 rounded-[10px] {message
       .sender.role === 'user'
       ? 'bg-darkPurple-600'
       : 'bg-white/8'}"
