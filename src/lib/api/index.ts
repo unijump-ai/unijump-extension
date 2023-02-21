@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
@@ -164,10 +165,10 @@ export class Api {
     const conversationBody: ConversationBody = {
       action: 'next',
       model: 'text-davinci-002-render',
-      parent_message_id: params.parentMessageId || crypto.randomUUID(),
+      parent_message_id: params.parentMessageId || uuidv4(),
       messages: [
         {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           role: 'user',
           content: {
             content_type: 'text',

@@ -1,6 +1,7 @@
 import type { ConversationParams } from '$lib/api';
 import type { ConnectionHandler } from '$lib/extension/messaging/messaging.types';
 import type { ImageToolsSource } from 'src/types/image-tools';
+import { v4 as uuidv4 } from 'uuid';
 import { openConnection, sendMessage } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 import { StoreService } from './store';
@@ -69,7 +70,7 @@ export class ConversationService extends StoreService<ConversationState> {
   }
 
   private createMessageId() {
-    return crypto.randomUUID();
+    return uuidv4();
   }
 
   private getAiSender(): ConversationSender {

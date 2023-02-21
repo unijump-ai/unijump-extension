@@ -1,4 +1,5 @@
 import ExpiryMap from 'expiry-map';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ExpiryCache<T> {
   private cache: ExpiryMap;
@@ -6,7 +7,7 @@ export class ExpiryCache<T> {
 
   constructor(maxAge: number) {
     this.cache = new ExpiryMap(maxAge);
-    this.key = crypto.randomUUID();
+    this.key = uuidv4();
   }
 
   get(): T | void {
