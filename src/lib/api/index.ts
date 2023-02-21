@@ -1,9 +1,7 @@
 import { Cache } from '$lib/decorators/cache.method';
 import {
-  ApiException,
   CloudflareException,
   ServiceBusyException,
-  SseException,
   UnauthorizedException,
   UnknownException,
 } from '$lib/exceptions';
@@ -84,13 +82,15 @@ export class Api {
     const response = await fetch(this.getFullUrl(path), requestOptions);
 
     if (!response.ok) {
-      const resBody = await response.json();
-
-      if (resBody?.detail) {
-        throw new ApiException(resBody.detail);
+      if (response.status === 403) {
+        throw new CloudflareException();
       }
 
-      throw new SseException();
+      if (response.status === 405) {
+        throw new ServiceBusyException();
+      }
+
+      throw new UnknownException();
     }
 
     if (onSseMessage) {
@@ -139,12 +139,6 @@ export class Api {
 
       if (response.status === 405) {
         throw new ServiceBusyException();
-      }
-
-      const resBody = await response.json();
-
-      if (resBody?.detail) {
-        throw new ApiException(resBody.detail);
       }
 
       throw new UnknownException();

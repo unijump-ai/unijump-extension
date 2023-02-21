@@ -24,26 +24,11 @@ export class UnknownException extends Error {
     this.name = UnknownException.name;
   }
 }
-export class SseException extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = SseException.name;
-  }
-}
-
-export class ApiException extends Error {
-  constructor(message?: string) {
-    super(message);
-    this.name = ApiException.name;
-  }
-}
 
 const exceptions = [
   CloudflareException,
   UnauthorizedException,
   UnknownException,
-  SseException,
-  ApiException,
   ServiceBusyException,
 ];
 
