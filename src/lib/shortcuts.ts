@@ -9,8 +9,8 @@ interface PlatformShortcuts {
 
 const shortcuts = {
   app: {
-    mac: '⌘+u',
-    default: 'ctrl+u',
+    mac: '⌘+j',
+    default: 'ctrl+j',
   },
 } satisfies Record<string, PlatformShortcuts>;
 
