@@ -1,6 +1,7 @@
 import { parseCSV } from '$lib/csv';
 import { Cache } from '$lib/decorators/cache.method';
 import { ExtensionStorage } from '$lib/extension/storage';
+import { StorageKey } from '$lib/extension/storage/storage.constants';
 import promptLists from '$lib/prompt-lists';
 import type { PromptListConfig } from '$lib/prompt-lists/prompt-list.types';
 import { createArrayStore } from '$lib/store/arrayStore';
@@ -19,7 +20,9 @@ interface PromptListState {
   isLoading: boolean;
 }
 
-const favoritePromptsStorage = new ExtensionStorage<string[]>('favoritePrompts');
+const favoritePromptsStorage = new ExtensionStorage<string[]>(
+  StorageKey.FAVORITE_PROMPTS
+);
 
 class PromptListService extends StoreService<PromptListState> {
   lists = promptLists;

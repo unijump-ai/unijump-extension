@@ -9,7 +9,6 @@ import type {
 
 interface ConnectionPayloadMapArray {
   [Connection.CHAT]: ConnectionPayloadMap[Connection.CHAT][];
-  [Connection.ANOTHER]: ConnectionPayloadMap[Connection.ANOTHER][];
 }
 
 // const message = 'Hello how can i helop you today?';
@@ -81,7 +80,6 @@ const devMessages: ConnectionPayloadMapArray = {
       },
     },
   ],
-  [Connection.ANOTHER]: [undefined, undefined],
 };
 
 export const openConnection = <T extends keyof ConnectionPayloadMap>(

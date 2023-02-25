@@ -34,7 +34,7 @@
     const input = config.input(selectedPromptArgs, inputText);
     const initial = config.initialPrompt(input);
 
-    dispatch('prompt', { initial, input });
+    dispatch('prompt', { initial, input, args: selectedPromptArgs });
   }
 
   function removeArg(argKey: string, argItem: PromptArgItem) {

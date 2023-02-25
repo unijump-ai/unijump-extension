@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {},
     plugins: [svelte(), svelteSVG(), imagetools()],
+    envPrefix: 'CLIENT_',
   } satisfies UserConfigExport;
 
   if (development) {

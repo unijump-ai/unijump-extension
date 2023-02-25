@@ -28,6 +28,7 @@ export interface ConversationState {
   messages: ConversationMessage[];
   incomingMessage: ConversationMessage;
   outgoingMessage: ConversationMessage;
+  uniqueId: string;
   title?: string;
   id?: string;
   error?: Error;
@@ -37,6 +38,7 @@ export class ConversationService extends StoreService<ConversationState> {
   private incomingMessage: ConversationMessage = null;
   private outgoingMessage: ConversationMessage = null;
   private connectionHandler: ConnectionHandler<Connection.CHAT>;
+  private uniqueId = uuidv4(); // This is for events due to privacy and anonymity;
   private title?: string;
 
   constructor(
@@ -58,6 +60,7 @@ export class ConversationService extends StoreService<ConversationState> {
       incomingMessage: this.incomingMessage,
       outgoingMessage: this.outgoingMessage,
       id: this.id,
+      uniqueId: this.uniqueId,
       title: this.title,
     };
   }
@@ -192,6 +195,7 @@ export class ConversationService extends StoreService<ConversationState> {
     this.aiMessages = [];
     this.userMessages = [];
     this.id = undefined;
+    this.uniqueId = uuidv4();
     this.title = undefined;
     this.setStore();
   }

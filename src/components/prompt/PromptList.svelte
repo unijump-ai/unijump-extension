@@ -8,6 +8,9 @@
   import { inlineClass } from '$lib/utils';
   import Search from '$components/elements/Search.svelte';
   import IconArrowLeft from '$assets/icons/arrow-left.svg?component';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { UserEvent } from '$lib/extension/events/event.constants';
 
   const dispatch = createEventDispatcher();
   const { store: promptListStore, favoritePrompts } = promptListService;
@@ -24,11 +27,21 @@
 
   function onFavoriteClick(prompt: ListPrompt) {
     const title = prompt.title;
+    let removed = false;
+
     if (favoritePrompts.has(title)) {
       favoritePrompts.remove(title);
+      removed = true;
     } else {
       favoritePrompts.add(title);
     }
+
+    sendMessage(Message.SEND_EVENT, {
+      type: removed ? UserEvent.PROMPT_UNSAVE : UserEvent.PROMPT_SAVE,
+      props: {
+        prompt: title,
+      },
+    });
   }
 
   function onSearchChange(searchInput: string) {

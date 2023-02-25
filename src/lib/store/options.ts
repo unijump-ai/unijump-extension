@@ -1,4 +1,5 @@
 import { ExtensionStorage } from '$lib/extension/storage';
+import { StorageKey } from '$lib/extension/storage/storage.constants';
 import { writable } from 'svelte/store';
 
 interface OptionsState {
@@ -11,7 +12,7 @@ const defaultOptions = {
   disabledWidgetHosts: ['auth0.openai.com', 'chat.openai.com'],
 };
 
-const optionsStorage = new ExtensionStorage<OptionsState>('options');
+const optionsStorage = new ExtensionStorage<OptionsState>(StorageKey.OPTIONS);
 
 export const createOptionsStore = () => {
   const optionsStore = writable<OptionsState>(null);

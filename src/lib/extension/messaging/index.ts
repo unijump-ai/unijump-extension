@@ -12,8 +12,8 @@ import type {
   MessageResponse,
   MessageResponseMap,
 } from './messaging.types';
+import browser from 'webextension-polyfill';
 import { getExceptionByName } from '$lib/exceptions';
-import { runtime, tabs, type Runtime } from 'webextension-polyfill';
 import { Message } from './messaging.constants';
 
 export const messageError = (
@@ -36,7 +36,7 @@ export const listenMessage = <
 ): MessageUnsubsriber => {
   const onMessage = (
     messageEvent: MessageEvent<T>,
-    sender: Runtime.MessageSender
+    sender: browser.Runtime.MessageSender
   ): ReturnType<MessageCallback<T, K>> => {
     if (!Object.values(Message).includes(message) || messageEvent.type !== message)
       return;
@@ -44,23 +44,20 @@ export const listenMessage = <
     return callback(messageEvent.payload, sender);
   };
 
-  runtime.onMessage.addListener(onMessage);
+  browser.runtime.onMessage.addListener(onMessage);
 
   return () => {
-    runtime.onMessage.removeListener(onMessage);
+    browser.runtime.onMessage.removeListener(onMessage);
   };
 };
 
-export const sendMessage = async <
-  T extends keyof MessagePayloadMap,
-  K extends keyof MessageResponseMap
->(
+export const sendMessage = async <T extends keyof MessagePayloadMap>(
   message: T,
   payload: MessagePayload<T>
-): Promise<MessageResponse<K>> => {
-  const response = await runtime.sendMessage({ type: message, payload });
+): Promise<MessageResponse<T>> => {
+  const response = await browser.runtime.sendMessage({ type: message, payload });
 
-  if (response.error) {
+  if (response?.error) {
     const internalException = getExceptionByName(response.error.name);
     const exception = new (internalException || Error)(response.error.message);
     return { error: exception };
@@ -69,16 +66,26 @@ export const sendMessage = async <
   return response;
 };
 
-export const sendMessageToTab = <T extends keyof MessagePayloadMap>(
+export const sendMessageToTab = async <T extends keyof MessagePayloadMap>(
   tabId: number,
   message: T,
   payload?: MessagePayload<T>
-) => {
-  return tabs.sendMessage(tabId, { type: message, payload });
+): Promise<MessageResponse<T>> => {
+  try {
+    const response = await browser.tabs.sendMessage(tabId, { type: message, payload });
+
+    return {
+      message: response,
+    };
+  } catch (error) {
+    return {
+      error: error,
+    };
+  }
 };
 
 export const listenConnection = <T extends keyof ConnectionMessageMap>(
-  port: Runtime.Port,
+  port: browser.Runtime.Port,
   type: T,
   callback: (
     payload: ConnectionMessageMap[T],
@@ -105,7 +112,7 @@ export const openConnection = <T extends keyof ConnectionPayloadMap>(
   message: ConnectionMessageMap[T],
   callback: (payload: ConnectionPayloadMap[T], error?: Error) => void
 ): ConnectionHandler<T> => {
-  const port = runtime.connect();
+  const port = browser.runtime.connect();
 
   port.onMessage.addListener((portMessageEvent: PortPayloadEvent<T>) => {
     if (portMessageEvent.type !== type) return;

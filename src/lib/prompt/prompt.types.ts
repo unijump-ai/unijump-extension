@@ -32,4 +32,5 @@ export interface PromptConfig<T extends string = any> {
 export interface PromptEventPayload {
   input: string;
   initial: string;
+  args: AllPromptArgs;
 }

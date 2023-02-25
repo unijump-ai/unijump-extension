@@ -1,7 +1,7 @@
 <script lang="ts">
   import '../../../app.css';
   import { onMount } from 'svelte';
-  import { listenMessage } from '$lib/extension/messaging';
+  import { listenMessage, sendMessage } from '$lib/extension/messaging';
   import { errorStore, selectedText } from '$lib/store';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { getShortcut, registerShortcut } from '$lib/shortcuts';
@@ -13,6 +13,7 @@
     type DraggablePosition,
   } from '$components/elements/Draggable.svelte';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
+  import { APP_OPEN_SOURCE, UserEvent } from '$lib/extension/events/event.constants';
 
   let appModalVisible = false;
   let appWrapperEl: HTMLDivElement;
@@ -27,41 +28,36 @@
     registerShortcut(getShortcut('app'), (evt) => {
       evt.preventDefault();
 
-      toggleModal();
+      openModal(APP_OPEN_SOURCE.SHORTCUT);
     });
 
     registerShortcut('Esc', () => {
       closeModals();
     });
 
-    listenMessage(Message.OPEN_MODAL, () => {
+    listenMessage(Message.OPEN_MODAL, async () => {
       openModal();
-    });
 
-    listenMessage(Message.TOGGLE_MODAL, () => {
-      toggleModal();
+      return {
+        message: true,
+      };
     });
   });
 
-  function openModal() {
+  function openModal(source?: APP_OPEN_SOURCE) {
     const selection = window.getSelection().toString();
     selectedText.set(selection || '');
     appModalVisible = true;
     appWrapperEl?.focus();
+
+    if (source) {
+      sendMessage(Message.SEND_EVENT, { type: UserEvent.APP_OPEN, props: { source } });
+    }
   }
 
   function closeModal() {
     appModalVisible = false;
     errorStore.set(null);
-  }
-
-  function toggleModal() {
-    if (appModalVisible) {
-      closeModal();
-      return;
-    }
-
-    openModal();
   }
 </script>
 
@@ -80,7 +76,7 @@
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
       visible={!appModalVisible}
-      on:activate={openModal}
+      on:activate={() => openModal(APP_OPEN_SOURCE.FLOATING_WIDGET)}
     />
   </Draggable>
 {/if}

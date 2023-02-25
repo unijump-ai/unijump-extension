@@ -5,6 +5,7 @@ import type {
   ConversationResponse,
 } from '$lib/api';
 import type { Runtime } from 'webextension-polyfill';
+import type { UserEventMessage } from '../events/event.types';
 import type { Connection, Message } from './messaging.constants';
 
 export interface ConnectionMessage {
@@ -14,25 +15,22 @@ export interface ConnectionMessage {
 }
 
 export type MessagePayloadMap = {
-  [Message.OPEN_MODAL]: {
-    selectionText?: string;
-  };
-  [Message.TOGGLE_MODAL]: {
-    selectionText?: string;
-  };
+  [Message.OPEN_MODAL]: void;
   [Message.GET_SESSION]: void;
   [Message.SET_CONVERSATION_PROPERTY]: {
     conversationId: string;
     props: Partial<ConversationProperty>;
   };
   [Message.OPEN_CHATGPT_TAB]: string;
+  [Message.SEND_EVENT]: UserEventMessage;
 };
 
 export type MessageResponseMap = {
-  [Message.OPEN_MODAL]: void;
-  [Message.TOGGLE_MODAL]: void;
+  [Message.OPEN_MODAL]: boolean;
   [Message.GET_SESSION]: ApiSession;
   [Message.SET_CONVERSATION_PROPERTY]: boolean;
+  [Message.OPEN_CHATGPT_TAB]: void;
+  [Message.SEND_EVENT]: void;
 };
 
 export type ConnectionPayloadMap = {
@@ -75,7 +73,6 @@ export interface ConnectionHandler<T extends keyof ConnectionMessageMap> {
   sendMessage: (message: ConnectionMessageMap[T]) => void;
 }
 
-// export type MessageResponse<T extends keyof MessageResponseMap> = MessageResponseMap[T];
 export type MessagePayload<T extends keyof MessagePayloadMap> = MessagePayloadMap[T];
 export type MessageCallback<
   T extends keyof MessagePayloadMap,

@@ -25,3 +25,11 @@ declare module '*&picture' {
 
   export default ImageToolsSource;
 }
+
+interface ImportMetaEnv {
+  readonly CLIENT_AMPLITUDE_API_KEY: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

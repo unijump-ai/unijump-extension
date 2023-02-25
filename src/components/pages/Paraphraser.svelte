@@ -12,6 +12,10 @@
   import TextOutputActions from '$components/output/TextOutputActions.svelte';
   import Output from '$components/output/Output.svelte';
   import Scroller from '$components/elements/Scroller.svelte';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { UserEvent } from '$lib/extension/events/event.constants';
+  import { PageName } from '$lib/navigation';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
@@ -46,10 +50,17 @@
   }
 
   function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
-    const { initial, input } = evt.detail;
+    const { initial, input, args } = evt.detail;
 
     const text = !aiMessage ? initial : input;
     conversationService.sendMessage(text);
+
+    const tags = Object.values(args).reduce(
+      (tags, argTags) => [...tags, ...argTags.map((a) => a.value)],
+      [] as string[]
+    );
+
+    sendMessageEvent('paraphrase', tags);
   }
 
   function onOutputAction(evt: CustomEvent<OutputAction>) {
@@ -68,14 +79,29 @@
 
   function rewrite() {
     conversationService.sendMessage('Rewrite it.');
+    sendMessageEvent(OutputAction.REWRITE);
   }
 
   function shorten() {
     conversationService.sendMessage('Make it shorter.');
+    sendMessageEvent(OutputAction.SHORTEN);
   }
 
   function expand() {
     conversationService.sendMessage('Make it longer.');
+    sendMessageEvent(OutputAction.EXPAND);
+  }
+
+  function sendMessageEvent(action: string, tags: string[] = []) {
+    sendMessage(Message.SEND_EVENT, {
+      type: UserEvent.MESSAGE_SENT,
+      props: {
+        page: PageName.Paraphraser,
+        conversation: $conversationStore.uniqueId,
+        action,
+        tags,
+      },
+    });
   }
 </script>
 

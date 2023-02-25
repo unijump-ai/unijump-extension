@@ -13,6 +13,10 @@
   import { errorStore, selectedText } from '$lib/store';
   import IconPlus from '$assets/icons/plus-circle.svg?component';
   import PromptList from '$components/prompt/PromptList.svelte';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { UserEvent } from '$lib/extension/events/event.constants';
+  import { PageName } from '$lib/navigation';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
@@ -20,6 +24,7 @@
   let focusInput: () => void;
   let scrollerController: ScrollerController | null = null;
   let inputText = $selectedText || '';
+  let selectedPrompt: ListPrompt | null = null;
 
   $: messaging = $conversationStore.incomingMessage || $conversationStore.outgoingMessage;
   $: hasConversation = $conversationStore.messages.length || messaging;
@@ -49,6 +54,19 @@
     const text = evt.detail;
 
     conversationService.sendMessage(text);
+
+    sendMessage(Message.SEND_EVENT, {
+      type: UserEvent.MESSAGE_SENT,
+      props: {
+        page: PageName.Chat,
+        conversation: $conversationStore.uniqueId,
+        prompt: selectedPrompt
+          ? `${selectedPrompt.title} - ${selectedPrompt.list}`
+          : undefined,
+      },
+    });
+
+    selectedPrompt = null;
   }
 
   function newChat() {
@@ -58,6 +76,7 @@
 
   function onPromptListSelect(evt: CustomEvent<ListPrompt>) {
     const listPrompt = evt.detail;
+    selectedPrompt = listPrompt;
 
     inputText = listPrompt.prompt;
     focusInput?.();

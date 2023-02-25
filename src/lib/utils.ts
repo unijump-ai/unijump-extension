@@ -41,3 +41,7 @@ export const isMac = () => {
 
   return platform.toLowerCase().includes('mac');
 };
+
+export const isPromise = (obj: any): boolean => {
+  return obj && typeof obj.then === 'function';
+};

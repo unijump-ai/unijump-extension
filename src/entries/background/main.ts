@@ -7,26 +7,46 @@ import {
   sendMessageToTab,
 } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
+import { events } from '$lib/extension/events';
+import { adapter } from '$lib/extension/events/adapters/amplitude';
+import { APP_OPEN_SOURCE, UserEvent } from '$lib/extension/events/event.constants';
 
-browser.runtime.onInstalled.addListener(() => {
-  console.debug('Extension installed');
+const openModal = async (tabId: number, source: APP_OPEN_SOURCE) => {
+  const { message } = await sendMessageToTab(tabId, Message.OPEN_MODAL);
+
+  if (message) {
+    events.send(UserEvent.APP_OPEN, { source });
+  }
+};
+
+browser.runtime.onInstalled.addListener(async () => {
+  console.debug('Unitext Installed installed');
 
   browser.contextMenus.create({
     id: 'Unitext.ai',
     title: 'UniText',
     contexts: ['all'],
   });
+
+  events.init({
+    adapter: adapter({
+      apiKey: import.meta.env.CLIENT_AMPLITUDE_API_KEY,
+      debug: true,
+    }),
+  });
+
+  events.send(UserEvent.EXTENSION_INSTALL);
 });
 
-browser.contextMenus.onClicked.addListener((info, tab) => {
+browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== 'Unitext.ai') return;
 
-  sendMessageToTab(tab.id, Message.OPEN_MODAL);
+  openModal(tab.id, APP_OPEN_SOURCE.CONTEXT_MENU);
 });
 
 // Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
-  sendMessageToTab(tab.id, Message.TOGGLE_MODAL);
+  openModal(tab.id, APP_OPEN_SOURCE.TOPBAR);
 });
 
 listenMessage(Message.GET_SESSION, async () => {
@@ -85,6 +105,10 @@ listenMessage(Message.OPEN_CHATGPT_TAB, (urlString, sender) => {
 
       browser.tabs.onUpdated.addListener(onTabUpdated);
     });
+});
+
+listenMessage(Message.SEND_EVENT, ({ type, props }) => {
+  events.send(type, props);
 });
 
 browser.runtime.onConnect.addListener((port) => {
