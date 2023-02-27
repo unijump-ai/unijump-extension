@@ -1,11 +1,13 @@
 <script lang="ts">
   import type { PromptArgItem } from '$lib/prompt/prompt.types';
+  import { bindKeyEvent } from '$lib/a11y';
   import { tick } from 'svelte';
 
   export let tags: PromptArgItem[] = [];
 
   let isAdding = false;
-  let tagInput: HTMLSpanElement;
+  let tagInput = '';
+  let tagInputEl: HTMLSpanElement;
   let addButton: HTMLButtonElement;
 
   async function addTag(value: string) {
@@ -14,15 +16,15 @@
 
   async function toggleAdding(adding: boolean) {
     if (!adding) {
-      tagInput.blur();
+      tagInputEl.blur();
     }
 
     isAdding = adding;
     await tick();
 
     if (adding) {
-      tagInput.innerText = '';
-      tagInput?.focus();
+      tagInputEl.innerText = '';
+      tagInputEl?.focus();
     } else {
       addButton?.focus();
     }
@@ -32,37 +34,13 @@
     isAdding = false;
   }
 
-  function onInputKeydown(evt: KeyboardEvent) {
-    const target = evt.target as HTMLSpanElement;
-    const value = target.innerText;
+  function appendTag(value: string, event: KeyboardEvent) {
+    if (!value) return;
 
-    const events = [
-      {
-        keys: ['Enter', ','],
-        onPress() {
-          if (!value) {
-            return;
-          }
+    event.preventDefault();
 
-          addTag(value);
-          target.innerText = '';
-        },
-      },
-      {
-        keys: ['Escape'],
-        onPress() {
-          toggleAdding(false);
-        },
-      },
-    ];
-
-    const activeEvent = events.find((event) => event.keys.includes(evt.key));
-
-    if (!activeEvent) return;
-
-    evt.preventDefault();
-
-    activeEvent.onPress();
+    addTag(value);
+    tagInput = '';
   }
 </script>
 
@@ -70,9 +48,20 @@
   role="textbox"
   contenteditable="true"
   class="tag mr-1 mb-1 focus:outline-none {isAdding ? 'inline-block' : 'hidden'}"
-  bind:this={tagInput}
+  bind:this={tagInputEl}
+  bind:innerHTML={tagInput}
   on:keypress|stopPropagation={() => {}}
-  on:keydown|stopPropagation={onInputKeydown}
+  on:keydown|stopPropagation={bindKeyEvent(
+    { key: 'Enter', onEvent: (evt) => appendTag(tagInput, evt) },
+    { key: ',', onEvent: (evt) => appendTag(tagInput, evt) },
+    {
+      key: 'Escape',
+      onEvent: (evt) => {
+        evt.preventDefault();
+        toggleAdding(false);
+      },
+    }
+  )}
   on:blur={onInputBlur}
 />
 <button

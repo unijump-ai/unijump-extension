@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import IconSend from '$assets/icons/send.svg?component';
   import { inlineStyle, sleep } from '$lib/utils';
-  import { bindKeyEvent } from '$lib/a11y';
+  import { bindKeyEvent, ModifierKey } from '$lib/a11y';
 
   export let disabled = false;
   export let inputText = '';
@@ -52,13 +52,6 @@
 
     chatInput.selectionStart = chatInput.selectionEnd = 10000;
   }
-
-  function onKeyPress(evt: KeyboardEvent) {
-    if (evt.key === 'Enter' && !evt.shiftKey) {
-      evt.preventDefault();
-      sendMessage();
-    }
-  }
 </script>
 
 <div
@@ -78,8 +71,18 @@
       placeholder="Write your message..."
       bind:this={chatInput}
       bind:value={inputText}
-      on:keydown|stopPropagation={bindKeyEvent(['Escape'], () => chatInput.blur())}
-      on:keypress|stopPropagation={onKeyPress}
+      on:keydown|stopPropagation={bindKeyEvent({
+        key: 'Escape',
+        onEvent: () => chatInput.blur(),
+      })}
+      on:keypress|stopPropagation={bindKeyEvent({
+        key: 'Enter',
+        [ModifierKey.Shift]: false,
+        onEvent: (evt) => {
+          evt.preventDefault();
+          sendMessage();
+        },
+      })}
       on:focus={onChatInputFocus}
     />
     <button

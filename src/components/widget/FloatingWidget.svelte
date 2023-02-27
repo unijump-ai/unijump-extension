@@ -59,7 +59,10 @@
     on:focus={() => (expanded = true)}
     on:blur={() => (expanded = false)}
     on:click={() => dispatch('activate')}
-    on:keypress={bindKeyEvent(['Enter'], () => dispatch('activate'))}
+    on:keypress={bindKeyEvent(
+      { key: 'Enter', onEvent: () => dispatch('activate') },
+      { key: ' ', onEvent: () => dispatch('activate') }
+    )}
   >
     <div
       class={inlineClass('icon absolute top-1 pointer-events-none', [

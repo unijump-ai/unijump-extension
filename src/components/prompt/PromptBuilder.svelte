@@ -56,7 +56,10 @@
     bind:value={inputText}
     class="block mb-6 w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md resize-none focus:ring-1 focus:ring-white/80 focus:outline-none"
     rows={6}
-    on:keydown|stopPropagation={bindKeyEvent(['Escape'], () => inputEl.blur())}
+    on:keydown|stopPropagation={bindKeyEvent({
+      key: 'Escape',
+      onEvent: () => inputEl.blur(),
+    })}
     on:keypress|stopPropagation={() => {}}
   />
   {#each config.args as arg}
