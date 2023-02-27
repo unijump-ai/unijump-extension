@@ -9,11 +9,11 @@ import {
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 import { events } from '$lib/extension/events';
 import { adapter } from '$lib/extension/events/adapters/amplitude';
-import { APP_OPEN_SOURCE, UserEvent } from '$lib/extension/events/event.constants';
+import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
 
 const CONTEXT_MENU_ID = 'UniJump.ai';
 
-const openModal = async (tabId: number, source: APP_OPEN_SOURCE) => {
+const openModal = async (tabId: number, source: OpenAppSource) => {
   const { message } = await sendMessageToTab(tabId, Message.OPEN_MODAL);
 
   if (message) {
@@ -43,12 +43,12 @@ browser.runtime.onInstalled.addListener(async () => {
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== CONTEXT_MENU_ID) return;
 
-  openModal(tab.id, APP_OPEN_SOURCE.CONTEXT_MENU);
+  openModal(tab.id, OpenAppSource.CONTEXT_MENU);
 });
 
 // Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
-  openModal(tab.id, APP_OPEN_SOURCE.TOPBAR);
+  openModal(tab.id, OpenAppSource.TOPBAR);
 });
 
 listenMessage(Message.GET_SESSION, async () => {

@@ -6,6 +6,7 @@ import svelteSVG from 'vite-plugin-svelte-svg';
 import { imagetools } from 'vite-imagetools';
 import { getManifest } from './src/manifest';
 import { pluginDevImport } from './build/vite-plugin-dev-import';
+console.log('running');
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {

@@ -73,7 +73,7 @@ export function getManifest(
   const manifest = {
     author: pkg.author,
     description: pkg.description,
-    name: pkg.displayName ?? pkg.name,
+    name: pkg.displayName || pkg.name,
     version: pkg.version,
   };
 

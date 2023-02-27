@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { bindKeyEvent } from '$lib/a11y';
+  import { bindKeyEvent } from '$lib/keyboard';
   import { promptListService, type ListPrompt } from '$lib/services/prompt-list';
   import { errorStore } from '$lib/store';
   import { Icon } from '@steeze-ui/svelte-icon';
@@ -25,7 +25,7 @@
     dispatch('select', prompt);
   }
 
-  function onFavoriteClick(prompt: ListPrompt) {
+  function toggleFavorite(prompt: ListPrompt) {
     const title = prompt.title;
     let removed = false;
 
@@ -42,6 +42,13 @@
         prompt: title,
       },
     });
+  }
+
+  function onFavoriteEvent(event: Event, prompt: ListPrompt) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    toggleFavorite(prompt);
   }
 
   function onSearchChange(searchInput: string) {
@@ -69,7 +76,7 @@
           title={prompt.title}
           tabindex="0"
           on:click={() => onPromptClick(prompt)}
-          on:keypress={bindKeyEvent(
+          on:keypress|preventDefault={bindKeyEvent(
             { key: 'Enter', onEvent: () => onPromptClick(prompt) },
             { key: ' ', onEvent: () => onPromptClick(prompt) }
           )}
@@ -88,7 +95,12 @@
                 'text-amber-400': $favoritePrompts.includes(prompt.title),
               }
             )}
-            on:click|preventDefault|stopPropagation={() => onFavoriteClick(prompt)}
+            on:click|preventDefault|stopPropagation={(evt) =>
+              onFavoriteEvent(evt, prompt)}
+            on:keydown={bindKeyEvent(
+              { key: ' ', onEvent: (evt) => onFavoriteEvent(evt, prompt) },
+              { key: 'Enter', onEvent: (evt) => onFavoriteEvent(evt, prompt) }
+            )}
           >
             <Icon
               src={Star}

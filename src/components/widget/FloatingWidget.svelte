@@ -1,8 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
   import unijumpLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
-  import { bindKeyEvent } from '$lib/a11y';
-  import { getShortcut } from '$lib/shortcuts';
+  import { bindKeyEvent, getShortcut, ShortcutName } from '$lib/keyboard';
   import { inlineClass } from '$lib/utils';
   import Picture from '$components/elements/Picture.svelte';
   import IconClose from '$assets/icons/close.svg?component';
@@ -76,7 +75,7 @@
         expand ? 'text-white w-auto' : 'text-transparent absolute w-0',
       ])}
     >
-      {getShortcut('app')}
+      {getShortcut(ShortcutName.ToggleModal).display}
     </div>
   </div>
   <button
@@ -107,7 +106,7 @@
     <ModalDescription
       >You're about to hide UniJump widget. You can still open it with <code
         class="uppercase bg-white/10 border border-white/8 text-xs px-1 py-0.5 rounded-md font-sans tracking-[3px]"
-        >{getShortcut('app')}</code
+        >{getShortcut(ShortcutName.ToggleModal).display}</code
       > shortcut or by clicking on the UniJump icon in the browser toolbar.</ModalDescription
     >
     <div class="grid grid-cols-2 gap-2 mt-6">

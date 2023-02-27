@@ -6,7 +6,7 @@ export enum UserEvent {
   MESSAGE_SENT = 'MESSAGE_SENT',
 }
 
-export enum APP_OPEN_SOURCE {
+export enum OpenAppSource {
   TOPBAR = 'topbar',
   CONTEXT_MENU = 'context-menu',
   FLOATING_WIDGET = 'floating-widget',

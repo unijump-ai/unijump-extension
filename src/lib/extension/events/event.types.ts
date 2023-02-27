@@ -1,6 +1,6 @@
 import type { PageName } from '$lib/navigation';
 import type UAParser from 'ua-parser-js';
-import type { APP_OPEN_SOURCE, UserEvent } from './event.constants';
+import type { OpenAppSource, UserEvent } from './event.constants';
 
 export interface ExtensionInfo {
   ua: UAParser.IResult;
@@ -25,7 +25,7 @@ export interface EventAdapter<T = any> {
 }
 
 export type UserEventMessage =
-  | { type: UserEvent.APP_OPEN; props: { 'opened-from': APP_OPEN_SOURCE } }
+  | { type: UserEvent.APP_OPEN; props: { 'opened-from': OpenAppSource } }
   | { type: UserEvent.EXTENSION_INSTALL; props?: {} }
   | { type: UserEvent.PROMPT_SAVE; props: { prompt: string } }
   | { type: UserEvent.PROMPT_UNSAVE; props: { prompt: string } }

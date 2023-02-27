@@ -4,7 +4,7 @@
   import { listenMessage, sendMessage } from '$lib/extension/messaging';
   import { errorStore, selectedText } from '$lib/store';
   import { Message } from '$lib/extension/messaging/messaging.constants';
-  import { getShortcut, registerShortcut } from '$lib/shortcuts';
+  import { registerShortcut, ShortcutName, ModifierKey } from '$lib/keyboard';
   import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
   import { options } from '$lib/store';
   import Modal, { closeModals } from '$components/modal/Modal.svelte';
@@ -13,7 +13,8 @@
     type DraggablePosition,
   } from '$components/elements/Draggable.svelte';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
-  import { APP_OPEN_SOURCE, UserEvent } from '$lib/extension/events/event.constants';
+  import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+  import { isMac } from '$lib/utils';
 
   let appModalVisible = false;
   let appWrapperEl: HTMLDivElement;
@@ -25,14 +26,29 @@
       right: 6,
     };
 
-    registerShortcut(getShortcut('app'), (evt) => {
-      evt.preventDefault();
-
-      openModal(APP_OPEN_SOURCE.SHORTCUT);
+    registerShortcut(ShortcutName.ToggleModal, {
+      display: isMac() ? 'cmd+j' : 'ctrl+j',
+      keyOptions: {
+        key: 'j',
+        [isMac() ? ModifierKey.Meta : ModifierKey.Ctrl]: true,
+        onEvent() {
+          if (appModalVisible) {
+            closeModal();
+          } else {
+            openModal(OpenAppSource.SHORTCUT);
+          }
+        },
+      },
     });
 
-    registerShortcut('Esc', () => {
-      closeModals();
+    registerShortcut(ShortcutName.CloseModal, {
+      display: 'esc',
+      keyOptions: {
+        key: 'Escape',
+        onEvent() {
+          closeModals();
+        },
+      },
     });
 
     listenMessage(Message.OPEN_MODAL, async () => {
@@ -44,7 +60,7 @@
     });
   });
 
-  function openModal(source?: APP_OPEN_SOURCE) {
+  function openModal(source?: OpenAppSource) {
     const selection = window.getSelection().toString();
     selectedText.set(selection || '');
     appModalVisible = true;
@@ -79,7 +95,7 @@
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
       visible={!appModalVisible}
-      on:activate={() => openModal(APP_OPEN_SOURCE.FLOATING_WIDGET)}
+      on:activate={() => openModal(OpenAppSource.FLOATING_WIDGET)}
     />
   </Draggable>
 {/if}

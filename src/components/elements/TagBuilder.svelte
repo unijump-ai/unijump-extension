@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PromptArgItem } from '$lib/prompt/prompt.types';
-  import { bindKeyEvent } from '$lib/a11y';
+  import { bindKeyEvent } from '$lib/keyboard';
   import { tick } from 'svelte';
 
   export let tags: PromptArgItem[] = [];
