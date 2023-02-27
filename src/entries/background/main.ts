@@ -11,20 +11,22 @@ import { events } from '$lib/extension/events';
 import { adapter } from '$lib/extension/events/adapters/amplitude';
 import { APP_OPEN_SOURCE, UserEvent } from '$lib/extension/events/event.constants';
 
+const CONTEXT_MENU_ID = 'UniJump.ai';
+
 const openModal = async (tabId: number, source: APP_OPEN_SOURCE) => {
   const { message } = await sendMessageToTab(tabId, Message.OPEN_MODAL);
 
   if (message) {
-    events.send(UserEvent.APP_OPEN, { source });
+    events.send(UserEvent.APP_OPEN, { 'opened-from': source });
   }
 };
 
 browser.runtime.onInstalled.addListener(async () => {
-  console.debug('Unitext Installed installed');
+  console.debug('UniJump Installed installed');
 
   browser.contextMenus.create({
-    id: 'Unitext.ai',
-    title: 'UniText',
+    id: CONTEXT_MENU_ID,
+    title: 'UniJump',
     contexts: ['all'],
   });
 
@@ -39,7 +41,7 @@ browser.runtime.onInstalled.addListener(async () => {
 });
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId !== 'Unitext.ai') return;
+  if (info.menuItemId !== CONTEXT_MENU_ID) return;
 
   openModal(tab.id, APP_OPEN_SOURCE.CONTEXT_MENU);
 });
@@ -72,7 +74,7 @@ listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props 
 
 listenMessage(Message.OPEN_CHATGPT_TAB, (urlString, sender) => {
   const url = new URL(urlString);
-  url.searchParams.set('ut', '1');
+  url.searchParams.set('uj', '1');
   browser.tabs
     .create({
       url: url.toString(),

@@ -40,6 +40,6 @@
 
 <a href={chatGptUrl} target="_blank" rel="noreferrer" on:click={onChatGptClick}>
   <p>
-    {message} <span class="underline">chat.openai.com ↗</span> to continue using UniText.
+    {message} <span class="underline">chat.openai.com ↗</span> to continue using UniJump.
   </p>
 </a>

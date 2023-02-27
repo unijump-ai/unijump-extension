@@ -6,14 +6,14 @@
 
   const pages = {
     '/options': {
-      id: 'unitext-options',
+      id: 'unijump-options',
       component: Options,
     },
   } as const;
 
   const page = pages[window.location.pathname];
 
-  setContext(AppContext.Root, '#unitext-app');
+  setContext(AppContext.Root, '#unijump-app');
 </script>
 
 {#if page}
@@ -48,7 +48,7 @@
       />
     </div>
   </div>
-  <div id="unitext-app">
+  <div id="unijump-app">
     <ContentPage />
   </div>
 {/if}

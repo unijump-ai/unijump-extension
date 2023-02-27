@@ -25,11 +25,11 @@
     @apply font-bold;
   }
 
-  #unitext-app {
+  #unijump-app {
     @apply antialiased font-sans;
   }
 
-  #unitext-options {
+  #unijump-options {
     @apply antialiased h-full font-sans;
   }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "unitext",
+  "name": "unijump",
   "version": "0.3.0",
-  "displayName": "UniText - Shortcut for ChatGPT",
+  "displayName": "UniJump - Shortcut for ChatGPT",
   "description": "Shortcut for ChatGPT with Superpowers",
   "author": "Doga Genc <dogagenc@gmail.com>",
   "scripts": {

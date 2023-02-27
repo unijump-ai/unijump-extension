@@ -25,7 +25,7 @@ export interface EventAdapter<T = any> {
 }
 
 export type UserEventMessage =
-  | { type: UserEvent.APP_OPEN; props: { source: APP_OPEN_SOURCE } }
+  | { type: UserEvent.APP_OPEN; props: { 'opened-from': APP_OPEN_SOURCE } }
   | { type: UserEvent.EXTENSION_INSTALL; props?: {} }
   | { type: UserEvent.PROMPT_SAVE; props: { prompt: string } }
   | { type: UserEvent.PROMPT_UNSAVE; props: { prompt: string } }

@@ -9,7 +9,7 @@ export default async function renderContent(
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });
   const appRoot = document.createElement('div');
-  appRoot.setAttribute('id', 'unitext-app');
+  appRoot.setAttribute('id', 'unijump-app');
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(

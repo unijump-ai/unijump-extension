@@ -52,7 +52,7 @@ const ManifestV2: Partial<chrome.runtime.ManifestV2> = {
   permissions: [...sharedManifest.permissions, '*://*/*'],
   browser_specific_settings: {
     gecko: {
-      id: 'unitext@example.com',
+      id: 'unijump@example.com',
       strict_min_version: '42.0',
     },
   },

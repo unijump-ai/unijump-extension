@@ -51,7 +51,10 @@
     appWrapperEl?.focus();
 
     if (source) {
-      sendMessage(Message.SEND_EVENT, { type: UserEvent.APP_OPEN, props: { source } });
+      sendMessage(Message.SEND_EVENT, {
+        type: UserEvent.APP_OPEN,
+        props: { 'opened-from': source },
+      });
     }
   }
 
@@ -80,7 +83,7 @@
     />
   </Draggable>
 {/if}
-<Modal id="unitext-modal" active={appModalVisible} on:close={closeModal}>
+<Modal id="unijump-modal" active={appModalVisible} on:close={closeModal}>
   <div class="h-full w-full max-h-[800px] max-w-5xl mx-auto" bind:this={appWrapperEl}>
     {#if appModalVisible}
       <App on:close={closeModal} />

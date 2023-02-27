@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
-  import unitextLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
+  import unijumpLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
   import { bindKeyEvent } from '$lib/a11y';
   import { getShortcut } from '$lib/shortcuts';
   import { inlineClass } from '$lib/utils';
@@ -69,7 +69,7 @@
         direction === 'left' ? 'right-1' : 'left-1',
       ])}
     >
-      <Picture image={unitextLogo} width={36} alt="Unitext icon" />
+      <Picture image={unijumpLogo} width={36} alt="UniJump icon" />
     </div>
     <div
       class={inlineClass('text-sm font-medium uppercase', [
@@ -103,12 +103,12 @@
 
 <Modal bind:active={isCloseModalActive} id="floating-close">
   <ModalDialog>
-    <ModalTitle>Hide Unitext widget</ModalTitle>
+    <ModalTitle>Hide UniJump widget</ModalTitle>
     <ModalDescription
-      >You're about to hide Unitext widget. You can still open it with <code
+      >You're about to hide UniJump widget. You can still open it with <code
         class="uppercase bg-white/10 border border-white/8 text-xs px-1 py-0.5 rounded-md font-sans tracking-[3px]"
         >{getShortcut('app')}</code
-      > shortcut or by clicking on the Unitext icon in the browser toolbar.</ModalDescription
+      > shortcut or by clicking on the UniJump icon in the browser toolbar.</ModalDescription
     >
     <div class="grid grid-cols-2 gap-2 mt-6">
       <Button on:click={() => options.toggleWidgetHost(window.location.host)}
