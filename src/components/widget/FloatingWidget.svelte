@@ -1,26 +1,26 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
   import unijumpLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
-  import { bindKeyEvent, getShortcut, ShortcutName } from '$lib/keyboard';
+  import { bindKeyEvent } from '$lib/keyboard';
   import { inlineClass } from '$lib/utils';
   import Picture from '$components/elements/Picture.svelte';
   import IconClose from '$assets/icons/close.svg?component';
   import IconDraggerHandle from '$assets/icons/dragger-handle.svg?component';
-  import ModalDialog from '$components/modal/ModalDialog.svelte';
-  import Modal from '$components/modal/Modal.svelte';
-  import ModalTitle from '$components/modal/ModalTitle.svelte';
-  import ModalDescription from '$components/modal/ModalDescription.svelte';
-  import Button from '$components/elements/Button.svelte';
-  import { options } from '$lib/store';
+  import { Icon } from '@steeze-ui/svelte-icon';
+  import { ExclamationCircle } from '@steeze-ui/heroicons';
+  import ShortcutModal from './ShortcutModal.svelte';
+  import CloseModal from './CloseModal.svelte';
 
   export let direction: 'left' | 'right';
   export let expanded = false;
   export let visible = true;
+  export let shortcut = '';
 
   const dispatch = createEventDispatcher();
 
   let hasSelection = false;
   let isCloseModalActive = false;
+  let isShortcutModalActive = false;
 
   $: expand = hasSelection || expanded;
 
@@ -37,6 +37,15 @@
       document.removeEventListener('selectionchange', onSelectionChange);
     };
   });
+
+  function onSetShortcut(evt: CustomEvent<string>) {
+    const newShortcut = evt.detail;
+    if (!shortcut && newShortcut) {
+      expanded = true;
+    }
+
+    dispatch('set-shortcut', newShortcut);
+  }
 </script>
 
 <div
@@ -71,11 +80,21 @@
       <Picture image={unijumpLogo} width={36} alt="UniJump icon" />
     </div>
     <div
-      class={inlineClass('text-sm font-medium uppercase', [
-        expand ? 'text-white w-auto' : 'text-transparent absolute w-0',
-      ])}
+      class={inlineClass('text-sm flex items-center font-medium uppercase', {
+        'w-auto text-white': expand,
+        'absolute w-0 text-transparent': !expand,
+      })}
     >
-      {getShortcut(ShortcutName.ToggleModal).display}
+      {#if shortcut}
+        {shortcut}
+      {:else if expanded}
+        <button
+          class="text-amber-400 hover:text-amber-300"
+          on:click|preventDefault|stopPropagation={() => (isShortcutModalActive = true)}
+        >
+          <Icon src={ExclamationCircle} width={20} />
+        </button>
+      {/if}
     </div>
   </div>
   <button
@@ -100,22 +119,5 @@
   </button>
 </div>
 
-<Modal bind:active={isCloseModalActive} id="floating-close">
-  <ModalDialog>
-    <ModalTitle>Hide UniJump widget</ModalTitle>
-    <ModalDescription
-      >You're about to hide UniJump widget. You can still open it with <code
-        class="uppercase bg-white/10 border border-white/8 text-xs px-1 py-0.5 rounded-md font-sans tracking-[3px]"
-        >{getShortcut(ShortcutName.ToggleModal).display}</code
-      > shortcut or by clicking on the UniJump icon in the browser toolbar.</ModalDescription
-    >
-    <div class="grid grid-cols-2 gap-2 mt-6">
-      <Button on:click={() => options.toggleWidgetHost(window.location.host)}
-        >Hide for this website</Button
-      >
-      <Button clean on:click={() => options.updateWidgetDisabled(true)}
-        >Hide for all websites</Button
-      >
-    </div>
-  </ModalDialog>
-</Modal>
+<CloseModal bind:active={isCloseModalActive} {shortcut} />
+<ShortcutModal bind:active={isShortcutModalActive} on:set-shortcut={onSetShortcut} />

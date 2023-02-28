@@ -8,7 +8,7 @@
   import PromptArgs from './PromptArgs.svelte';
   import { errorStore, selectedText } from '$lib/store';
   import TagBuilder from '$components/elements/TagBuilder.svelte';
-  import { bindKeyEvent, getShortcut, ShortcutName } from '$lib/keyboard';
+  import { bindKeyEvent } from '$lib/keyboard';
 
   export let config: PromptConfig;
 
@@ -55,13 +55,10 @@
     bind:this={inputEl}
     bind:value={inputText}
     class="block h-36 mb-6 w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md resize-none focus:ring-1 focus:ring-white/80 focus:outline-none"
-    on:keydown|stopPropagation={bindKeyEvent(
-      {
-        key: 'Escape',
-        onEvent: () => inputEl.blur(),
-      },
-      getShortcut(ShortcutName.ToggleModal).keyOptions
-    )}
+    on:keydown|stopPropagation={bindKeyEvent({
+      key: 'Escape',
+      onEvent: () => inputEl.blur(),
+    })}
     on:keypress|stopPropagation={() => {}}
   />
   {#each config.args as arg}

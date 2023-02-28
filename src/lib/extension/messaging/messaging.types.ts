@@ -16,6 +16,7 @@ export interface ConnectionMessage {
 
 export type MessagePayloadMap = {
   [Message.OPEN_MODAL]: void;
+  [Message.TOGGLE_MODAL]: void;
   [Message.GET_SESSION]: void;
   [Message.SET_CONVERSATION_PROPERTY]: {
     conversationId: string;
@@ -23,14 +24,19 @@ export type MessagePayloadMap = {
   };
   [Message.OPEN_CHATGPT_TAB]: string;
   [Message.SEND_EVENT]: UserEventMessage;
+  [Message.GET_TOGGLE_SHORTCUT]: void;
+  [Message.OPEN_TAB]: string;
 };
 
 export type MessageResponseMap = {
   [Message.OPEN_MODAL]: boolean;
+  [Message.TOGGLE_MODAL]: boolean;
   [Message.GET_SESSION]: ApiSession;
   [Message.SET_CONVERSATION_PROPERTY]: boolean;
   [Message.OPEN_CHATGPT_TAB]: void;
   [Message.SEND_EVENT]: void;
+  [Message.GET_TOGGLE_SHORTCUT]: string;
+  [Message.OPEN_TAB]: void;
 };
 
 export type ConnectionPayloadMap = {

@@ -1,4 +1,5 @@
 import pkg from '../package.json';
+import config from './config';
 
 const sharedManifest: Partial<chrome.runtime.ManifestV2> &
   Partial<chrome.runtime.ManifestV3> = {
@@ -56,6 +57,13 @@ const ManifestV2: Partial<chrome.runtime.ManifestV2> = {
       strict_min_version: '42.0',
     },
   },
+  commands: {
+    _execute_browser_action: {
+      suggested_key: {
+        ...config.defaultShortcut,
+      },
+    },
+  },
 };
 
 const ManifestV3: Partial<chrome.runtime.ManifestV3> = {
@@ -65,6 +73,13 @@ const ManifestV3: Partial<chrome.runtime.ManifestV3> = {
     service_worker: 'src/entries/background/serviceWorker.ts',
   },
   host_permissions: ['*://*/*'],
+  commands: {
+    _execute_action: {
+      suggested_key: {
+        ...config.defaultShortcut,
+      },
+    },
+  },
 };
 
 export function getManifest(

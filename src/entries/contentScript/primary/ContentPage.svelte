@@ -4,21 +4,21 @@
   import { listenMessage, sendMessage } from '$lib/extension/messaging';
   import { errorStore, selectedText } from '$lib/store';
   import { Message } from '$lib/extension/messaging/messaging.constants';
-  import { registerShortcut, ShortcutName, ModifierKey } from '$lib/keyboard';
+  import { registerShortcut, ShortcutName } from '$lib/keyboard';
   import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
   import { options } from '$lib/store';
-  import Modal, { closeModals } from '$components/modal/Modal.svelte';
+  import { closeModals, Modal } from '$components/modal';
   import App from '$components/app/App.svelte';
   import Draggable, {
     type DraggablePosition,
   } from '$components/elements/Draggable.svelte';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
   import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
-  import { isMac } from '$lib/utils';
 
   let appModalVisible = false;
   let appWrapperEl: HTMLDivElement;
   let draggablePosition: DraggablePosition = null;
+  let toggleShortcut = '';
 
   onMount(async () => {
     draggablePosition = (await floatingWidgetPositionStorage.get()) || {
@@ -26,23 +26,15 @@
       right: 6,
     };
 
-    registerShortcut(ShortcutName.ToggleModal, {
-      display: isMac() ? 'cmd+j' : 'ctrl+j',
-      keyOptions: {
-        key: 'j',
-        [isMac() ? ModifierKey.Meta : ModifierKey.Ctrl]: true,
-        onEvent() {
-          if (appModalVisible) {
-            closeModal();
-          } else {
-            openModal(OpenAppSource.SHORTCUT);
-          }
-        },
-      },
-    });
+    const { message } = await sendMessage(Message.GET_TOGGLE_SHORTCUT, undefined);
+
+    if (message) {
+      toggleShortcut = message;
+    }
 
     registerShortcut(ShortcutName.CloseModal, {
       display: 'esc',
+      listen: true,
       keyOptions: {
         key: 'Escape',
         onEvent() {
@@ -56,6 +48,14 @@
 
       return {
         message: true,
+      };
+    });
+
+    listenMessage(Message.TOGGLE_MODAL, async () => {
+      toggleModal();
+
+      return {
+        message: appModalVisible,
       };
     });
   });
@@ -78,6 +78,22 @@
     appModalVisible = false;
     errorStore.set(null);
   }
+
+  function toggleModal() {
+    if (appModalVisible) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  }
+
+  function onSetShortcut(evt: CustomEvent<string>) {
+    const shortcut = evt.detail;
+
+    if (!shortcut) return;
+
+    toggleShortcut = shortcut;
+  }
 </script>
 
 {#if draggablePosition && $options && !$options.widgetDisabled && !$options.disabledWidgetHosts.includes(window.location.host)}
@@ -92,10 +108,12 @@
     let:dragging
   >
     <FloatingWidget
+      shortcut={toggleShortcut}
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
       visible={!appModalVisible}
       on:activate={() => openModal(OpenAppSource.FLOATING_WIDGET)}
+      on:set-shortcut={onSetShortcut}
     />
   </Draggable>
 {/if}

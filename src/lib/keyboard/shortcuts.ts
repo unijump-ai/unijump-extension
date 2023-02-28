@@ -1,9 +1,11 @@
+// TODO: Change this file behaviour and name to keep shortcuts only on extension
 import type { ShortcutName } from './shortcut.constants';
 import { matchKeyToEvent, type KeyOptions } from './events';
 
 interface ShortcutOptions {
   display: string;
-  keyOptions: KeyOptions;
+  listen: boolean;
+  keyOptions?: KeyOptions;
 }
 
 const registeredShortcuts = new Map<ShortcutName, ShortcutOptions>();
@@ -12,12 +14,10 @@ export const registerShortcut = (name: ShortcutName, options: ShortcutOptions) =
   registeredShortcuts.set(name, options);
 };
 
-export const getShortcut = (name: ShortcutName) => {
-  return registeredShortcuts.get(name);
-};
-
 const onKeydown = (event: KeyboardEvent) => {
-  const shortcuts = [...registeredShortcuts.values()];
+  const shortcuts = [...registeredShortcuts.values()].filter(
+    (shortcut) => shortcut.listen
+  );
 
   shortcuts.forEach((shortcut) => {
     const triggered = matchKeyToEvent(shortcut.keyOptions, event);

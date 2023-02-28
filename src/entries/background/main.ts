@@ -12,9 +12,13 @@ import { adapter } from '$lib/extension/events/adapters/amplitude';
 import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
 
 const CONTEXT_MENU_ID = 'UniJump.ai';
+const TOGGLE_SHORTCUT_NAME = '_execute_action';
 
-const openModal = async (tabId: number, source: OpenAppSource) => {
-  const { message } = await sendMessageToTab(tabId, Message.OPEN_MODAL);
+const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean) => {
+  const { message } = await sendMessageToTab(
+    tabId,
+    open ? Message.OPEN_MODAL : Message.TOGGLE_MODAL
+  );
 
   if (message) {
     events.send(UserEvent.APP_OPEN, { 'opened-from': source });
@@ -43,12 +47,12 @@ browser.runtime.onInstalled.addListener(async () => {
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== CONTEXT_MENU_ID) return;
 
-  openModal(tab.id, OpenAppSource.CONTEXT_MENU);
+  toggleModal(tab.id, OpenAppSource.CONTEXT_MENU, true);
 });
 
 // Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
-  openModal(tab.id, OpenAppSource.TOPBAR);
+  toggleModal(tab.id, OpenAppSource.TOPBAR);
 });
 
 listenMessage(Message.GET_SESSION, async () => {
@@ -111,6 +115,29 @@ listenMessage(Message.OPEN_CHATGPT_TAB, (urlString, sender) => {
 
 listenMessage(Message.SEND_EVENT, ({ type, props }) => {
   events.send(type, props);
+});
+
+listenMessage(Message.GET_TOGGLE_SHORTCUT, async () => {
+  const commands = await browser.commands.getAll();
+  const toggleAppCommand = commands.find(
+    (command) => command.name === TOGGLE_SHORTCUT_NAME
+  );
+
+  const shortcut =
+    toggleAppCommand?.shortcut && toggleAppCommand.shortcut !== ''
+      ? toggleAppCommand.shortcut
+      : null;
+
+  return {
+    message: shortcut,
+  };
+});
+
+listenMessage(Message.OPEN_TAB, (url, sender) => {
+  browser.tabs.create({
+    url,
+    index: sender.tab.index + 1,
+  });
 });
 
 browser.runtime.onConnect.addListener((port) => {

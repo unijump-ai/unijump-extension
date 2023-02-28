@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, tick } from 'svelte';
   import IconSend from '$assets/icons/send.svg?component';
-  import { bindKeyEvent, getShortcut, ModifierKey, ShortcutName } from '$lib/keyboard';
+  import { bindKeyEvent, ModifierKey } from '$lib/keyboard';
   import { inlineStyle, sleep } from '$lib/utils';
 
   export let disabled = false;
@@ -71,13 +71,10 @@
       placeholder="Write your message..."
       bind:this={chatInput}
       bind:value={inputText}
-      on:keydown|stopPropagation={bindKeyEvent(
-        {
-          key: 'Escape',
-          onEvent: () => chatInput.blur(),
-        },
-        getShortcut(ShortcutName.ToggleModal).keyOptions
-      )}
+      on:keydown|stopPropagation={bindKeyEvent({
+        key: 'Escape',
+        onEvent: () => chatInput.blur(),
+      })}
       on:keypress|stopPropagation={bindKeyEvent({
         key: 'Enter',
         [ModifierKey.Shift]: false,

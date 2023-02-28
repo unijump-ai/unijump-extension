@@ -1,6 +1,5 @@
 <script lang="ts">
   import IconSearch from '$assets/icons/search.svg?component';
-  import { bindKeyEvent, getShortcut, ShortcutName } from '$lib/keyboard';
 
   export let value = '';
   export let placeholder = '';
@@ -15,9 +14,7 @@
     class="flex-1 bg-transparent pl-2 py-4 text-white text-xs font-medium placeholder:zinc-300 outline-none"
     {placeholder}
     bind:value
-    on:keydown|stopPropagation={bindKeyEvent(
-      getShortcut(ShortcutName.ToggleModal).keyOptions
-    )}
+    on:keydown|stopPropagation={() => {}}
     on:keypress|stopPropagation={() => {}}
   />
 </div>
