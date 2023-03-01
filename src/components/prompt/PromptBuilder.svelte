@@ -81,6 +81,6 @@
   <button
     on:click={() => buildPrompt()}
     disabled={!inputText || !!$errorStore}
-    class="btn-primary">UniJump it!</button
+    class="btn-primary">Paraphrase</button
   >
 </div>

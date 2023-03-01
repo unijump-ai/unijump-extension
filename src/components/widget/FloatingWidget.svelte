@@ -87,7 +87,7 @@
     >
       {#if shortcut}
         {shortcut}
-      {:else if expanded}
+      {:else if expand}
         <button
           class="text-amber-400 hover:text-amber-300"
           on:click|preventDefault|stopPropagation={() => (isShortcutModalActive = true)}

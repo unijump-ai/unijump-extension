@@ -2,7 +2,7 @@
   import '../../../app.css';
   import { onMount } from 'svelte';
   import { listenMessage, sendMessage } from '$lib/extension/messaging';
-  import { errorStore, selectedText } from '$lib/store';
+  import { activePage, errorStore, selectedText } from '$lib/store';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { registerShortcut, ShortcutName } from '$lib/keyboard';
   import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
@@ -14,6 +14,7 @@
   } from '$components/elements/Draggable.svelte';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
   import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+  import { PageName } from '$lib/navigation';
 
   let appModalVisible = false;
   let appWrapperEl: HTMLDivElement;
@@ -63,6 +64,11 @@
   function openModal(source?: OpenAppSource) {
     const selection = window.getSelection().toString();
     selectedText.set(selection || '');
+
+    if (selection) {
+      activePage.set(PageName.Paraphraser);
+    }
+
     appModalVisible = true;
     appWrapperEl?.focus();
 
