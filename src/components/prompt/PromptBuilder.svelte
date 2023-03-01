@@ -81,6 +81,6 @@
   <button
     on:click={() => buildPrompt()}
     disabled={!inputText || !!$errorStore}
-    class="btn-primary">Paraphrase</button
+    class="btn-primary">{config.ctaLabel || 'Run'}</button
   >
 </div>

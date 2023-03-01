@@ -4,6 +4,7 @@ type ParaphraserArgs = 'modes' | 'tones';
 
 export default {
   name: 'Paraphraser',
+  ctaLabel: 'Paraphrase',
   initialPrompt: (input: string) => `Paraphrase following text ${input}`,
   input: (args, userInput) => {
     const { modes, tones, user } = args;

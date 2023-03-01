@@ -24,6 +24,7 @@ export type AllPromptArgs<T extends string = any> = SelectedPromptArgs<T> & Prom
 
 export interface PromptConfig<T extends string = any> {
   name: string;
+  ctaLabel: string;
   initialPrompt: (input: string) => string;
   input: (args: AllPromptArgs<T>, userInput: string) => string;
   args: PromptArg[];
