@@ -20,6 +20,7 @@
   let appWrapperEl: HTMLDivElement;
   let draggablePosition: DraggablePosition = null;
   let toggleShortcut = '';
+  let isWindowFullscreen = false;
 
   onMount(async () => {
     draggablePosition = (await floatingWidgetPositionStorage.get()) || {
@@ -58,6 +59,10 @@
       return {
         message: appModalVisible,
       };
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      isWindowFullscreen = !!document.fullscreenElement;
     });
   });
 
@@ -117,7 +122,7 @@
       shortcut={toggleShortcut}
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
-      visible={!appModalVisible}
+      visible={!appModalVisible && !isWindowFullscreen}
       on:activate={() => openModal(OpenAppSource.FLOATING_WIDGET)}
       on:set-shortcut={onSetShortcut}
     />
