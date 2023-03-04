@@ -26,6 +26,8 @@ const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean)
   }
 };
 
+browser.runtime.setUninstallURL('https://bit.ly/unijump-uninstall');
+
 browser.runtime.onInstalled.addListener(async () => {
   console.debug('UniJump Installed installed');
 
