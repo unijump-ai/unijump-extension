@@ -1,6 +1,6 @@
 export default {
   defaultShortcut: {
     mac: 'Command+J',
-    default: 'Ctrl+J',
+    default: 'Alt+J',
   },
 } as const;
