@@ -24,7 +24,25 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {},
-    plugins: [svelte(), svelteSVG(), imagetools()],
+    plugins: [
+      svelte(),
+      svelteSVG({
+        svgoConfig: {
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+          ],
+        },
+        requireSuffix: true,
+      }),
+      imagetools(),
+    ],
     envPrefix: 'CLIENT_',
   } satisfies UserConfigExport;
 

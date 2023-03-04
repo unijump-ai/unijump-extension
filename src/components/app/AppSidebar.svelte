@@ -31,7 +31,7 @@
   </ul>
   <ul class="mb-1">
     {#each socialLinks as socialLink}
-      <li class="mt-3.5 first:mt-0">
+      <li class="mt-3 first:mt-0">
         <a
           class="text-zinc-500 transition-all hover:text-zinc-100"
           href={socialLink.href}
@@ -39,7 +39,7 @@
           title={socialLink.name}
           rel="noreferrer"
         >
-          <svelte:component this={socialLink.icon} width={24} height={24} />
+          <svelte:component this={socialLink.icon} width={20} height={20} />
           <span class="sr-only">{socialLink.name}</span>
         </a>
       </li>
