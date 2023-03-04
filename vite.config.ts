@@ -63,6 +63,9 @@ export default defineConfig(({ mode }) => {
       },
       minify: false,
     },
+    define: {
+      __MANIFEST_VERSION__: manifestVersion,
+    },
     server: {
       hmr: false,
     },

@@ -60,6 +60,14 @@
     node-forge "^1.3.1"
     split "~1.0.1"
 
+"@dogagenc/svelte-markdown@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@dogagenc/svelte-markdown/-/svelte-markdown-0.2.4.tgz#bc5eccf51af78fa36ab1d895331e5b173bb87e12"
+  integrity sha512-UmmHHZ7rilAbBYiNsxuL5d8Ac79EhFXrhjsUNr30BPzn+T7ohJR8kHMFjDYDQc0tOQOfKbICvkPAQ6cprqS3Eg==
+  dependencies:
+    "@types/marked" "^4.0.1"
+    marked "^4.0.10"
+
 "@esbuild/android-arm64@0.16.17":
   version "0.16.17"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.16.17.tgz#cf91e86df127aa3d141744edafcba0abdc577d23"
@@ -4376,14 +4384,6 @@ svelte-hmr@^0.15.1:
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.15.1.tgz#d11d878a0bbb12ec1cba030f580cd2049f4ec86b"
   integrity sha512-BiKB4RZ8YSwRKCNVdNxK/GfY+r4Kjgp9jCLEy0DuqAKfmQtpL38cQK3afdpjw4sqSs4PLi3jIPJIFp259NkZtA==
-
-svelte-markdown@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/svelte-markdown/-/svelte-markdown-0.2.3.tgz#16c6db61605512100cf25c3e18f8e4105837895c"
-  integrity sha512-2h680NzTXnAD0CXhxe3GeHl6W+ayG4iKQRl+BIDRw+R0mUE0OiNxP1Vt8Rn+aWevB/LBiBIPCAwvL+0BkG057A==
-  dependencies:
-    "@types/marked" "^4.0.1"
-    marked "^4.0.10"
 
 svelte-portal@^2.2.0:
   version "2.2.0"

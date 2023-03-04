@@ -12,7 +12,8 @@ import { adapter } from '$lib/extension/events/adapters/amplitude';
 import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
 
 const CONTEXT_MENU_ID = 'UniJump.ai';
-const TOGGLE_SHORTCUT_NAME = '_execute_action';
+const TOGGLE_SHORTCUT_NAME =
+  __MANIFEST_VERSION__ === 2 ? '_execute_browser_action' : '_execute_action';
 
 const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean) => {
   const { message } = await sendMessageToTab(

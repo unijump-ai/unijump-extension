@@ -55,10 +55,10 @@
     "web-ext": "^7.4.0"
   },
   "dependencies": {
+    "@dogagenc/svelte-markdown": "^0.2.4",
     "eventsource-parser": "^0.0.5",
     "expiry-map": "^2.0.0",
     "lodash.omit": "^4.5.0",
-    "svelte-markdown": "^0.2.3",
     "svelte-portal": "^2.2.0",
     "ua-parser-js": "^1.0.33",
     "uuid": "^9.0.0",

@@ -2,6 +2,8 @@
 /// <reference types="vite/client" />
 /// <reference types="@samrum/vite-plugin-web-extension/client" />
 
+declare const __MANIFEST_VERSION__: 2 | 3;
+
 declare module '*svg?component' {
   import { ComponentType, SvelteComponentTyped } from 'svelte';
 

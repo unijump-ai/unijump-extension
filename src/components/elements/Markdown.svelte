@@ -1,5 +1,5 @@
 <script lang="ts">
-  import SvelteMarkdown from 'svelte-markdown';
+  import SvelteMarkdown from '@dogagenc/svelte-markdown';
   import Code from './Code.svelte';
 
   export let source: string = '';
