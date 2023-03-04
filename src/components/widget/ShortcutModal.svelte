@@ -15,12 +15,7 @@
 
   const dispatch = createEventDispatcher();
   const ua = userAgent.getResult();
-  const shortcutPage =
-    ua.engine.name === 'Blink'
-      ? 'chrome://extensions/shortcuts'
-      : ua.browser.name === 'Firefox'
-      ? 'about:addons'
-      : '';
+  const shortcutPage = ua.engine.name === 'Blink' ? 'chrome://extensions/shortcuts' : '';
   const defaultShortcut = isMac()
     ? config.defaultShortcut.mac
     : config.defaultShortcut.default;
@@ -57,19 +52,21 @@
         >{defaultShortcut}</code
       >
       for UniJump. The browser's shortcuts page provides an option for you to set a new shortcut.
-      {#if !shortcutPage}
-        <p class="text-xs text-zinc-300 mt-3">
-          * Unfortunately, your browser is unable to open the shortcut page for UniJump.
-          You can set a shortcut for UniJump by accessing the extension preferences in
-          your browser instead.
-        </p>
-      {/if}
     </ModalDescription>
-    <div class="flex justify-center mt-6">
-      {#if shortcutPage}
+    {#if shortcutPage}
+      <div class="flex justify-center mt-6">
         <Button on:click={() => openShortcutPage()}>Go to shortcuts page</Button>
-      {/if}
-    </div>
+      </div>
+    {/if}
+    <p class="font-medium text-sm italic mt-5">
+      Still not working? <a
+        class="underline"
+        href="https://beautiful-birth-073.notion.site/Troubleshooting-Shortcut-Problem-eabb861b3cb7418bbb6eaa3269d7c1c9"
+        target="_blank"
+        rel="noreferrer"
+        >Click here
+      </a> for a possible solution.
+    </p>
   </ModalDialog>
 </Modal>
 
