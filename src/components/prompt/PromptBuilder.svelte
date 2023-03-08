@@ -76,7 +76,9 @@
         >
       {/each}
     {/each}
-    <TagBuilder bind:tags={selectedPromptArgs['user']}>+ Add Tag</TagBuilder>
+    <TagBuilder bind:tags={selectedPromptArgs['user']}
+      >+ {config.addUserTagLabel || ''}</TagBuilder
+    >
   </div>
   <button
     on:click={() => buildPrompt()}
