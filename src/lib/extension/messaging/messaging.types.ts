@@ -26,6 +26,7 @@ export type MessagePayloadMap = {
   [Message.SEND_EVENT]: UserEventMessage;
   [Message.GET_TOGGLE_SHORTCUT]: void;
   [Message.OPEN_TAB]: string;
+  [Message.OPEN_OPTIONS_PAGE]: void;
 };
 
 export type MessageResponseMap = {

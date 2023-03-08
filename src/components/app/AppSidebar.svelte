@@ -3,16 +3,25 @@
   import { activePage } from '$lib/store';
   import unijumpLogo from '$assets/logo.png?w=40;80&format=webp;png&picture';
   import Picture from '$components/elements/Picture.svelte';
+  import IconOptions from '$assets/icons/options.svg?component';
   import { socialLinks } from '$lib/social';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
 
   function navigate(pageName: PageName) {
     activePage.set(pageName);
   }
+
+  function openOptionsPage() {
+    sendMessage(Message.OPEN_OPTIONS_PAGE, undefined);
+  }
 </script>
 
-<div class="py-4 flex flex-col border-r justify-between items-center border-r-white/8">
+<div
+  class="relative py-4 flex flex-col border-r justify-between items-center border-r-white/8"
+>
   <Picture width={40} image={unijumpLogo} alt="UniJump icon" />
-  <ul class="pt-4">
+  <ul class="absolute w-full flex flex-col left-0 items-center top-1/2 -translate-y-1/2">
     {#each pages as page}
       <li>
         <button
@@ -29,20 +38,30 @@
       </li>
     {/each}
   </ul>
-  <ul class="mb-1">
-    {#each socialLinks as socialLink}
-      <li class="mt-3 first:mt-0">
-        <a
-          class="text-zinc-500 transition-all hover:text-zinc-100"
-          href={socialLink.href}
-          target="_blank"
-          title={socialLink.name}
-          rel="noreferrer"
-        >
-          <svelte:component this={socialLink.icon} width={20} height={20} />
-          <span class="sr-only">{socialLink.name}</span>
-        </a>
-      </li>
-    {/each}
-  </ul>
+  <div class="flex flex-col items-center mb-1">
+    <ul>
+      {#each socialLinks as socialLink}
+        <li class="flex first:mt-0">
+          <a
+            class="p-1.5 inline-flex text-zinc-500 transition-all hover:text-zinc-100"
+            href={socialLink.href}
+            target="_blank"
+            title={socialLink.name}
+            rel="noreferrer"
+          >
+            <svelte:component this={socialLink.icon} width={16} height={16} />
+            <span class="sr-only">{socialLink.name}</span>
+          </a>
+        </li>
+      {/each}
+    </ul>
+    <hr class="h-[1px] w-6 border-none bg-white/8 my-4" />
+    <button
+      class="text-zinc-500 transition-all hover:text-zinc-100"
+      title="Options"
+      on:click={openOptionsPage}
+    >
+      <IconOptions width={24} height={24} />
+    </button>
+  </div>
 </div>

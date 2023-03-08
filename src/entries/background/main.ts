@@ -144,6 +144,10 @@ listenMessage(Message.OPEN_TAB, (url, sender) => {
   });
 });
 
+listenMessage(Message.OPEN_OPTIONS_PAGE, () => {
+  browser.runtime.openOptionsPage();
+});
+
 browser.runtime.onConnect.addListener((port) => {
   browser.tabs.onRemoved.addListener((tabId) => {
     deleteConversation(tabId);

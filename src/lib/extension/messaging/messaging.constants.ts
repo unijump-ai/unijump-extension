@@ -7,6 +7,7 @@ export enum Message {
   OPEN_CHATGPT_TAB = 'open-chatgpt-tab',
   SEND_EVENT = 'send-event',
   GET_TOGGLE_SHORTCUT = 'get-shortcut',
+  OPEN_OPTIONS_PAGE = 'open-options-page',
 }
 
 export enum Connection {
