@@ -29,10 +29,12 @@
   );
   $: output = $conversationStore?.incomingMessage?.text || aiMessage?.text || '';
 
-  onDestroy(() => {
+  onDestroy(destroyConversation);
+
+  function destroyConversation() {
     conversationService.clear();
     conversationService.destroy();
-  });
+  }
 
   async function onConversationChange(conversation: typeof $conversationStore) {
     if (conversation.incomingMessage || conversation.outgoingMessage) {

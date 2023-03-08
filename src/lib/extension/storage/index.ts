@@ -1,4 +1,4 @@
-import browser, { type Runtime } from 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 
 export class ExtensionStorage<T> {
   private storage: browser.Storage.StorageArea;

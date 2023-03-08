@@ -30,10 +30,12 @@
   $: hasConversation = $conversationStore.messages.length || messaging;
   $: onConversationChange($conversationStore);
 
-  onDestroy(() => {
+  onDestroy(destroyConversation);
+
+  function destroyConversation() {
     conversationService.clear();
     conversationService.destroy();
-  });
+  }
 
   async function onConversationChange({ error }: ConversationState) {
     if (error) {

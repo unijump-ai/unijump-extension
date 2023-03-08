@@ -10,6 +10,7 @@ import { Connection, Message } from '$lib/extension/messaging/messaging.constant
 import { events } from '$lib/extension/events';
 import { adapter } from '$lib/extension/events/adapters/amplitude';
 import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+import { addConversation, deleteConversation } from '$lib/extension/conversations';
 
 const CONTEXT_MENU_ID = 'UniJump.ai';
 const TOGGLE_SHORTCUT_NAME =
@@ -144,9 +145,17 @@ listenMessage(Message.OPEN_TAB, (url, sender) => {
 });
 
 browser.runtime.onConnect.addListener((port) => {
+  browser.tabs.onRemoved.addListener((tabId) => {
+    deleteConversation(tabId);
+  });
+
   listenConnection(port, Connection.CHAT, async (message, respond, error) => {
     try {
       await api.conversation(message, (response, done) => {
+        if (response?.conversationId) {
+          addConversation(port.sender.tab.id, response.conversationId);
+        }
+
         respond({ response, done });
       });
     } catch (err) {
