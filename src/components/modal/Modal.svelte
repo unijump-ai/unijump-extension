@@ -9,8 +9,6 @@
 <script lang="ts">
   import SveltePortal from 'svelte-portal';
   import { createEventDispatcher, getContext, setContext } from 'svelte';
-  import { fade } from 'svelte/transition';
-  import { focus, overflow } from '$lib/actions';
   import { AppContext } from '$lib/context';
   import { createModalStore } from './modal.store';
   import { inlineClass } from '$lib/utils';
@@ -19,6 +17,7 @@
   export let active = false;
   export let center = false;
   export let disableClose = false;
+  export let mount = false;
 
   const appRoot = (getContext(AppContext.Root) as HTMLElement) || document.body;
   const dispatch = createEventDispatcher();
@@ -42,21 +41,23 @@
   }
 </script>
 
-{#if active}
+{#if mount || active}
   <SveltePortal target={appRoot}>
     <div
       {id}
       class={inlineClass(
-        'fixed inset-0 p-4 z-[99999999] flex items-center justify-center bg-white/30',
-        { 'text-center': center }
+        'fixed inset-0 p-4 z-[99999999] flex items-center justify-center bg-white/30 transition-opacity',
+        {
+          'text-center': center,
+          'invisible opacity-0 pointer-events-none duration-100': !active,
+          'visible opacity-100 pointer-events-auto duration-200': active,
+        }
       )}
       role="dialog"
       aria-modal="true"
       tabindex="-1"
-      use:focus
       on:click|self={close}
       {...props}
-      transition:fade={{ duration: 100 }}
     >
       <slot />
     </div>

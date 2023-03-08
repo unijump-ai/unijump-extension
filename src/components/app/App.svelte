@@ -1,34 +1,14 @@
 <script lang="ts">
-  import type { ApiSession } from '$lib/api';
-  import { onMount } from 'svelte';
-  import { fade } from 'svelte/transition';
-  import { sendMessage } from '$lib/extension/messaging';
-  import { Message } from '$lib/extension/messaging/messaging.constants';
   import { PageName } from '$lib/navigation';
-  import { activePage, errorStore, user } from '$lib/store';
+  import { activePage } from '$lib/store';
   import Chat from '$components/pages/Chat.svelte';
   import Paraphraser from '$components/pages/Paraphraser.svelte';
   import AppSidebar from './AppSidebar.svelte';
   import Warnings from '$components/warnings/Warnings.svelte';
-
-  onMount(checkSession);
-
-  async function checkSession() {
-    const { message, error } = await sendMessage(Message.GET_SESSION, undefined);
-
-    if (error) {
-      errorStore.set(error);
-      return;
-    }
-
-    const session = message as ApiSession;
-    user.set(session.user);
-  }
 </script>
 
 <div
   class="relative bg-modal h-full grid grid-cols-[64px_1fr] rounded-[20px] text-white select-none font-sans overflow-hidden"
-  transition:fade={{ duration: 130 }}
 >
   <AppSidebar />
   <main class="h-full overflow-hidden">
