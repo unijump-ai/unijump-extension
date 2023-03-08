@@ -15,6 +15,13 @@ const CONTEXT_MENU_ID = 'UniJump.ai';
 const TOGGLE_SHORTCUT_NAME =
   __MANIFEST_VERSION__ === 2 ? '_execute_browser_action' : '_execute_action';
 
+events.init({
+  adapter: adapter({
+    apiKey: import.meta.env.CLIENT_AMPLITUDE_API_KEY,
+    debug: true,
+  }),
+});
+
 const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean) => {
   const { message } = await sendMessageToTab(
     tabId,
@@ -35,13 +42,6 @@ browser.runtime.onInstalled.addListener(async () => {
     id: CONTEXT_MENU_ID,
     title: 'UniJump',
     contexts: ['all'],
-  });
-
-  events.init({
-    adapter: adapter({
-      apiKey: import.meta.env.CLIENT_AMPLITUDE_API_KEY,
-      debug: true,
-    }),
   });
 
   events.send(UserEvent.EXTENSION_INSTALL);
