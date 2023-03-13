@@ -1,10 +1,15 @@
 import browser from 'webextension-polyfill';
 
+export interface ContentRendererOptions {
+  cssPaths: string[];
+  appContainer: HTMLElement;
+}
+
 export default async function renderContent(
-  cssPaths: string[],
+  options: ContentRendererOptions,
   render: (appRoot: HTMLElement) => void
 ) {
-  const appContainer = document.createElement('div');
+  const { appContainer, cssPaths } = options;
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });

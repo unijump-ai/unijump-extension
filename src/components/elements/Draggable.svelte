@@ -8,10 +8,10 @@
 </script>
 
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
-  import { inlineClass, inlineStyle } from '$lib/utils';
   import IconDrag from '$assets/icons/drag.svg?component';
   import IconDraggerHandle from '$assets/icons/dragger-handle.svg?component';
+  import { inlineClass, inlineStyle } from '$lib/utils';
+  import { createEventDispatcher } from 'svelte';
 
   export let position: DraggablePosition;
   export let handlePosition: 'top' | 'bottom' = 'bottom';
@@ -114,7 +114,7 @@
   on:resize={onWindowResize}
 />
 <div
-  class={inlineClass('fixed select-none z-[9999999]', [])}
+  class={inlineClass('fixed select-none z-max')}
   {style}
   bind:this={draggableEl}
   on:mouseenter={() => (isHovered = true)}

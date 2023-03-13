@@ -1,11 +1,11 @@
+import webExtension from '@samrum/vite-plugin-web-extension';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 import path from 'path';
 import { defineConfig, loadEnv, UserConfigExport } from 'vite';
-import { svelte } from '@sveltejs/vite-plugin-svelte';
-import webExtension from '@samrum/vite-plugin-web-extension';
-import svelteSVG from 'vite-plugin-svelte-svg';
 import { imagetools } from 'vite-imagetools';
-import { getManifest } from './src/manifest';
+import svelteSVG from 'vite-plugin-svelte-svg';
 import { pluginDevImport } from './build/vite-plugin-dev-import';
+import { getManifest } from './src/manifest';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -13,6 +13,8 @@ export default defineConfig(({ mode }) => {
   const development = env.NODE_ENV === 'development';
   const manifestVersion = env.MANIFEST_VERSION || '2';
   const outDir = `dist/mv${manifestVersion}`;
+  const manifest = getManifest(parseInt(manifestVersion));
+  manifest.name = `${manifest.name} - (dev)`;
 
   const sharedConfig = {
     resolve: {
@@ -87,9 +89,6 @@ export default defineConfig(({ mode }) => {
     server: {
       hmr: false,
     },
-    plugins: [
-      ...sharedConfig.plugins,
-      webExtension({ manifest: getManifest(Number(manifestVersion)) }),
-    ],
+    plugins: [...sharedConfig.plugins, webExtension({ manifest })],
   } satisfies UserConfigExport;
 });

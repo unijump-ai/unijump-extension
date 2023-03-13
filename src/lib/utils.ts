@@ -1,24 +1,26 @@
 export const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const inlineClass = (
-  defaultClasses: string,
-  conditinalClasses: Record<string, boolean> | string[]
-): string => {
-  let validClasses: string[] = [];
+type ClassNameType = string | string[] | Record<string, boolean>;
 
-  if (Array.isArray(conditinalClasses)) {
-    validClasses = conditinalClasses;
-  } else {
-    Object.keys(conditinalClasses).forEach((className) => {
-      const value = conditinalClasses[className];
+export const inlineClass = (...classNames: ClassNameType[]) => {
+  let classArray: string[] = [];
 
-      if (!value) return;
+  const addClasses = (classes: string[]) => {
+    classArray = [...classArray, ...classes];
+  };
 
-      validClasses.push(className);
-    });
-  }
+  classNames.forEach((classInit) => {
+    if (typeof classInit === 'string') {
+      addClasses([classInit]);
+    } else if (Array.isArray(classInit)) {
+      addClasses(classInit);
+    } else if (typeof classInit === 'object' && classInit !== null) {
+      const classes = Object.keys(classInit).filter((_class) => !!classInit[_class]);
+      addClasses(classes);
+    }
+  });
 
-  return `${defaultClasses} ${validClasses.join(' ')}`;
+  return classArray.join(' ');
 };
 
 export const inlineStyle = (styleObject: Partial<CSSStyleDeclaration>): string => {

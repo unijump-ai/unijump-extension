@@ -19,6 +19,9 @@ module.exports = {
       opacity: {
         '8': '.08',
         '15': '.15'
+      },
+      zIndex: {
+        'max': '2147483647'
       }
     },
   },

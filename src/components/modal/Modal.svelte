@@ -12,6 +12,7 @@
   import { AppContext } from '$lib/context';
   import { createModalStore } from './modal.store';
   import { inlineClass } from '$lib/utils';
+  import { MAX_Z_INDEX } from '$lib/style';
 
   export let id: string;
   export let active = false;
@@ -46,7 +47,7 @@
     <div
       {id}
       class={inlineClass(
-        'fixed inset-0 p-4 z-[99999999] flex items-center justify-center bg-white/30 transition-opacity',
+        'fixed inset-0 p-4 flex items-center justify-center bg-white/30 transition-opacity z-max',
         {
           'text-center': center,
           'invisible opacity-0 pointer-events-none duration-100': !active,
