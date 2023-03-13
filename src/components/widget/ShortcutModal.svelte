@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy } from 'svelte';
   import { Button } from '$components/elements';
   import Modal from '$components/modal/Modal.svelte';
   import ModalDescription from '$components/modal/ModalDescription.svelte';
   import ModalDialog from '$components/modal/ModalDialog.svelte';
   import ModalTitle from '$components/modal/ModalTitle.svelte';
-  import config from '../../config';
-  import { userAgent } from '$lib/user-agent';
+  import config from '$config';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { userAgent } from '$lib/user-agent';
   import { isMac } from '$lib/utils';
+  import { createEventDispatcher, onDestroy } from 'svelte';
 
   export let active = false;
 

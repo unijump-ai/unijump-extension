@@ -12,7 +12,8 @@
       "$components/*": ["src/components/*"],
       "$lib/*": ["src/lib/*"],
       "$assets/*": ["src/assets/*"],
-      "$prompts/*": ["src/prompts/*"]
+      "$prompts/*": ["src/prompts/*"],
+      "$config": ["src/config.ts"]
     },
     /**
      * Typecheck JS in `.svelte` and `.js` files by default.

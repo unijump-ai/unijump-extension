@@ -1,5 +1,9 @@
-import browser from 'webextension-polyfill';
+import config from '$config';
 import api from '$lib/api';
+import { addConversation, deleteConversation } from '$lib/extension/conversations';
+import { events } from '$lib/extension/events';
+import { adapter } from '$lib/extension/events/adapters/amplitude';
+import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
 import {
   listenConnection,
   listenMessage,
@@ -7,10 +11,7 @@ import {
   sendMessageToTab,
 } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
-import { events } from '$lib/extension/events';
-import { adapter } from '$lib/extension/events/adapters/amplitude';
-import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
-import { addConversation, deleteConversation } from '$lib/extension/conversations';
+import browser from 'webextension-polyfill';
 
 const CONTEXT_MENU_ID = 'UniJump.ai';
 const TOGGLE_SHORTCUT_NAME =
@@ -34,18 +35,31 @@ const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean)
   }
 };
 
-browser.runtime.setUninstallURL('https://bit.ly/unijump-uninstall');
+if (config.visitUrl.uninstall) {
+  browser.runtime.setUninstallURL(config.visitUrl.uninstall);
+}
 
-browser.runtime.onInstalled.addListener(async () => {
-  console.debug('UniJump Installed installed');
+browser.runtime.onInstalled.addListener(async (details) => {
+  const installReason = details.reason;
+  console.debug(`UniJump Installed: ${installReason}`);
+
+  if (installReason === 'install') {
+    if (config.visitUrl.install) {
+      browser.tabs.create({ url: config.visitUrl.install });
+    }
+
+    events.send(UserEvent.EXTENSION_INSTALL);
+  }
+
+  if (installReason === 'update') {
+    events.send(UserEvent.EXTENSION_UPDATE);
+  }
 
   browser.contextMenus.create({
     id: CONTEXT_MENU_ID,
     title: 'UniJump',
     contexts: ['all'],
   });
-
-  events.send(UserEvent.EXTENSION_INSTALL);
 });
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {

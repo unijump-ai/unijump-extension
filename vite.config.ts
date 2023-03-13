@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
         $lib: path.resolve(__dirname, './src/lib'),
         $assets: path.resolve(__dirname, './src/assets'),
         $prompts: path.resolve(__dirname, './src/prompts'),
+        $config: path.resolve(__dirname, './src/config.ts'),
       },
     },
     build: {},
