@@ -10,11 +10,16 @@ import { getManifest } from './src/manifest';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const development = env.NODE_ENV === 'development';
+  const envDevelopment = env.NODE_ENV === 'development';
+  const modeDevelopment = mode === 'development';
+
   const manifestVersion = env.MANIFEST_VERSION || '2';
-  const outDir = `dist/mv${manifestVersion}`;
+  const outDir = `dist/mv${manifestVersion}${modeDevelopment ? '-dev' : ''}`;
   const manifest = getManifest(parseInt(manifestVersion));
-  manifest.name = `${manifest.name} - (dev)`;
+
+  if (modeDevelopment) {
+    manifest.name = `${manifest.name} - (dev)`;
+  }
 
   const sharedConfig = {
     resolve: {
@@ -49,7 +54,7 @@ export default defineConfig(({ mode }) => {
     envPrefix: 'CLIENT_',
   } satisfies UserConfigExport;
 
-  if (development) {
+  if (envDevelopment) {
     return {
       ...sharedConfig,
       plugins: [
