@@ -1,24 +1,29 @@
 <script lang="ts">
-  import type { ApiSession } from '$lib/api';
-  import '../../../app.css';
-  import { onMount } from 'svelte';
-  import { listenMessage, sendMessage } from '$lib/extension/messaging';
-  import { activePage, errorStore, selectedText, user } from '$lib/store';
-  import { Message } from '$lib/extension/messaging/messaging.constants';
-  import { registerShortcut, ShortcutName } from '$lib/keyboard';
-  import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
-  import { options } from '$lib/store';
-  import { closeModals, Modal } from '$components/modal';
   import App from '$components/app/App.svelte';
   import Draggable, {
     type DraggablePosition,
   } from '$components/elements/Draggable.svelte';
+  import { closeModals, Modal } from '$components/modal';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
+  import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
+  import type { ApiSession } from '$lib/api';
   import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+  import { listenMessage, sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { registerShortcut, ShortcutName } from '$lib/keyboard';
   import { PageName } from '$lib/navigation';
+  import {
+    activePage,
+    appModalVisible,
+    errorStore,
+    options,
+    selectedText,
+    user,
+  } from '$lib/store';
+  import { onMount } from 'svelte';
+  import '../../../app.css';
 
   let appMounted = false;
-  let appModalVisible = false;
   let appWrapperEl: HTMLDivElement;
   let draggablePosition: DraggablePosition = null;
   let toggleShortcut = '';
@@ -59,7 +64,7 @@
       toggleModal();
 
       return {
-        message: appModalVisible,
+        message: $appModalVisible,
       };
     });
 
@@ -80,7 +85,7 @@
       activePage.set(PageName.Paraphraser);
     }
 
-    appModalVisible = true;
+    $appModalVisible = true;
     appWrapperEl?.focus();
 
     if (source) {
@@ -93,12 +98,12 @@
   }
 
   function closeModal() {
-    appModalVisible = false;
+    $appModalVisible = false;
     errorStore.set(null);
   }
 
   function toggleModal() {
-    if (appModalVisible) {
+    if ($appModalVisible) {
       closeModal();
     } else {
       openModal();
@@ -141,7 +146,7 @@
       shortcut={toggleShortcut}
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
-      visible={!appModalVisible && !isWindowFullscreen}
+      visible={!$appModalVisible && !isWindowFullscreen}
       on:activate={() => openModal(OpenAppSource.FLOATING_WIDGET)}
       on:set-shortcut={onSetShortcut}
     />
@@ -149,7 +154,7 @@
 {/if}
 <Modal
   id="unijump-modal"
-  active={appModalVisible}
+  active={$appModalVisible}
   on:close={closeModal}
   mount={appMounted}
 >

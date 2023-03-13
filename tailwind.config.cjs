@@ -19,15 +19,19 @@ module.exports = {
       opacity: {
         '8': '.08',
         '15': '.15'
+      },
+      zIndex: {
+        'max': '2147483647'
       }
     },
   },
   plugins: [
-    plugin(({ matchUtilities, theme }) => {
+    plugin(({ addVariant, matchUtilities, theme }) => {
       matchUtilities(
         { 'animation-delay': (value) => ({ 'animation-delay': value }) },
         { values: theme('transitionDelay') }
       );
+      addVariant('no-backdrop-blur', '@supports not (backdrop-filter: blur())')
     }),
   ],
 }

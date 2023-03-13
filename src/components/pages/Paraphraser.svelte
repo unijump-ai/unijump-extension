@@ -1,25 +1,27 @@
 <script lang="ts">
-  import type { PromptEventPayload } from '$lib/prompt/prompt.types';
-  import type { ConversationMessage } from '$lib/services/conversation';
   import type { ScrollerController } from '$components/elements/Scroller.controller';
-  import { onDestroy, tick } from 'svelte';
-  import { fade } from 'svelte/transition';
-  import { OutputAction } from '$lib/prompt/output.constants';
-  import { ConversationService } from '$lib/services/conversation';
-  import AppPage from '../app/AppPage.svelte';
-  import paraphraserConfig from '$prompts/paraphraser';
-  import PromptBuilder from '../prompt/PromptBuilder.svelte';
-  import TextOutputActions from '$components/output/TextOutputActions.svelte';
-  import Output from '$components/output/Output.svelte';
   import Scroller from '$components/elements/Scroller.svelte';
+  import Output from '$components/output/Output.svelte';
+  import TextOutputActions from '$components/output/TextOutputActions.svelte';
+  import { UserEvent } from '$lib/extension/events/event.constants';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
-  import { UserEvent } from '$lib/extension/events/event.constants';
   import { PageName } from '$lib/navigation';
+  import { OutputAction } from '$lib/prompt/output.constants';
+  import type { PromptEventPayload } from '$lib/prompt/prompt.types';
+  import type { ConversationMessage } from '$lib/services/conversation';
+  import { ConversationService } from '$lib/services/conversation';
+  import { activePage, appModalVisible } from '$lib/store';
+  import paraphraserConfig from '$prompts/paraphraser';
+  import { onDestroy, tick } from 'svelte';
+  import { fade } from 'svelte/transition';
+  import AppPage from '../app/AppPage.svelte';
+  import PromptBuilder from '../prompt/PromptBuilder.svelte';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
 
+  let focusPromptBuilder: () => Promise<void>;
   let outputScroller: ScrollerController | null = null;
   let aiMessage: ConversationMessage = null;
 
@@ -28,12 +30,22 @@
     $conversationStore.incomingMessage || $conversationStore.outgoingMessage
   );
   $: output = $conversationStore?.incomingMessage?.text || aiMessage?.text || '';
+  $: isActivePage = $activePage === PageName.Paraphraser;
+  $: onVisibilityChange($appModalVisible, isActivePage);
 
   onDestroy(destroyConversation);
 
   function destroyConversation() {
     conversationService.clear();
     conversationService.destroy();
+  }
+
+  function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
+    if ($appModalVisible && isActivePage) {
+      setTimeout(() => {
+        focusPromptBuilder?.();
+      }, 200);
+    }
   }
 
   async function onConversationChange(conversation: typeof $conversationStore) {
@@ -112,7 +124,11 @@
     <div class="grid grid-cols-2 h-full">
       <Scroller>
         <div class="p-6">
-          <PromptBuilder config={paraphraserConfig} on:prompt={onPromptBuilt} />
+          <PromptBuilder
+            config={paraphraserConfig}
+            bind:focus={focusPromptBuilder}
+            on:prompt={onPromptBuilt}
+          />
         </div>
       </Scroller>
       <div class="relative h-full overflow-hidden">
