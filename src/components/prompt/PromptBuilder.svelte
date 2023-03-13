@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import TagBuilder from '$components/elements/TagBuilder.svelte';
+  import { bindKeyEvent } from '$lib/keyboard';
   import type {
     AllPromptArgs,
     PromptArgItem,
     PromptConfig,
   } from '$lib/prompt/prompt.types';
-  import PromptArgs from './PromptArgs.svelte';
   import { errorStore, selectedText } from '$lib/store';
-  import TagBuilder from '$components/elements/TagBuilder.svelte';
-  import { bindKeyEvent } from '$lib/keyboard';
+  import { createEventDispatcher, tick } from 'svelte';
+  import PromptArgs from './PromptArgs.svelte';
 
   export let config: PromptConfig;
+  export const focus = async () => {
+    await tick();
+    inputEl?.focus();
+  };
 
   const dispatch = createEventDispatcher();
 
@@ -25,10 +29,6 @@
   let inputEl: HTMLTextAreaElement;
 
   $: inputText = $selectedText;
-
-  onMount(() => {
-    inputEl.focus();
-  });
 
   function buildPrompt() {
     const input = config.input(selectedPromptArgs, inputText);

@@ -2,7 +2,7 @@
   import IconSend from '$assets/icons/send.svg?component';
   import { bindKeyEvent, ModifierKey } from '$lib/keyboard';
   import { inlineStyle, sleep } from '$lib/utils';
-  import { createEventDispatcher, onMount, tick } from 'svelte';
+  import { createEventDispatcher, tick } from 'svelte';
 
   export let disabled = false;
   export let inputText = '';
@@ -14,14 +14,6 @@
 
   $: disableSend = disabled || !inputText;
   $: onInputTextChange(inputText);
-
-  onMount(async () => {
-    await sleep(100);
-
-    if (!disabled) {
-      focusInput();
-    }
-  });
 
   async function onInputTextChange(inputText: string) {
     inputHeight = 24;

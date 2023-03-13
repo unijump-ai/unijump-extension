@@ -1,22 +1,22 @@
 <script lang="ts">
-  import type { ScrollerController } from '$components/elements/Scroller.controller';
-  import type { ListPrompt } from '$lib/services/prompt-list';
-  import { onDestroy, tick } from 'svelte';
+  import IconPlus from '$assets/icons/plus-circle.svg?component';
   import AppPage from '$components/app/AppPage.svelte';
   import ChatInput from '$components/chat/ChatInput.svelte';
-  import { Button, Scroller } from '$components/elements';
   import Conversation from '$components/chat/Conversation.svelte';
+  import { Button, Scroller } from '$components/elements';
+  import type { ScrollerController } from '$components/elements/Scroller.controller';
+  import PromptList from '$components/prompt/PromptList.svelte';
+  import { UserEvent } from '$lib/extension/events/event.constants';
+  import { sendMessage } from '$lib/extension/messaging';
+  import { Message } from '$lib/extension/messaging/messaging.constants';
+  import { PageName } from '$lib/navigation';
   import {
     ConversationService,
     type ConversationState,
   } from '$lib/services/conversation';
-  import { errorStore, selectedText } from '$lib/store';
-  import IconPlus from '$assets/icons/plus-circle.svg?component';
-  import PromptList from '$components/prompt/PromptList.svelte';
-  import { sendMessage } from '$lib/extension/messaging';
-  import { Message } from '$lib/extension/messaging/messaging.constants';
-  import { UserEvent } from '$lib/extension/events/event.constants';
-  import { PageName } from '$lib/navigation';
+  import type { ListPrompt } from '$lib/services/prompt-list';
+  import { activePage, appModalVisible, errorStore, selectedText } from '$lib/store';
+  import { onDestroy, tick } from 'svelte';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
@@ -29,12 +29,22 @@
   $: messaging = $conversationStore.incomingMessage || $conversationStore.outgoingMessage;
   $: hasConversation = $conversationStore.messages.length || messaging;
   $: onConversationChange($conversationStore);
+  $: isActivePage = $activePage === PageName.Chat;
+  $: onVisibilityChange($appModalVisible, isActivePage);
 
   onDestroy(destroyConversation);
 
   function destroyConversation() {
     conversationService.clear();
     conversationService.destroy();
+  }
+
+  function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
+    if ($appModalVisible && isActivePage) {
+      setTimeout(() => {
+        focusInput?.();
+      }, 100);
+    }
   }
 
   async function onConversationChange({ error }: ConversationState) {
