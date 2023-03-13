@@ -55,17 +55,13 @@
     listenMessage(Message.OPEN_MODAL, async () => {
       openModal();
 
-      return {
-        message: true,
-      };
+      return true;
     });
 
     listenMessage(Message.TOGGLE_MODAL, async () => {
       toggleModal();
 
-      return {
-        message: $appModalVisible,
-      };
+      return $appModalVisible;
     });
 
     document.addEventListener('fullscreenchange', () => {

@@ -29,6 +29,7 @@ const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean)
     tabId,
     open ? Message.OPEN_MODAL : Message.TOGGLE_MODAL
   );
+  console.log('open message', message);
 
   if (message) {
     events.send(UserEvent.APP_OPEN, { 'opened-from': source });
