@@ -26,11 +26,12 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(({ matchUtilities, theme }) => {
+    plugin(({ addVariant, matchUtilities, theme }) => {
       matchUtilities(
         { 'animation-delay': (value) => ({ 'animation-delay': value }) },
         { values: theme('transitionDelay') }
       );
+      addVariant('no-backdrop-blur', '@supports not (backdrop-filter: blur())')
     }),
   ],
 }
