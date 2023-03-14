@@ -154,4 +154,8 @@
     border-color: rgba(0, 0, 0, 0.1) !important;
     transform: translateY(1px);
   }
+
+  .tooltip {
+    @apply !absolute !py-0.5 !px-1 text-xs left-full top-1/2 -translate-y-1/2 rounded-sm z-20 !bg-darkPurple-900/100 text-white font-sans border border-white/8 sr-only group-hover/tooltip:not-sr-only;
+  }
 }
