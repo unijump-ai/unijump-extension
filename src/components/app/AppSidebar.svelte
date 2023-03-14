@@ -42,7 +42,7 @@
       {#each socialLinks as socialLink}
         <li class="group/tooltip relative flex first:mt-0">
           <a
-            class="p-1.5 inline-flex text-zinc-500 transition-all hover:text-zinc-100"
+            class="py-1.5 px-2 inline-flex text-zinc-500 transition-all hover:text-zinc-100"
             href={socialLink.href}
             target="_blank"
             rel="noreferrer"
@@ -55,7 +55,7 @@
     </ul>
     <hr class="h-[1px] w-6 border-none bg-white/8 my-4" />
     <button
-      class="group/tooltip relative p-1 text-zinc-500 transition-all hover:text-zinc-100"
+      class="group/tooltip relative py-1 px-2 text-zinc-500 transition-all hover:text-zinc-100"
       on:click={openOptionsPage}
     >
       <IconOptions width={24} height={24} />
