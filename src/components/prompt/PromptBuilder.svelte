@@ -31,6 +31,12 @@
   $: inputText = $selectedText;
 
   function buildPrompt() {
+    if (!inputText) {
+      alert('Please enter input text');
+      focus();
+      return;
+    }
+
     const input = config.input(selectedPromptArgs, inputText);
     const initial = config.initialPrompt(input);
 
@@ -80,9 +86,7 @@
       >+ {config.addUserTagLabel || ''}</TagBuilder
     >
   </div>
-  <button
-    on:click={() => buildPrompt()}
-    disabled={!inputText || !!$errorStore}
-    class="btn-primary">{config.ctaLabel || 'Run'}</button
+  <button on:click={() => buildPrompt()} disabled={!!$errorStore} class="btn-primary"
+    >{config.ctaLabel || 'Run'}</button
   >
 </div>
