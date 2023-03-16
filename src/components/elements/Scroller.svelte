@@ -10,6 +10,9 @@
   });
 </script>
 
-<div class="h-full overflow-y-auto w-full" bind:this={scrollElement}>
+<div
+  class="h-full overflow-y-auto w-full {$$props.class || ''}"
+  bind:this={scrollElement}
+>
   <slot scroller={scrollerController} />
 </div>
