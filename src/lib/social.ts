@@ -1,7 +1,7 @@
-import type { SvelteComponent } from 'svelte';
 import IconDiscord from '$assets/icons/social/discord.svg?component';
 import IconTelegram from '$assets/icons/social/telegram.svg?component';
 import IconTwitter from '$assets/icons/social/twitter.svg?component';
+import type { SvelteComponent } from 'svelte';
 
 interface SocialLink {
   name: string;
@@ -17,7 +17,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     name: 'Discord',
-    href: 'https://discord.gg/MAUktptu',
+    href: 'https://discord.gg/adXsUw8e5j',
     icon: IconDiscord,
   },
   {

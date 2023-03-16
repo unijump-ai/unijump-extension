@@ -2,6 +2,7 @@
   import IconOptions from '$assets/icons/options.svg?component';
   import unijumpLogo from '$assets/logo.png?w=40;80&format=webp;png&picture';
   import Picture from '$components/elements/Picture.svelte';
+  import config from '$config';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { PageName, pages } from '$lib/navigation';
@@ -20,7 +21,10 @@
 <div
   class="relative py-4 flex flex-col border-r justify-between items-center border-r-white/8 z-20"
 >
-  <Picture width={40} image={unijumpLogo} alt="UniJump icon" />
+  <a class="group/tooltip relative px-2" href={config.landingPage.host} target="_blank" rel="noreferrer">
+    <Picture width={40} image={unijumpLogo} alt="UniJump icon" />
+    <span class="tooltip">{config.landingPage.host}</span>
+  </a>
   <ul class="absolute w-full flex flex-col left-0 items-center top-1/2 -translate-y-1/2">
     {#each pages as page}
       <li>

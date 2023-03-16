@@ -62,7 +62,7 @@
   }
 
   .btn-primary {
-    @apply relative rounded-full p-4 block w-full border border-white/10 text-white font-bold transition-all;
+    @apply relative rounded-lg p-3 block w-full border text-sm border-white/10 text-zinc-50 font-semibold transition-all;
     /* border: 1px solid rgba(255, 255, 255, 0.08); */
     background: radial-gradient(
           59.99% 298.08% at 55.32% 100%,

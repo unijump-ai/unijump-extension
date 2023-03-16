@@ -122,15 +122,11 @@
 <AppPage title="Paraphraser" on:close>
   {#if $conversationStore}
     <div class="grid grid-cols-2 h-full">
-      <Scroller>
-        <div class="p-6">
-          <PromptBuilder
-            config={paraphraserConfig}
-            bind:focus={focusPromptBuilder}
-            on:prompt={onPromptBuilt}
-          />
-        </div>
-      </Scroller>
+      <PromptBuilder
+        config={paraphraserConfig}
+        bind:focus={focusPromptBuilder}
+        on:prompt={onPromptBuilt}
+      />
       <div class="relative h-full overflow-hidden">
         <div class="absolute left-0 top-0 seperator-vertical" />
         <Scroller bind:scrollerController={outputScroller}>
