@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { ConversationMessage } from '$lib/services/conversation';
-  import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
+  import Markdown from '$components/elements/Markdown.svelte';
   import Picture from '$components/elements/Picture.svelte';
+  import type { ConversationMessage } from '$lib/services/conversation';
 
   export let message: ConversationMessage;
 

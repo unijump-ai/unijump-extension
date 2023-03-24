@@ -1,20 +1,20 @@
+import { getExceptionByName } from '$lib/exceptions';
+import browser from 'webextension-polyfill';
+import { Message } from './messaging.constants';
 import type {
-  MessagePayloadMap,
-  MessageCallback,
-  MessageUnsubsriber,
-  MessagePayload,
-  MessageEvent,
+  ConnectionHandler,
   ConnectionMessageMap,
   ConnectionPayloadMap,
-  PortMessageEvent,
-  ConnectionHandler,
-  PortPayloadEvent,
+  MessageCallback,
+  MessageEvent,
+  MessagePayload,
+  MessagePayloadMap,
   MessageResponse,
   MessageResponseMap,
+  MessageUnsubsriber,
+  PortMessageEvent,
+  PortPayloadEvent,
 } from './messaging.types';
-import browser from 'webextension-polyfill';
-import { getExceptionByName } from '$lib/exceptions';
-import { Message } from './messaging.constants';
 
 export const messageError = (
   err: Error
@@ -75,7 +75,7 @@ export const sendMessageToTab = async <T extends keyof MessagePayloadMap>(
     const response = await browser.tabs.sendMessage(tabId, { type: message, payload });
 
     return {
-      message: response,
+      response,
     };
   } catch (error) {
     return {

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
@@ -7,6 +6,7 @@ import {
   UnknownException,
 } from '$lib/exceptions';
 import { parseStream } from '$lib/sse';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ConversationParams {
   text: string;
@@ -83,6 +83,10 @@ export class Api {
     const response = await fetch(this.getFullUrl(path), requestOptions);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        throw new UnauthorizedException();
+      }
+
       if (response.status === 403) {
         throw new CloudflareException();
       }
@@ -152,6 +156,10 @@ export class Api {
     }
 
     return session;
+  }
+
+  checkUser() {
+    return this.fetch('/backend-api/accounts/check');
   }
 
   setConversationProperty(conversationId: string, props: Partial<ConversationProperty>) {

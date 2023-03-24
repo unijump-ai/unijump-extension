@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
       }),
       imagetools(),
     ],
-    envPrefix: 'CLIENT_',
+    envPrefix: 'PUBLIC_',
   } satisfies UserConfigExport;
 
   if (envDevelopment) {

@@ -15,7 +15,14 @@
     type ConversationState,
   } from '$lib/services/conversation';
   import type { ListPrompt } from '$lib/services/prompt-list';
-  import { activePage, appModalVisible, errorStore, selectedText } from '$lib/store';
+  import {
+    activePage,
+    appModalVisible,
+    errorStore,
+    pageAction,
+    selectedText,
+  } from '$lib/store';
+  import { sleep } from '$lib/utils';
   import { onDestroy, tick } from 'svelte';
 
   const conversationService = new ConversationService();
@@ -39,11 +46,25 @@
     conversationService.destroy();
   }
 
-  function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
-    if ($appModalVisible && isActivePage) {
-      setTimeout(() => {
+  async function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
+    if (!$appModalVisible || !isActivePage) return;
+
+    if ($pageAction && $pageAction.page === PageName.Chat) {
+      conversationService.clear();
+
+      const message = $pageAction.args.chat[0].value;
+      if ($pageAction.run) {
+        inputText = '';
+        await sleep(200);
+        send(message);
+      } else {
+        inputText = message;
+        await sleep(200);
         focusInput?.();
-      }, 100);
+      }
+    } else {
+      await sleep(300);
+      focusInput?.();
     }
   }
 
@@ -64,7 +85,10 @@
 
   function onMessageSend(evt: CustomEvent<string>) {
     const text = evt.detail;
+    send(text);
+  }
 
+  function send(text: string) {
     conversationService.sendMessage(text);
 
     sendMessage(Message.SEND_EVENT, {

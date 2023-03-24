@@ -3,7 +3,6 @@
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
-  import { onMount } from 'svelte';
 
   const chatGptUrl = 'https://chat.openai.com/chat';
 
@@ -12,29 +11,14 @@
       ? 'Please Login at'
       : 'You need to visit';
 
-  onMount(() => {
-    const onVisibilityChange = async () => {
-      if (document.visibilityState !== 'visible') return;
-
-      const { error } = await sendMessage(Message.GET_SESSION, undefined);
-
-      if (error) {
-        return;
-      }
-
-      errorStore.set(null);
-    };
-
-    document.addEventListener('visibilitychange', onVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', onVisibilityChange);
-    };
-  });
-
-  function onChatGptClick(evt: MouseEvent) {
+  async function onChatGptClick(evt: MouseEvent) {
     evt.preventDefault();
-    sendMessage(Message.OPEN_CHATGPT_TAB, chatGptUrl);
+
+    const { response } = await sendMessage(Message.OPEN_CHATGPT_TAB, chatGptUrl);
+
+    if (response) {
+      errorStore.set(null);
+    }
   }
 </script>
 

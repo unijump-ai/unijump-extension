@@ -7,11 +7,13 @@
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { PageName } from '$lib/navigation';
+  import { PromptManager } from '$lib/prompt';
   import { OutputAction } from '$lib/prompt/output.constants';
   import type { PromptEventPayload } from '$lib/prompt/prompt.types';
   import type { ConversationMessage } from '$lib/services/conversation';
   import { ConversationService } from '$lib/services/conversation';
-  import { activePage, appModalVisible } from '$lib/store';
+  import { activePage, appModalVisible, errorStore, pageAction } from '$lib/store';
+  import { sleep } from '$lib/utils';
   import paraphraserConfig from '$prompts/paraphraser';
   import { onDestroy, tick } from 'svelte';
   import { fade } from 'svelte/transition';
@@ -21,9 +23,11 @@
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
 
+  let buildPrompt: () => Promise<void>;
   let focusPromptBuilder: () => Promise<void>;
   let outputScroller: ScrollerController | null = null;
   let aiMessage: ConversationMessage = null;
+  let selectedPromptArgs = PromptManager.createEmptyArgs(paraphraserConfig);
 
   $: onConversationChange($conversationStore);
   $: loading = !!(
@@ -40,8 +44,20 @@
     conversationService.destroy();
   }
 
-  function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
-    if ($appModalVisible && isActivePage) {
+  async function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
+    if (!$appModalVisible || !isActivePage) return;
+
+    if ($pageAction && $pageAction.page === PageName.Paraphraser) {
+      selectedPromptArgs = $pageAction.args;
+
+      if ($pageAction.run) {
+        await sleep(200);
+        buildPrompt();
+      } else {
+        await sleep(200);
+        focusPromptBuilder?.();
+      }
+    } else {
       setTimeout(() => {
         focusPromptBuilder?.();
       }, 200);
@@ -49,6 +65,12 @@
   }
 
   async function onConversationChange(conversation: typeof $conversationStore) {
+    if (conversation.error) {
+      errorStore.set(conversation.error);
+      conversationService.clear();
+      return;
+    }
+
     if (conversation.incomingMessage || conversation.outgoingMessage) {
       aiMessage = null;
       return;
@@ -124,6 +146,8 @@
     <div class="grid grid-cols-2 h-full">
       <PromptBuilder
         config={paraphraserConfig}
+        bind:selectedPromptArgs
+        bind:build={buildPrompt}
         bind:focus={focusPromptBuilder}
         on:prompt={onPromptBuilt}
       />

@@ -4,6 +4,7 @@ import { addConversation, deleteConversation } from '$lib/extension/conversation
 import { events } from '$lib/extension/events';
 import { adapter } from '$lib/extension/events/adapters/amplitude';
 import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+import { getExtensionInfo } from '$lib/extension/events/event.module';
 import {
   listenConnection,
   listenMessage,
@@ -19,24 +20,32 @@ const TOGGLE_SHORTCUT_NAME =
 
 events.init({
   adapter: adapter({
-    apiKey: import.meta.env.CLIENT_AMPLITUDE_API_KEY,
+    apiKey: import.meta.env.PUBLIC_AMPLITUDE_API_KEY,
     debug: true,
   }),
 });
 
 const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean) => {
-  const { message } = await sendMessageToTab(
+  const { response } = await sendMessageToTab(
     tabId,
     open ? Message.OPEN_MODAL : Message.TOGGLE_MODAL
   );
 
-  if (message) {
+  if (response) {
     events.send(UserEvent.APP_OPEN, { 'opened-from': source });
   }
 };
 
+const createUninstallUrl = async () => {
+  const url = new URL(config.visitUrl.uninstall);
+  const { version, deviceId, userId } = await getExtensionInfo();
+  url.searchParams.set('e', JSON.stringify({ version, deviceId, userId }));
+
+  browser.runtime.setUninstallURL(url.toString());
+};
+
 if (config.visitUrl.uninstall) {
-  browser.runtime.setUninstallURL(config.visitUrl.uninstall);
+  createUninstallUrl();
 }
 
 browser.runtime.onInstalled.addListener(async (details) => {
@@ -73,12 +82,12 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
   toggleModal(tab.id, OpenAppSource.TOPBAR);
 });
 
-listenMessage(Message.GET_SESSION, async () => {
+listenMessage(Message.CHECK_USER, async () => {
   try {
-    const session = await api.getSession();
+    await api.checkUser();
 
     return {
-      message: session,
+      response: true,
     };
   } catch (err) {
     return messageError(err);
@@ -88,47 +97,36 @@ listenMessage(Message.GET_SESSION, async () => {
 listenMessage(Message.SET_CONVERSATION_PROPERTY, async ({ conversationId, props }) => {
   try {
     await api.setConversationProperty(conversationId, props);
-    return { message: true };
+    return { response: true };
   } catch (err) {
     return messageError(err);
   }
 });
 
 listenMessage(Message.OPEN_CHATGPT_TAB, (urlString, sender) => {
-  const url = new URL(urlString);
-  url.searchParams.set('uj', '1');
-  browser.tabs
-    .create({
-      url: url.toString(),
-    })
-    .then((tab) => {
-      let updatedUrl: string;
-      let title: string;
+  return new Promise((resolve) => {
+    browser.tabs
+      .create({
+        url: urlString,
+      })
+      .then((tab) => {
+        const onTabUpdated = async () => {
+          try {
+            await api.checkUser();
+            removeListener();
+            browser.tabs.update(sender.tab.id, { active: true });
+            resolve({ response: true });
+            browser.tabs.remove(tab.id);
+          } catch (error) {}
+        };
 
-      const onTabUpdated = (
-        _: number,
-        changeInfo: browser.Tabs.OnUpdatedChangeInfoType
-      ) => {
-        if (changeInfo.url) {
-          updatedUrl = changeInfo.url;
-        }
-        if (changeInfo.title) {
-          title = changeInfo.title;
-        }
+        const removeListener = () => {
+          browser.tabs.onUpdated.removeListener(onTabUpdated);
+        };
 
-        if (updatedUrl === url.toString() && title === 'New chat') {
-          removeListener();
-          browser.tabs.update(sender.tab.id, { active: true });
-          browser.tabs.remove(tab.id);
-        }
-      };
-
-      const removeListener = () => {
-        browser.tabs.onUpdated.removeListener(onTabUpdated);
-      };
-
-      browser.tabs.onUpdated.addListener(onTabUpdated);
-    });
+        browser.tabs.onUpdated.addListener(onTabUpdated);
+      });
+  });
 });
 
 listenMessage(Message.SEND_EVENT, ({ type, props }) => {
@@ -147,7 +145,7 @@ listenMessage(Message.GET_TOGGLE_SHORTCUT, async () => {
       : null;
 
   return {
-    message: shortcut,
+    response: shortcut,
   };
 });
 

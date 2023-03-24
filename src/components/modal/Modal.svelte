@@ -7,12 +7,11 @@
 </script>
 
 <script lang="ts">
-  import SveltePortal from 'svelte-portal';
-  import { createEventDispatcher, getContext, setContext } from 'svelte';
   import { AppContext } from '$lib/context';
-  import { createModalStore } from './modal.store';
   import { inlineClass } from '$lib/utils';
-  import { MAX_Z_INDEX } from '$lib/style';
+  import { createEventDispatcher, getContext, setContext } from 'svelte';
+  import SveltePortal from 'svelte-portal';
+  import { createModalStore } from './modal.store';
 
   export let id: string;
   export let active = false;

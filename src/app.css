@@ -26,7 +26,7 @@
   }
 
   #unijump-app {
-    @apply antialiased font-sans;
+    @apply antialiased font-sans text-left;
   }
 
   #unijump-options {

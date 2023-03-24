@@ -2,31 +2,25 @@
   import { Scroller } from '$components/elements';
   import TagBuilder from '$components/elements/TagBuilder.svelte';
   import { bindKeyEvent } from '$lib/keyboard';
-  import type {
-    AllPromptArgs,
-    PromptArgItem,
-    PromptConfig,
-  } from '$lib/prompt/prompt.types';
+  import { PromptManager } from '$lib/prompt';
+  import type { PromptArgItem, PromptConfig } from '$lib/prompt/prompt.types';
   import { errorStore, selectedText } from '$lib/store';
   import { createEventDispatcher, tick } from 'svelte';
   import PromptArgs from './PromptArgs.svelte';
 
   export let config: PromptConfig;
+  export let selectedPromptArgs = PromptManager.createEmptyArgs(config);
   export const focus = async () => {
     await tick();
     inputEl?.focus();
   };
+  export const build = async () => {
+    await tick();
+    buildPrompt();
+  };
 
   const dispatch = createEventDispatcher();
 
-  let selectedPromptArgs: AllPromptArgs = {
-    ...config.args.reduce((rv, arg) => {
-      rv[arg.key] = [];
-
-      return rv;
-    }, {}),
-    user: [],
-  };
   let inputEl: HTMLTextAreaElement;
 
   $: inputText = $selectedText;
@@ -84,9 +78,11 @@
           >
         {/each}
       {/each}
-      <TagBuilder bind:tags={selectedPromptArgs['user']}
-        >+ {config.addUserTagLabel || ''}</TagBuilder
-      >
+      {#if config.userTags}
+        <TagBuilder bind:tags={selectedPromptArgs['user']}
+          >+ {config.addUserTagLabel || ''}</TagBuilder
+        >
+      {/if}
     </div>
   </Scroller>
   <div

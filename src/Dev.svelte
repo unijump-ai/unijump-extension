@@ -1,5 +1,6 @@
 <script lang="ts">
   import Options from '$components/options/Options.svelte';
+  import Toolbox from '$components/toolbox/Toolbox.svelte';
   import { AppContext } from '$lib/context';
   import { setContext } from 'svelte';
   import ContentPage from './entries/contentScript/primary/ContentPage.svelte';
@@ -12,8 +13,17 @@
   } as const;
 
   const page = pages[window.location.pathname];
+  const toolboxConfig = {
+    style: 'rounded',
+    getValue() {
+      return inputText;
+    },
+  };
+
+  let inputText = '';
 
   setContext(AppContext.Root, '#unijump-app');
+  setContext(AppContext.ToolboxConfig, toolboxConfig);
 </script>
 
 {#if page}
@@ -33,7 +43,7 @@
     <div class="my-4">
       <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, iste!</h3>
 
-      <p>
+      <p class="mb-4">
         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate quae,
         sapiente in velit tempora repellat magni inventore unde laboriosam autem molestiae
         placeat quam consequatur ea accusamus esse aliquam eum. Itaque illo maxime
@@ -41,11 +51,23 @@
         dolore, labore excepturi delectus ex magni.
       </p>
 
-      <input
-        class="w-full my-3 p-3 border border-slate-500 rounded-xl"
-        placeholder="Input text"
-        type="text"
-      />
+      <p class="mb-4">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate quae,
+        sapiente in velit tempora repellat magni inventore unde laboriosam autem molestiae
+        placeat quam consequatur ea accusamus esse aliquam eum. Itaque illo maxime
+        doloribus saepe corporis, beatae ut veniam possimus non nisi nihil porro animi
+        dolore, labore excepturi delectus ex magni.
+      </p>
+
+      <div class="my-3">
+        <Toolbox />
+        <input
+          bind:value={inputText}
+          class="w-full p-3 border border-slate-500 rounded-xl"
+          placeholder="Input text"
+          type="text"
+        />
+      </div>
     </div>
   </div>
   <div id="unijump-app">

@@ -4,6 +4,7 @@ type ParaphraserArgs = 'modes' | 'tones';
 
 export default {
   name: 'Paraphraser',
+  userTags: true,
   ctaLabel: 'Paraphrase',
   addUserTagLabel: 'Add Your Own Tone',
   initialPrompt: (input: string) => `Paraphrase following text ${input}`,

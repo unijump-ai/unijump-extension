@@ -4,7 +4,7 @@ export default {
   },
   visitUrl: {
     install: 'https://unijump.ai/welcome/index.html',
-    uninstall: 'https://bit.ly/unijump-uninstall',
+    uninstall: 'https://uninstall.unijump.ai/',
   },
   defaultShortcut: {
     mac: 'Command+J',

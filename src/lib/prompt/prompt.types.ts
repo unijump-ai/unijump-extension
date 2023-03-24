@@ -16,7 +16,7 @@ export interface PromptArg {
 }
 
 export interface PromptUserArg {
-  user: PromptArgItem[];
+  user?: PromptArgItem[];
 }
 
 export type SelectedPromptArgs<T extends string = any> = Record<T, PromptArgItem[]>;
@@ -29,6 +29,7 @@ export interface PromptConfig<T extends string = any> {
   initialPrompt: (input: string) => string;
   input: (args: AllPromptArgs<T>, userInput: string) => string;
   args: PromptArg[];
+  userTags?: boolean;
 }
 
 export interface PromptEventPayload {
