@@ -3,7 +3,6 @@ import type { ToolboxActionType } from './toolbox.constants';
 export interface ToolboxWebsiteConfig {
   style: 'flat' | 'rounded';
   host: string;
-  waitFor: string;
   inject: {
     parent: string;
     insertBefore?: string;
@@ -13,7 +12,6 @@ export interface ToolboxWebsiteConfig {
     type: 'editable' | 'input';
   };
   createRootElement?: () => HTMLElement;
-  getValue: () => string;
   disabled?: boolean;
 }
 

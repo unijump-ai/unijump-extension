@@ -18,6 +18,7 @@ export function renderToolbox() {
     const toolboxContainer =
       toolboxConfig.createRootElement?.() || document.createElement('div');
     toolboxContainer.setAttribute('id', ToolboxWrapperId);
+    toolboxContainer.style.width = '100%';
 
     const toolboxOptions = {
       cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
@@ -52,9 +53,9 @@ export function renderToolbox() {
       return;
     }
 
-    const lookupElement = document.querySelector(toolboxConfig.waitFor);
+    const inputElement = document.querySelector(toolboxConfig.input.selector);
 
-    if (!lookupElement) {
+    if (!inputElement) {
       return;
     }
 
