@@ -13,13 +13,15 @@
   import type { ConversationMessage } from '$lib/services/conversation';
   import { ConversationService } from '$lib/services/conversation';
   import { activePage, appModalVisible, errorStore, pageAction } from '$lib/store';
+  import { injectToInput } from '$lib/toolbox';
   import { sleep } from '$lib/utils';
   import paraphraserConfig from '$prompts/paraphraser';
-  import { onDestroy, tick } from 'svelte';
+  import { createEventDispatcher, onDestroy, tick } from 'svelte';
   import { fade } from 'svelte/transition';
   import AppPage from '../app/AppPage.svelte';
   import PromptBuilder from '../prompt/PromptBuilder.svelte';
 
+  const dispatch = createEventDispatcher();
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
 
@@ -110,6 +112,9 @@
       case OutputAction.EXPAND:
         expand();
         break;
+      case OutputAction.INJECT:
+        inject();
+        break;
     }
   }
 
@@ -126,6 +131,18 @@
   function expand() {
     conversationService.sendMessage('Make it longer.');
     sendMessageEvent(OutputAction.EXPAND);
+  }
+
+  async function inject() {
+    if (!$pageAction?.input) return;
+
+    const injected = await injectToInput($pageAction.input, output);
+
+    if (injected) {
+      dispatch('close');
+    } else {
+      alert('Inject input is missing at the moment!');
+    }
   }
 
   function sendMessageEvent(action: string, tags: string[] = []) {

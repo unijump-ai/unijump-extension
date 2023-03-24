@@ -5,15 +5,17 @@ import { PromptManager } from '$lib/prompt';
 import { pageAction, selectedText } from '$lib/store';
 import paraphraserConfig from '$prompts/paraphraser';
 import { ToolboxActionType } from './toolbox.constants';
-import type { ToolboxActionConfig } from './toolbox.types';
+import type { ToolboxActionConfig, ToolboxWebsiteConfig } from './toolbox.types';
 
 export const toolboxActions = [
-  createParaphraseAction(),
-  createToneAction(),
-  createGrammarAction(),
+  createParaphraseAction,
+  createToneAction,
+  createGrammarAction,
 ];
 
-function createParaphraseAction(): ToolboxActionConfig {
+function createParaphraseAction(
+  websiteConfig: ToolboxWebsiteConfig
+): ToolboxActionConfig {
   return {
     type: ToolboxActionType.Button,
     label: 'Improve Writing',
@@ -22,12 +24,17 @@ function createParaphraseAction(): ToolboxActionConfig {
 
       const promptManager = new PromptManager(paraphraserConfig);
       appManager.openModal(OpenAppSource.TOOLBAR);
-      pageAction.run(PageName.Paraphraser, promptManager.args, !!event.input);
+      pageAction.run(
+        PageName.Paraphraser,
+        promptManager.args,
+        websiteConfig.input,
+        !!event.input
+      );
     },
   };
 }
 
-function createToneAction(): ToolboxActionConfig {
+function createToneAction(websiteConfig: ToolboxWebsiteConfig): ToolboxActionConfig {
   const promptManager = new PromptManager(paraphraserConfig);
   const tonesKey = 'tones';
   const toneList = promptManager.getArgConfig(tonesKey).list;
@@ -41,12 +48,17 @@ function createToneAction(): ToolboxActionConfig {
       promptManager.clearArgs();
       promptManager.addArg(tonesKey, event.selected);
       appManager.openModal(OpenAppSource.TOOLBAR);
-      pageAction.run(PageName.Paraphraser, promptManager.args, !!event.input);
+      pageAction.run(
+        PageName.Paraphraser,
+        promptManager.args,
+        websiteConfig.input,
+        !!event.input
+      );
     },
   };
 }
 
-function createGrammarAction(): ToolboxActionConfig {
+function createGrammarAction(websiteConfig: ToolboxWebsiteConfig): ToolboxActionConfig {
   return {
     type: ToolboxActionType.Button,
     label: 'Check Grammar',
@@ -54,7 +66,7 @@ function createGrammarAction(): ToolboxActionConfig {
       appManager.openModal(OpenAppSource.TOOLBAR);
       const prompt = `Check grammar for:\n${event.input}`;
       const args = { chat: [{ value: prompt, label: '' }] };
-      pageAction.run(PageName.Chat, args, !!event.input);
+      pageAction.run(PageName.Chat, args, websiteConfig.input, !!event.input);
     },
   };
 }

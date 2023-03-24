@@ -1,5 +1,5 @@
 import { getExceptionByName } from '$lib/exceptions';
-import browser from 'webextension-polyfill';
+import browser, { type Runtime } from 'webextension-polyfill';
 import { Message } from './messaging.constants';
 import type {
   ConnectionHandler,
@@ -112,25 +112,40 @@ export const openConnection = <T extends keyof ConnectionPayloadMap>(
   message: ConnectionMessageMap[T],
   callback: (payload: ConnectionPayloadMap[T], error?: Error) => void
 ): ConnectionHandler<T> => {
-  const port = browser.runtime.connect();
+  let disconnected = false;
+  let port: Runtime.Port;
 
-  port.onMessage.addListener((portMessageEvent: PortPayloadEvent<T>) => {
-    if (portMessageEvent.type !== type) return;
+  const setupPort = () => {
+    port = browser.runtime.connect();
 
-    const error = portMessageEvent.error
-      ? new (getExceptionByName(portMessageEvent.error.name) || Error)(
-          portMessageEvent.error.message
-        )
-      : undefined;
+    port.onDisconnect.addListener(() => {
+      disconnected = true;
+    });
 
-    callback(portMessageEvent.payload, error);
-  });
+    port.onMessage.addListener((portMessageEvent: PortPayloadEvent<T>) => {
+      if (portMessageEvent.type !== type) return;
 
+      const error = portMessageEvent.error
+        ? new (getExceptionByName(portMessageEvent.error.name) || Error)(
+            portMessageEvent.error.message
+          )
+        : undefined;
+
+      callback(portMessageEvent.payload, error);
+    });
+  };
+
+  setupPort();
   port.postMessage({ type, payload: message });
 
   return {
-    disconnect: () => port.disconnect(),
+    disconnect: () => {
+      port.disconnect();
+    },
     sendMessage: (message) => {
+      if (disconnected) {
+        setupPort();
+      }
       port.postMessage({ type, payload: message });
     },
   };

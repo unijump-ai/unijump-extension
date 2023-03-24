@@ -8,10 +8,17 @@ export function createWhatsappConfig(): ToolboxWebsiteConfig {
     style: 'flat',
     disabled: false,
     waitFor: inputSelector,
-    inject: { parent: '#main', insertBefore: 'footer' },
+    inject: {
+      parent: '#main',
+      insertBefore: '[data-testid="conversation-panel-body"]+div',
+    },
+    input: {
+      selector: inputSelector,
+      type: 'editable',
+    },
     createRootElement() {
       const root = document.createElement('div');
-      root.style.order = '3';
+      root.style.order = '2';
       root.style.zIndex = '1';
 
       return root;

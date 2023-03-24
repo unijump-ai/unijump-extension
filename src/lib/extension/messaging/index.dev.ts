@@ -1,56 +1,56 @@
 import { Connection } from '$lib/extension/messaging/messaging.constants';
 import type {
-  ConnectionPayloadMap,
-  ConnectionMessageMap,
   ConnectionHandler,
-  MessagePayloadMap,
+  ConnectionMessageMap,
+  ConnectionPayloadMap,
   MessagePayload,
+  MessagePayloadMap,
 } from '$lib/extension/messaging/messaging.types';
 
 interface ConnectionPayloadMapArray {
   [Connection.CHAT]: ConnectionPayloadMap[Connection.CHAT][];
 }
 
-// const message = 'Hello how can i helop you today?';
-const message = `
-JavaScript is a single-threaded programming language, meaning that it runs code in a single thread and can only process one task at a time. So, there is no built-in "sleep" function in JavaScript that can halt the execution of code for a specified amount of time.
+const message = 'Hello how can i help you today?';
+// const message = `
+// JavaScript is a single-threaded programming language, meaning that it runs code in a single thread and can only process one task at a time. So, there is no built-in "sleep" function in JavaScript that can halt the execution of code for a specified amount of time.
 
-However, there are a few ways to simulate a sleep-like behavior:
+// However, there are a few ways to simulate a sleep-like behavior:
 
-1. Using \`setTimeout\`: You can use \`setTimeout\` to delay the execution of a function. For example:
+// 1. Using \`setTimeout\`: You can use \`setTimeout\` to delay the execution of a function. For example:
 
-    \`\`\`
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
+//     \`\`\`
+//     function sleep(ms) {
+//       return new Promise(resolve => setTimeout(resolve, ms));
+//     }
 
-    async function doSomething() {
-      console.log('Taking a break...');
-      await sleep(2000);
-      console.log('Two second later');
-    }
-    \`\`\`
+//     async function doSomething() {
+//       console.log('Taking a break...');
+//       await sleep(2000);
+//       console.log('Two second later');
+//     }
+//     \`\`\`
 
-2. Using \`setInterval\`: You can use \`setInterval\` to repeatedly execute a function after a specified time interval, and use \`clearInterval\` to stop it. For example:
+// 2. Using \`setInterval\`: You can use \`setInterval\` to repeatedly execute a function after a specified time interval, and use \`clearInterval\` to stop it. For example:
 
-    \`\`\`
-    let counter = 0;
-    const intervalId = setInterval(() => {
-      console.log(\`Interval run: \$\{++counter\}\`);
-      if (counter === 5) {
-        console.log('Stopping the interval');
-        clearInterval(intervalId);
-      }
-    }, 1000);
-    \`\`\`
-`;
+//     \`\`\`
+//     let counter = 0;
+//     const intervalId = setInterval(() => {
+//       console.log(\`Interval run: \$\{++counter\}\`);
+//       if (counter === 5) {
+//         console.log('Stopping the interval');
+//         clearInterval(intervalId);
+//       }
+//     }, 1000);
+//     \`\`\`
+// `;
 
 const devMessages: ConnectionPayloadMapArray = {
   [Connection.CHAT]: [
     {
       done: false,
       response: {
-        text: message.substring(0, 300),
+        text: message.substring(0, 12),
         conversationId: 'a',
         messageId: 'b',
       },
@@ -58,7 +58,7 @@ const devMessages: ConnectionPayloadMapArray = {
     {
       done: false,
       response: {
-        text: message.substring(0, 600),
+        text: message.substring(0, 22),
         conversationId: 'a',
         messageId: 'b',
       },

@@ -1,6 +1,7 @@
 <script lang="ts">
   import IconArrowLeft from '$assets/icons/arrow-left.svg?component';
   import { AppContext } from '$lib/context';
+  import { getInput } from '$lib/toolbox';
   import { ToolboxActionType } from '$lib/toolbox/toolbox.constants';
   import type {
     ToolboxActionConfig,
@@ -47,7 +48,7 @@
   }
 
   function runAction(item?: ToolboxActionMenuItem) {
-    const inputValue = toolboxConfig.getValue();
+    const inputValue = getInput(toolboxConfig.input);
     const selectedText = window.getSelection().toString();
     const input = inputValue || selectedText;
 

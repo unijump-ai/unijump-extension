@@ -8,6 +8,10 @@ export interface ToolboxWebsiteConfig {
     parent: string;
     insertBefore?: string;
   };
+  input: {
+    selector: string;
+    type: 'editable' | 'input';
+  };
   createRootElement?: () => HTMLElement;
   getValue: () => string;
   disabled?: boolean;

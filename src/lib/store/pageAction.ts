@@ -1,19 +1,26 @@
 import type { PageName } from '$lib/navigation';
 import type { AllPromptArgs } from '$lib/prompt/prompt.types';
+import type { ToolboxWebsiteConfig } from '$lib/toolbox/toolbox.types';
 import { writable, type Writable } from 'svelte/store';
 
 interface PageAction {
   page: PageName;
   args: AllPromptArgs;
   run: boolean;
+  input: ToolboxWebsiteConfig['input'];
 }
 
 export const createPageActionStore = (activePageStore: Writable<PageName>) => {
   const pageActionStore = writable<PageAction>(null);
 
-  const run = (page: PageName, args: AllPromptArgs, run = true) => {
+  const run = (
+    page: PageName,
+    args: AllPromptArgs,
+    input: ToolboxWebsiteConfig['input'],
+    run = true
+  ) => {
     activePageStore.set(page);
-    pageActionStore.set({ page, args, run });
+    pageActionStore.set({ page, args, input, run });
   };
 
   const clear = () => pageActionStore.set(null);

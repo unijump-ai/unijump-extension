@@ -2,6 +2,7 @@
   import Options from '$components/options/Options.svelte';
   import Toolbox from '$components/toolbox/Toolbox.svelte';
   import { AppContext } from '$lib/context';
+  import type { ToolboxWebsiteConfig } from '$lib/toolbox/toolbox.types';
   import { setContext } from 'svelte';
   import ContentPage from './entries/contentScript/primary/ContentPage.svelte';
 
@@ -13,14 +14,13 @@
   } as const;
 
   const page = pages[window.location.pathname];
-  const toolboxConfig = {
+  const toolboxConfig: Partial<ToolboxWebsiteConfig> = {
     style: 'rounded',
-    getValue() {
-      return inputText;
+    input: {
+      selector: '#uj-dev-input',
+      type: 'editable',
     },
   };
-
-  let inputText = '';
 
   setContext(AppContext.Root, '#unijump-app');
   setContext(AppContext.ToolboxConfig, toolboxConfig);
@@ -61,11 +61,18 @@
 
       <div class="my-3">
         <Toolbox />
-        <input
-          bind:value={inputText}
+        <!-- <input
+          id="uj-dev-input"
           class="w-full p-3 border border-slate-500 rounded-xl"
           placeholder="Input text"
           type="text"
+        /> -->
+        <div
+          class="border border-slate-300 p-2 rounded-sm mt-1"
+          id="uj-dev-input"
+          contenteditable="true"
+          role="textbox"
+          spellcheck="false"
         />
       </div>
     </div>
