@@ -7,9 +7,7 @@
   import Warnings from '$components/warnings/Warnings.svelte';
 </script>
 
-<div
-  class="relative bg-modal h-full grid grid-cols-[64px_1fr] rounded-[20px] text-white select-none font-sans overflow-hidden"
->
+<div class="relative bg-modal h-full grid grid-cols-[64px_1fr] rounded-[20px] text-white font-sans overflow-hidden">
   <AppSidebar />
   <main class="h-full overflow-hidden">
     {#if $activePage === PageName.Paraphraser}
