@@ -23,9 +23,7 @@ export const inlineClass = (...classNames: ClassNameType[]) => {
   return classArray.join(' ');
 };
 
-export const inlineStyle = (
-  styleObject: Partial<CSSStyleDeclaration> | Record<`--${any}`, string>
-): string => {
+export const inlineStyle = (styleObject: Record<string, string>): string => {
   const validStyles = [];
 
   Object.keys(styleObject).forEach((key) => {

@@ -5,7 +5,7 @@ import { PromptManager } from '$lib/prompt';
 import { pageAction, selectedText } from '$lib/store';
 import paraphraserConfig from '$prompts/paraphraser';
 import { ToolboxActionType } from './toolbox.constants';
-import type { ToolboxActionConfig, ToolboxWebsiteConfig } from './toolbox.types';
+import type { ToolboxActionConfig } from './toolbox.types';
 
 export const toolboxActions = [
   createParaphraseAction,
@@ -13,9 +13,7 @@ export const toolboxActions = [
   createGrammarAction,
 ];
 
-function createParaphraseAction(
-  websiteConfig: ToolboxWebsiteConfig
-): ToolboxActionConfig {
+function createParaphraseAction(toolboxInput: HTMLElement): ToolboxActionConfig {
   return {
     type: ToolboxActionType.Button,
     label: 'Improve Writing',
@@ -27,14 +25,14 @@ function createParaphraseAction(
       pageAction.run(
         PageName.Paraphraser,
         promptManager.args,
-        websiteConfig.input,
+        toolboxInput,
         !!event.input
       );
     },
   };
 }
 
-function createToneAction(websiteConfig: ToolboxWebsiteConfig): ToolboxActionConfig {
+function createToneAction(toolboxInput: HTMLElement): ToolboxActionConfig {
   const promptManager = new PromptManager(paraphraserConfig);
   const tonesKey = 'tones';
   const toneList = promptManager.getArgConfig(tonesKey).list;
@@ -51,14 +49,14 @@ function createToneAction(websiteConfig: ToolboxWebsiteConfig): ToolboxActionCon
       pageAction.run(
         PageName.Paraphraser,
         promptManager.args,
-        websiteConfig.input,
+        toolboxInput,
         !!event.input
       );
     },
   };
 }
 
-function createGrammarAction(websiteConfig: ToolboxWebsiteConfig): ToolboxActionConfig {
+function createGrammarAction(toolboxInput: HTMLElement): ToolboxActionConfig {
   return {
     type: ToolboxActionType.Button,
     label: 'Check Grammar',
@@ -66,7 +64,7 @@ function createGrammarAction(websiteConfig: ToolboxWebsiteConfig): ToolboxAction
       appManager.openModal(OpenAppSource.TOOLBAR);
       const prompt = `Check grammar for:\n${event.input}`;
       const args = { chat: [{ value: prompt, label: '' }] };
-      pageAction.run(PageName.Chat, args, websiteConfig.input, !!event.input);
+      pageAction.run(PageName.Chat, args, toolboxInput, !!event.input);
     },
   };
 }

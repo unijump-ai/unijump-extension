@@ -3,19 +3,19 @@ import browser from 'webextension-polyfill';
 export interface ContentRendererOptions {
   cssPaths: string[];
   appContainer: HTMLElement;
-  rootId: string;
+  rootClass: string;
 }
 
 export default async function renderContent(
   options: ContentRendererOptions,
   render: (appRoot: HTMLElement) => void
 ) {
-  const { appContainer, cssPaths, rootId } = options;
+  const { appContainer, cssPaths, rootClass } = options;
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });
   const appRoot = document.createElement('div');
-  appRoot.setAttribute('id', rootId);
+  appRoot.classList.add(rootClass);
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(
@@ -33,7 +33,6 @@ export default async function renderContent(
   }
 
   shadowRoot.appendChild(appRoot);
-  // document.body.appendChild(appContainer);
 
   render(appRoot);
 }

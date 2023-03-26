@@ -1,7 +1,7 @@
 <script lang="ts">
   import IconArrowLeft from '$assets/icons/arrow-left.svg?component';
   import { AppContext } from '$lib/context';
-  import { getInput } from '$lib/toolbox';
+  import { getInputValue } from '$lib/toolbox';
   import { ToolboxActionType } from '$lib/toolbox/toolbox.constants';
   import type {
     ToolboxActionConfig,
@@ -14,9 +14,8 @@
 
   export let actionConfig: ToolboxActionConfig;
 
+  const toolboxInput = getContext(AppContext.ToolboxInput) as HTMLElement;
   const toolboxConfig = getContext(AppContext.ToolboxConfig) as ToolboxWebsiteConfig;
-  const actionClasses =
-    'toolbox-action text-zinc-50 px-2 py-1 rounded-md text-xs font-medium shadow-sm bg-gradient-to-b from-white/12 to-white/22 hover:bg-white/12 transition-all';
 
   let isMenuOpen = false;
   let menuListEl: HTMLDivElement;
@@ -48,7 +47,7 @@
   }
 
   function runAction(item?: ToolboxActionMenuItem) {
-    const inputValue = getInput(toolboxConfig.input);
+    const inputValue = getInputValue(toolboxInput);
     const selectedText = window.getSelection().toString();
     const input = inputValue || selectedText;
 
@@ -58,10 +57,11 @@
 
 <svelte:window on:focusin={onElementFocus} />
 {#if actionConfig.type === ToolboxActionType.Button}
-  <button class={actionClasses} on:click={() => runAction()}>{actionConfig.label}</button>
+  <button class="toolbox-action" on:click={() => runAction()}>{actionConfig.label}</button
+  >
 {:else if actionConfig.type === ToolboxActionType.Menu}
   <button
-    class="{actionClasses} relative flex items-center"
+    class="toolbox-action relative flex items-center"
     on:click|preventDefault={() => {}}
     on:mouseenter={() => openMenu()}
     on:mouseleave={() => closeMenu()}
@@ -71,7 +71,9 @@
     <span class={inlineClass('ml-1 -rotate-90')}><IconArrowLeft width={12} /></span>
     {#if isMenuOpen}
       <div
-        class="absolute min-w-[167px] left-0 z-10 bottom-full pb-1.5"
+        class={inlineClass('absolute min-w-[167px] left-0 z-10 ', [
+          toolboxConfig.position === 'top' ? 'top-full pt-1.5' : 'bottom-full pb-1.5',
+        ])}
         transition:fade={{ duration: 50 }}
         bind:this={menuListEl}
       >
@@ -96,10 +98,5 @@
     background: linear-gradient(160.85deg, #485ff5 0%, #491fad 87.11%);
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.2) inset,
       0px 4px 36px rgba(0, 0, 0, 0.5);
-  }
-
-  .toolbox-action {
-    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1) inset,
-      0px 1px 1px rgba(0, 0, 0, 0.12);
   }
 </style>

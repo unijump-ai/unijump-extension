@@ -33,7 +33,8 @@
       'rounded-full': toolboxConfig.style === 'rounded',
     }
   )}
-  style="visibility: hidden; opacity: 0; position: absolute;"
+  style="visibility: hidden; opacity: 0; position: absolute; {toolboxConfig.toolboxStyles ||
+    ''}"
 >
   <button class="flex gap-1 items-center" on:click={openApp}>
     <Picture image={unijumpLogo} width={20} alt="Unijump logo" />

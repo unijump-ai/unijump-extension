@@ -1,5 +1,5 @@
-export const ToolboxWrapperId = 'unijump-toolbox-wrapper';
-export const ToolboxRootId = 'unijump-toolbox';
+export const ToolboxWrapperClass = 'unijump-toolbox-wrapper';
+export const ToolboxRootClass = 'unijump-toolbox';
 
 export enum ToolboxActionType {
   Button = 'button',

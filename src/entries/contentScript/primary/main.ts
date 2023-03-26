@@ -13,7 +13,7 @@ function renderApp() {
   const appOptions = {
     cssPaths: import.meta.PLUGIN_WEB_EXT_CHUNK_CSS_PATHS,
     appContainer,
-    rootId: 'unijump-app',
+    rootClass: 'unijump-app',
   } satisfies ContentRendererOptions;
 
   renderContent(appOptions, (appRoot) => {

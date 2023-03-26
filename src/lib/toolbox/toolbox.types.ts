@@ -1,18 +1,20 @@
 import type { ToolboxActionType } from './toolbox.constants';
 
 export interface ToolboxWebsiteConfig {
-  style: 'flat' | 'rounded';
   host: string;
   inject: {
-    parent: string;
+    parent?: string;
     insertBefore?: string;
+    insertAfter?: string;
   };
   input: {
     selector: string;
-    type: 'editable' | 'input';
   };
-  createRootElement?: () => HTMLElement;
+  position?: 'top' | 'bottom';
+  plugins?: ToolboxWebsitePlugin[];
+  style?: 'flat' | 'rounded';
   disabled?: boolean;
+  toolboxStyles?: string;
 }
 
 export interface ToolboxActionMenuItem {
@@ -30,4 +32,18 @@ export interface ToolboxActionConfig {
   label: string;
   items?: ToolboxActionMenuItem[];
   callback: (event: ToolboxActionEvent) => void;
+}
+
+export interface ToolboxWebsitePlugin {
+  beforeMount?: (toolbox: ToolboxApi) => void;
+  afterMount?: (toolbox: ToolboxApi) => void;
+}
+
+export type AssignToolboxWebsiteConfig = Partial<Omit<ToolboxWebsiteConfig, 'plugins'>>;
+
+export interface ToolboxApi {
+  getContainer: () => HTMLElement;
+  setContainer: (container: HTMLElement) => void;
+  getConfig: () => ToolboxWebsiteConfig;
+  setConfig: (config: AssignToolboxWebsiteConfig) => void;
 }

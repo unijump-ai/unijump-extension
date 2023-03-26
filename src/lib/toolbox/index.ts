@@ -1,5 +1,10 @@
 import { sleep } from '$lib/utils';
-import type { ToolboxWebsiteConfig } from './toolbox.types';
+import omit from 'lodash.omit';
+import type {
+  AssignToolboxWebsiteConfig,
+  ToolboxApi,
+  ToolboxWebsiteConfig,
+} from './toolbox.types';
 import { toolboxWebsites } from './toolbox.websites';
 
 const toolboxEnabledWebsites = new Map<string, ToolboxWebsiteConfig>(
@@ -20,30 +25,20 @@ export const disableToolboxForHost = (host: string) => {
   toolboxEnabledWebsites.set(host, toolboxConfig);
 };
 
-export const getInput = (input: ToolboxWebsiteConfig['input']) => {
-  const inputEl = document.querySelector(input.selector);
-
+export const getInputValue = (inputEl: HTMLElement) => {
   if (!inputEl) return '';
 
-  switch (input.type) {
-    case 'editable':
-      return (inputEl as HTMLDivElement).innerText.trim();
-    case 'input':
-      return (inputEl as HTMLInputElement).value.trim();
-    default:
-      return '';
+  if (inputEl.isContentEditable) {
+    return (inputEl as HTMLDivElement).innerText.trim();
   }
+
+  return (inputEl as HTMLInputElement).value.trim();
 };
 
-export const injectToInput = async (
-  input: ToolboxWebsiteConfig['input'],
-  text: string
-) => {
-  const inputEl = document.querySelector(input.selector);
-
+export const injectToInput = async (inputEl: HTMLElement, text: string) => {
   if (!inputEl) return false;
 
-  if (input.type === 'editable') {
+  if (inputEl.isContentEditable) {
     const input = inputEl as HTMLDivElement;
     input.focus();
     await sleep(100);
@@ -53,10 +48,31 @@ export const injectToInput = async (
     document.execCommand('cut');
     await sleep(100);
     document.execCommand('inserttext', false, text.trim());
-  } else if (input.type === 'input') {
+  } else {
     const input = inputEl as HTMLInputElement;
     input.value = text;
   }
 
   return true;
+};
+
+export const createApi = (defaultConfig: ToolboxWebsiteConfig): ToolboxApi => {
+  let toolboxContainer: HTMLElement;
+  let toolboxConfig = defaultConfig;
+
+  const getContainer = () => toolboxContainer;
+  const setContainer = (container: HTMLElement) => {
+    toolboxContainer = container;
+  };
+  const getConfig = () => toolboxConfig;
+  const setConfig = (config: AssignToolboxWebsiteConfig) => {
+    toolboxConfig = { ...toolboxConfig, ...omit(config, ['plugins']) };
+  };
+
+  return {
+    setContainer,
+    getContainer,
+    setConfig,
+    getConfig,
+  };
 };

@@ -25,7 +25,7 @@
     @apply font-bold;
   }
 
-  #unijump-app {
+  .unijump-app {
     @apply antialiased font-sans text-left;
   }
 
@@ -157,5 +157,11 @@
 
   .tooltip {
     @apply !absolute !py-0.5 !px-2 text-xs left-full top-1/2 -translate-y-1/2 rounded-sm z-20 bg-white text-zinc-900 font-sans font-medium sr-only group-hover/tooltip:not-sr-only;
+  }
+
+  .toolbox-action {
+    @apply text-zinc-50 px-2 py-1 rounded-md text-xs font-medium shadow-sm bg-gradient-to-b from-white/12 to-white/2 hover:bg-white/12 transition-all;
+    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1) inset,
+      0px 1px 1px rgba(0, 0, 0, 0.12);
   }
 }
