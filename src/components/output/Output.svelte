@@ -17,7 +17,7 @@
 <div>
   <h3 class="text-sm mb-4">Output</h3>
   <div
-    class="block w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md"
+    class="block w-full select-text text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md"
   >
     {#if output}
       {#if type === 'markdown'}
