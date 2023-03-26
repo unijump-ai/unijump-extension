@@ -5,7 +5,7 @@
     "printWidth": 90,
     "plugins": [
       "./node_modules/prettier-plugin-svelte",
-      "prettier-plugin-tailwindcss"
+      "./node_modules/prettier-plugin-tailwindcss"
     ],
     "pluginSearchDirs": false,
     "svelteSortOrder": "scripts-markup-styles",
