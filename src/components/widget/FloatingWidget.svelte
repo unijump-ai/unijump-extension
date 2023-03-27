@@ -15,6 +15,7 @@
   export let expanded = false;
   export let visible = true;
   export let shortcut = '';
+  export let disableClose = false;
 
   const dispatch = createEventDispatcher();
 
@@ -99,26 +100,28 @@
       {/if}
     </div>
   </div>
-  <button
-    class={inlineClass(
-      'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
-      [
-        'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
-      ]
-    )}
-    on:click={() => (isCloseModalActive = true)}
-  >
-    <IconDraggerHandle width={44} height={17} />
-    <span
+  {#if !disableClose}
+    <button
       class={inlineClass(
-        'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
-        []
+        'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
+        [
+          'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
+        ]
       )}
+      on:click={() => (isCloseModalActive = true)}
     >
-      <IconClose width={16} />
-    </span>
-    <span class="sr-only">Close widget</span>
-  </button>
+      <IconDraggerHandle width={44} height={17} />
+      <span
+        class={inlineClass(
+          'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
+          []
+        )}
+      >
+        <IconClose width={16} />
+      </span>
+      <span class="sr-only">Close widget</span>
+    </button>
+  {/if}
 </div>
 
 <CloseModal bind:active={isCloseModalActive} {shortcut} />

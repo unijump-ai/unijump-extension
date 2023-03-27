@@ -16,6 +16,8 @@ export default async function renderContent(
   });
   const appRoot = document.createElement('div');
   appRoot.classList.add(rootClass);
+  appRoot.style.opacity = '0';
+  appRoot.style.visibility = 'hidden';
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(

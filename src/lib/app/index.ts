@@ -1,3 +1,4 @@
+import config from '$config';
 import { UserEvent, type OpenAppSource } from '$lib/extension/events/event.constants';
 import { sendMessage } from '$lib/extension/messaging';
 import { Message } from '$lib/extension/messaging/messaging.constants';
@@ -60,6 +61,10 @@ class AppManager {
       errorStore.set(error);
       return;
     }
+  }
+
+  isInWebView() {
+    return window.location.href.startsWith(config.visitUrl.browserAction);
   }
 }
 

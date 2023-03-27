@@ -34,6 +34,8 @@ const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean)
   if (response) {
     events.send(UserEvent.APP_OPEN, { 'opened-from': source });
   }
+
+  return response;
 };
 
 const createUninstallUrl = async () => {
@@ -79,7 +81,12 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 // Manifest v2/v3 differences
 (browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
-  toggleModal(tab.id, OpenAppSource.TOPBAR);
+  const opened = await toggleModal(tab.id, OpenAppSource.TOPBAR, true);
+
+  if (opened) return;
+
+  browser.tabs.create({ url: config.visitUrl.browserAction });
+  events.send(UserEvent.APP_OPEN, { 'opened-from': OpenAppSource.TOPBAR });
 });
 
 listenMessage(Message.CHECK_USER, async () => {
