@@ -1,12 +1,15 @@
 <script lang="ts">
   import { AppContext } from '$lib/context';
   import { toolboxActions } from '$lib/toolbox/toolbox.actions';
+  import type { ToolboxWebsiteConfig } from '$lib/toolbox/toolbox.types';
   import { getContext } from 'svelte';
   import ToolboxAction from './ToolboxAction.svelte';
 
   const toolboxInput = getContext(AppContext.ToolboxInput) as HTMLElement;
+  const toolboxConfig = getContext(AppContext.ToolboxConfig) as ToolboxWebsiteConfig;
+
   const actions = toolboxActions.map((createToolboxAction) =>
-    createToolboxAction(toolboxInput)
+    createToolboxAction(toolboxInput, toolboxConfig)
   );
 </script>
 

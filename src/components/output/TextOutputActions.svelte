@@ -31,10 +31,10 @@
 </script>
 
 <div class="grid grid-cols-2 gap-2">
-  {#if $pageAction?.input}
+  {#if $pageAction?.input?.element}
     <Button class="col-span-2" on:click={() => dispatchAction(OutputAction.INJECT)}>
       <IconEdit width={16} />
-      Inject
+      Paste to {$pageAction.input.name}
     </Button>
   {/if}
   <Button on:click={copyOutputToClipboard}>

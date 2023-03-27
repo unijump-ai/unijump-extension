@@ -134,9 +134,9 @@
   }
 
   async function inject() {
-    if (!$pageAction?.input) return;
+    if (!$pageAction?.input?.element) return;
 
-    const injected = await injectToInput($pageAction.input, output);
+    const injected = await injectToInput($pageAction.input.element, output);
 
     if (injected) {
       dispatch('close');
