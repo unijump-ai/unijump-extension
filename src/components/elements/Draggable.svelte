@@ -141,9 +141,9 @@
         handlePosition === 'top' ? '-rotate-180 align-bottom' : 'rotate-0 align-top',
       ])}
     >
-      <IconDraggerHandle />
+      <IconDraggerHandle width={44} height={17} />
       <span
-        class="text-zinc-500 absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:text-zinc-700"
+        class="text-zinc-500 absolute top-[45%] left-1/2 -translate-y-1/2 -translate-x-1/2 group-hover:text-zinc-700"
       >
         <IconDrag />
       </span>

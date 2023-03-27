@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-radial-to-b': 'radial-gradient(100% 100% at 50% 0%, var(--tw-gradient-stops))'
       },
       colors: {
         'darkPurple': {
