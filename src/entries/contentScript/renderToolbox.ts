@@ -115,5 +115,9 @@ export async function renderToolbox() {
     tryInject(inputElements);
   };
 
-  setInterval(() => checkInjection(), 500);
+  setInterval(async () => {
+    try {
+      await checkInjection();
+    } catch (err) {}
+  }, 500);
 }
