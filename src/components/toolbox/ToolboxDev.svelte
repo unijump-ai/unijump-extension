@@ -7,6 +7,8 @@
   export let inputEl: HTMLElement;
 
   const toolboxConfig: Partial<ToolboxWebsiteConfig> = {
+    name: 'UniJump Dev',
+    host: window.location.host,
     style: 'rounded',
   };
 

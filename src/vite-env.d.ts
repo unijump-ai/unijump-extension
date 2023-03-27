@@ -35,3 +35,9 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare namespace svelte.JSX {
+  interface HTMLAttributes<T> {
+    onclickoutside: () => void;
+  }
+}

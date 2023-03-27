@@ -2,6 +2,7 @@ import type { ToolboxWebsiteConfig, ToolboxWebsitePlugin } from '../toolbox.type
 
 export function createWhatsappConfig(): ToolboxWebsiteConfig {
   return {
+    name: 'Whatsapp',
     host: 'web.whatsapp.com',
     inject: {
       insertBefore: '[data-testid="conversation-panel-body"]+div',

@@ -47,3 +47,9 @@ export const isMac = () => {
 export const isPromise = (obj: any): boolean => {
   return obj && typeof obj.then === 'function';
 };
+
+export const toggleInArray = <T>(array: T[], item: T): T[] => {
+  return array.includes(item)
+    ? array.filter((_item) => _item !== item)
+    : [...array, item];
+};

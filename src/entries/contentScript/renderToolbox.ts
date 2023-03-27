@@ -1,11 +1,12 @@
 import Toolbox from '$components/toolbox/Toolbox.svelte';
 import { AppContext } from '$lib/context';
+import { optionsStorage } from '$lib/store/options';
 import { createApi, getToolboxConfigForHost } from '$lib/toolbox';
 import { ToolboxRootClass, ToolboxWrapperClass } from '$lib/toolbox/toolbox.constants';
 import renderContent from './renderContent';
 
 // TODO: This function definitely requires refactoring.
-export function renderToolbox() {
+export async function renderToolbox() {
   const defaultConfig = getToolboxConfigForHost(window.location.host);
 
   let rendering = false;
@@ -57,6 +58,7 @@ export function renderToolbox() {
         context: new Map<AppContext, any>([
           [AppContext.ToolboxConfig, toolboxConfig],
           [AppContext.ToolboxInput, input],
+          [AppContext.Root, toolboxRoot],
         ]),
       });
 
@@ -90,10 +92,19 @@ export function renderToolbox() {
     }
   };
 
-  const checkInjection = () => {
-    const toolboxConfig = getToolboxConfigForHost(window.location.host);
+  const checkInjection = async () => {
+    const unijumpOptions = await optionsStorage.get();
 
-    if (toolboxConfig.disabled || rendering) {
+    if (!unijumpOptions) {
+      return;
+    }
+
+    const toolboxConfig = getToolboxConfigForHost(window.location.host);
+    const isDisabled =
+      unijumpOptions.disabledToolboxHosts.includes(defaultConfig.host) ||
+      toolboxConfig.disabled;
+
+    if (isDisabled || rendering) {
       return;
     }
 

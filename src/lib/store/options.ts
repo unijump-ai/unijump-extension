@@ -1,24 +1,30 @@
 import { ExtensionStorage } from '$lib/extension/storage';
 import { StorageKey } from '$lib/extension/storage/storage.constants';
+import { toggleInArray } from '$lib/utils';
 import { writable } from 'svelte/store';
 
 interface OptionsState {
-  disabledWidgetHosts: string[];
   widgetDisabled: boolean;
+  disabledWidgetHosts: string[];
+  disabledToolboxHosts: string[];
 }
 
 const defaultOptions = {
   widgetDisabled: false,
   disabledWidgetHosts: ['auth0.openai.com', 'chat.openai.com'],
+  disabledToolboxHosts: [],
 };
 
-const optionsStorage = new ExtensionStorage<OptionsState>(StorageKey.OPTIONS);
+export const optionsStorage = new ExtensionStorage<OptionsState>(StorageKey.OPTIONS);
 
 export const createOptionsStore = () => {
   const optionsStore = writable<OptionsState>(null);
 
   optionsStorage.get().then((options) => {
-    const optionsState = options || defaultOptions;
+    const optionsState = {
+      ...defaultOptions,
+      ...(options || {}),
+    };
     optionsStore.set(optionsState);
   });
 
@@ -34,25 +40,23 @@ export const createOptionsStore = () => {
   };
 
   const toggleWidgetHost = (host: string) => {
-    optionsStore.update((optionsState) => {
-      let hosts = optionsState.disabledWidgetHosts;
+    optionsStore.update((optionsState) => ({
+      ...optionsState,
+      disabledWidgetHosts: toggleInArray(optionsState.disabledWidgetHosts, host),
+    }));
+  };
 
-      if (hosts.includes(host)) {
-        hosts = hosts.filter((h) => h !== host);
-      } else {
-        hosts = [...hosts, host];
-      }
-
-      return {
-        ...optionsState,
-        disabledWidgetHosts: hosts,
-      };
-    });
+  const toggleToolboxHost = (host: string) => {
+    optionsStore.update((optionsState) => ({
+      ...optionsState,
+      disabledToolboxHosts: toggleInArray(optionsState.disabledToolboxHosts, host),
+    }));
   };
 
   return {
     subscribe: optionsStore.subscribe,
     updateWidgetDisabled,
     toggleWidgetHost,
+    toggleToolboxHost,
   };
 };

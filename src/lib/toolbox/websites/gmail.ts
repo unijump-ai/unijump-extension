@@ -6,6 +6,7 @@ export function createGmailConfig(): ToolboxWebsiteConfig {
   const insertBefore = '[enctype="multipart/form-data"]';
 
   return {
+    name: 'Gmail',
     host: 'mail.google.com',
     inject: {
       insertBefore,

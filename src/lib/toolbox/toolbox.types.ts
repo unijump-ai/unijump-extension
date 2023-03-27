@@ -1,6 +1,7 @@
 import type { ToolboxActionType } from './toolbox.constants';
 
 export interface ToolboxWebsiteConfig {
+  name: string;
   host: string;
   inject: {
     parent?: string;
