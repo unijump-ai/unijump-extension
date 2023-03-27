@@ -23,8 +23,8 @@ export const getToolboxConfigForHost = (host: string) => {
   const toolboxConfig = toolboxEnabledWebsites.get(host);
 
   return {
-    ...toolboxConfig,
     ...defaultConfig,
+    ...toolboxConfig,
   };
 };
 
