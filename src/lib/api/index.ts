@@ -1,6 +1,7 @@
 import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
+  ExpiredSessionException,
   ServiceBusyException,
   UnauthorizedException,
   UnknownException,
@@ -95,6 +96,13 @@ export class Api {
         throw new ServiceBusyException();
       }
 
+      const responseMessage = await response.json();
+
+      // TODO: Try to get status code
+      if (responseMessage?.detail?.code === 'token_expired') {
+        throw new ExpiredSessionException();
+      }
+
       throw new UnknownException();
     }
 
@@ -144,6 +152,13 @@ export class Api {
 
       if (response.status === 405) {
         throw new ServiceBusyException();
+      }
+
+      const responseMessage = await response.json();
+
+      // TODO: Try to get status code
+      if (responseMessage?.detail?.code === 'token_expired') {
+        throw new ExpiredSessionException();
       }
 
       throw new UnknownException();

@@ -25,11 +25,19 @@ export class UnknownException extends Error {
   }
 }
 
+export class ExpiredSessionException extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = ExpiredSessionException.name;
+  }
+}
+
 const exceptions = [
   CloudflareException,
   UnauthorizedException,
   UnknownException,
   ServiceBusyException,
+  ExpiredSessionException,
 ];
 
 export const getExceptionByName = (exceptionName: string) => {

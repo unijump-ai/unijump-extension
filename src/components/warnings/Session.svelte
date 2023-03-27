@@ -1,15 +1,17 @@
 <script lang="ts">
-  import { UnauthorizedException } from '$lib/exceptions';
+  import { ExpiredSessionException, UnauthorizedException } from '$lib/exceptions';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
 
   const chatGptUrl = 'https://chat.openai.com/chat';
 
-  $: message =
-    $errorStore instanceof UnauthorizedException
-      ? 'Please Login at'
-      : 'You need to visit';
+  const messages = {
+    [UnauthorizedException.name]: 'Please Login at',
+    [ExpiredSessionException.name]: 'Your session has expired. Please go to',
+  };
+
+  $: message = messages[$errorStore.name] || 'You need to visit';
 
   async function onChatGptClick(evt: MouseEvent) {
     evt.preventDefault();

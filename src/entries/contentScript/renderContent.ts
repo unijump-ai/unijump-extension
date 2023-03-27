@@ -18,6 +18,7 @@ export default async function renderContent(
   appRoot.classList.add(rootClass);
   appRoot.style.opacity = '0';
   appRoot.style.visibility = 'hidden';
+  appRoot.style.transition = 'opacity 0.4s';
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(

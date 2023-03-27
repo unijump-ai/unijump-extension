@@ -29,6 +29,10 @@
     @apply !visible text-left font-sans antialiased !opacity-100;
   }
 
+  .unijump-toolbox {
+    @apply !visible !opacity-100;
+  }
+
   #unijump-options {
     @apply h-full font-sans antialiased;
   }
