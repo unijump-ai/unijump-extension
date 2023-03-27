@@ -1,6 +1,6 @@
 import userAvatar from '$assets/images/avatar.png?w=20;40&format=webp;png&picture';
 import chatgptAvatar from '$assets/images/chatgptavatar.png?w=20;40&format=webp;png&picture';
-import type { ConversationParams } from '$lib/api';
+import type { ChatGPTModel, ConversationParams } from '$lib/api';
 import { openConnection, sendMessage } from '$lib/extension/messaging';
 import { Connection, Message } from '$lib/extension/messaging/messaging.constants';
 import type { ConnectionHandler } from '$lib/extension/messaging/messaging.types';
@@ -40,6 +40,7 @@ export class ConversationService extends StoreService<ConversationState> {
   private connectionHandler: ConnectionHandler<Connection.CHAT>;
   private uniqueId = uuidv4(); // This is for events due to privacy and anonymity;
   private title?: string;
+  private model: ChatGPTModel;
 
   constructor(
     private userMessages: ConversationMessage[] = [],
@@ -121,6 +122,10 @@ export class ConversationService extends StoreService<ConversationState> {
       conversationParams.conversationId = this.id;
     }
 
+    if (this.model) {
+      conversationParams.modelSlug = this.model.slug;
+    }
+
     return conversationParams;
   }
 
@@ -130,7 +135,12 @@ export class ConversationService extends StoreService<ConversationState> {
     return this.aiMessages.at(-1);
   }
 
-  sendMessage(text: string) {
+  sendMessage(text: string, model: ChatGPTModel) {
+    if (this.model && this.model.slug !== model.slug) {
+      this.clear();
+    }
+    this.model = model;
+
     const chatMessage = this.createChatMessage(text, this.getSender());
     const connectionMessage = this.createConversationPayload(chatMessage);
     this.outgoingMessage = chatMessage;
@@ -190,6 +200,7 @@ export class ConversationService extends StoreService<ConversationState> {
       });
     }
 
+    this.model = null;
     this.incomingMessage = null;
     this.outgoingMessage = null;
     this.aiMessages = [];

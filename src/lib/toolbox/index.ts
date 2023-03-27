@@ -7,6 +7,11 @@ import type {
 } from './toolbox.types';
 import { toolboxWebsites } from './toolbox.websites';
 
+const defaultConfig: Partial<ToolboxWebsiteConfig> = {
+  position: 'bottom',
+  style: 'flat',
+};
+
 const toolboxEnabledWebsites = new Map<string, ToolboxWebsiteConfig>(
   toolboxWebsites.map((toolboxWebsiteConfig) => [
     toolboxWebsiteConfig.host,
@@ -15,14 +20,12 @@ const toolboxEnabledWebsites = new Map<string, ToolboxWebsiteConfig>(
 );
 
 export const getToolboxConfigForHost = (host: string) => {
-  return toolboxEnabledWebsites.get(host);
-};
+  const toolboxConfig = toolboxEnabledWebsites.get(host);
 
-export const disableToolboxForHost = (host: string) => {
-  const toolboxConfig = getToolboxConfigForHost(host);
-
-  toolboxConfig.disabled = true;
-  toolboxEnabledWebsites.set(host, toolboxConfig);
+  return {
+    ...toolboxConfig,
+    ...defaultConfig,
+  };
 };
 
 export const getInputValue = (inputEl: HTMLElement) => {

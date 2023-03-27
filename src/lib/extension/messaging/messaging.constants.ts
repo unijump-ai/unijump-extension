@@ -8,6 +8,7 @@ export enum Message {
   GET_TOGGLE_SHORTCUT = 'get-shortcut',
   OPEN_OPTIONS_PAGE = 'open-options-page',
   CHECK_USER = 'check-user',
+  FETCH_MODELS = 'fetch-models',
 }
 
 export enum Connection {

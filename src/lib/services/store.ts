@@ -10,4 +10,11 @@ export class StoreService<T> {
   setState(state: T) {
     this.store.set(state);
   }
+
+  updateState(state: Partial<T>) {
+    this.store.update((currentState) => ({
+      ...currentState,
+      ...state,
+    }));
+  }
 }

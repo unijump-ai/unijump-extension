@@ -1,15 +1,34 @@
 import config from '$config';
+import type { ChatGPTModel } from '$lib/api';
 import { UserEvent, type OpenAppSource } from '$lib/extension/events/event.constants';
 import { sendMessage } from '$lib/extension/messaging';
 import { Message } from '$lib/extension/messaging/messaging.constants';
+import { ExtensionStorage } from '$lib/extension/storage';
 import { PageName } from '$lib/navigation';
-import { activePage, appModalVisible, errorStore, selectedText } from '$lib/store';
+import { StoreService } from '$lib/services/store';
+import {
+  activePage,
+  appModalVisible,
+  errorStore,
+  pageAction,
+  selectedText,
+} from '$lib/store';
 import { get } from 'svelte/store';
 
-class AppManager {
+const selectedModelStorage = new ExtensionStorage<ChatGPTModel>('selected-model');
+
+interface AppStore {
+  models: ChatGPTModel[];
+  selectedModel: ChatGPTModel;
+}
+
+class AppManager extends StoreService<AppStore> {
   private $el: HTMLElement;
 
-  constructor() {}
+  constructor() {
+    super({ models: [], selectedModel: null });
+    this.checkSession();
+  }
 
   set wrapperEl(el: HTMLElement) {
     this.$el = el;
@@ -42,6 +61,7 @@ class AppManager {
   closeModal() {
     appModalVisible.set(false);
     errorStore.set(null);
+    pageAction.clear();
   }
 
   toggleModal() {
@@ -61,6 +81,21 @@ class AppManager {
       errorStore.set(error);
       return;
     }
+
+    this.fetchModels();
+  }
+
+  async fetchModels() {
+    try {
+      const { response } = await sendMessage(Message.FETCH_MODELS, undefined);
+      const selectedModel = await selectedModelStorage.get();
+      this.setState({ models: response, selectedModel: selectedModel || response[0] });
+    } catch (error) {}
+  }
+
+  selectModel(model: ChatGPTModel) {
+    selectedModelStorage.set(model);
+    this.updateState({ selectedModel: model });
   }
 
   isInWebView() {

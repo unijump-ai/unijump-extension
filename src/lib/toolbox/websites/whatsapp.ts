@@ -29,8 +29,8 @@ function whatsAppContainerPlugin(): ToolboxWebsitePlugin {
       const messagesNode = document.querySelector(
         '[data-testid="conversation-panel-messages"]'
       );
+
       if (!messagesNode) {
-        console.log('cant find messagesnodes');
         return;
       }
 

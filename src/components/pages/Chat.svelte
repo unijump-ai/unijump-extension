@@ -1,11 +1,13 @@
 <script lang="ts">
   import IconPlus from '$assets/icons/plus-circle.svg?component';
   import AppPage from '$components/app/AppPage.svelte';
+  import SelectModel from '$components/app/SelectModel.svelte';
   import ChatInput from '$components/chat/ChatInput.svelte';
   import Conversation from '$components/chat/Conversation.svelte';
   import { Button, Scroller } from '$components/elements';
   import type { ScrollerController } from '$components/elements/Scroller.controller';
   import PromptList from '$components/prompt/PromptList.svelte';
+  import { appManager } from '$lib/app';
   import { UserEvent } from '$lib/extension/events/event.constants';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
@@ -27,6 +29,7 @@
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
+  const { store: appStore } = appManager;
 
   let focusInput: () => void;
   let scrollerController: ScrollerController | null = null;
@@ -89,7 +92,7 @@
   }
 
   function send(text: string) {
-    conversationService.sendMessage(text);
+    conversationService.sendMessage(text, $appStore.selectedModel);
 
     sendMessage(Message.SEND_EVENT, {
       type: UserEvent.MESSAGE_SENT,
@@ -121,7 +124,8 @@
 
 <AppPage title={$conversationStore.title || 'Chat'} on:close>
   <svelte:fragment slot="header-actions">
-    <Button size="sm" disabled={!!messaging} on:click={newChat}>
+    <SelectModel disabled={!!hasConversation} />
+    <Button class="" size="sm" disabled={!!messaging} on:click={newChat}>
       <IconPlus width={16} /> New Chat
     </Button>
   </svelte:fragment>

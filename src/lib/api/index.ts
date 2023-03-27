@@ -14,6 +14,7 @@ export interface ConversationParams {
   conversationId?: string;
   parentMessageId?: string;
   messageId?: string;
+  modelSlug?: string;
 }
 
 export interface ConversationResponse {
@@ -37,10 +38,15 @@ export interface ApiSession {
   };
 }
 
+export interface ChatGPTModel {
+  slug: string;
+  title: string;
+}
+
 interface ConversationBody {
   conversation_id?: string;
   action: 'next';
-  model: 'text-davinci-002-render';
+  model: string;
   parent_message_id: string;
   messages: [ConversationMessage];
 }
@@ -59,6 +65,10 @@ type OnMessageCallback<T> = (message: T, done: boolean) => void;
 export class Api {
   private abortController: AbortController;
   private baseUrl = 'https://chat.openai.com';
+  private defaultModel: ChatGPTModel = {
+    title: 'Default (GPT-3.5)',
+    slug: 'text-davinci-002-render-sha',
+  };
 
   private getFullUrl(path: string) {
     return `${this.baseUrl}${path}`;
@@ -68,7 +78,7 @@ export class Api {
     path: string,
     options: RequestInit = {},
     onSseMessage?: OnMessageCallback<Res>
-  ): Promise<void | Res> {
+  ): Promise<Res> {
     this.abortController = new AbortController();
     const { accessToken } = await this.getSession();
 
@@ -181,13 +191,25 @@ export class Api {
     return this.patch(`/backend-api/conversation/${conversationId}`, props);
   }
 
+  async fetchModels() {
+    try {
+      const response = await this.fetch<{ models: ChatGPTModel[] }>(
+        '/backend-api/models'
+      );
+
+      return response.models;
+    } catch (err) {
+      return [this.defaultModel];
+    }
+  }
+
   conversation(
     params: ConversationParams,
     onMessage: (message: ConversationResponse, done: boolean) => void
   ) {
     const conversationBody: ConversationBody = {
       action: 'next',
-      model: 'text-davinci-002-render',
+      model: params.modelSlug || this.defaultModel.slug,
       parent_message_id: params.parentMessageId || uuidv4(),
       messages: [
         {

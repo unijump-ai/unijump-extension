@@ -1,8 +1,10 @@
 <script lang="ts">
+  import SelectModel from '$components/app/SelectModel.svelte';
   import type { ScrollerController } from '$components/elements/Scroller.controller';
   import Scroller from '$components/elements/Scroller.svelte';
   import Output from '$components/output/Output.svelte';
   import TextOutputActions from '$components/output/TextOutputActions.svelte';
+  import { appManager } from '$lib/app';
   import { UserEvent } from '$lib/extension/events/event.constants';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
@@ -24,6 +26,7 @@
   const dispatch = createEventDispatcher();
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
+  const { store: appStore } = appManager;
 
   let buildPrompt: () => Promise<void>;
   let focusPromptBuilder: () => Promise<void>;
@@ -37,7 +40,9 @@
   );
   $: output = $conversationStore?.incomingMessage?.text || aiMessage?.text || '';
   $: isActivePage = $activePage === PageName.Paraphraser;
+  $: selectedModel = $appStore.selectedModel;
   $: onVisibilityChange($appModalVisible, isActivePage);
+  $: onSelectedModelChange(selectedModel);
 
   onDestroy(destroyConversation);
 
@@ -87,11 +92,15 @@
     outputScroller?.scrollBottom();
   }
 
-  function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
-    const { initial, input, args } = evt.detail;
+  function onSelectedModelChange(_) {
+    aiMessage = null;
+  }
 
-    const text = !aiMessage ? initial : input;
-    conversationService.sendMessage(text);
+  function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
+    const { initial, args } = evt.detail;
+
+    conversationService.clear();
+    conversationService.sendMessage(initial, selectedModel);
 
     const tags = Object.values(args).reduce(
       (tags, argTags) => [...tags, ...argTags.map((a) => a.value)],
@@ -119,17 +128,17 @@
   }
 
   function rewrite() {
-    conversationService.sendMessage('Rewrite it.');
+    conversationService.sendMessage('Rewrite it.', selectedModel);
     sendMessageEvent(OutputAction.REWRITE);
   }
 
   function shorten() {
-    conversationService.sendMessage('Make it shorter.');
+    conversationService.sendMessage('Make it shorter.', selectedModel);
     sendMessageEvent(OutputAction.SHORTEN);
   }
 
   function expand() {
-    conversationService.sendMessage('Make it longer.');
+    conversationService.sendMessage('Make it longer.', selectedModel);
     sendMessageEvent(OutputAction.EXPAND);
   }
 
@@ -159,6 +168,9 @@
 </script>
 
 <AppPage title="Paraphraser" on:close>
+  <svelte:fragment slot="header-actions">
+    <SelectModel />
+  </svelte:fragment>
   {#if $conversationStore}
     <div class="grid grid-cols-2 h-full">
       <PromptBuilder

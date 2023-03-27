@@ -167,6 +167,14 @@ listenMessage(Message.OPEN_OPTIONS_PAGE, () => {
   browser.runtime.openOptionsPage();
 });
 
+listenMessage(Message.FETCH_MODELS, async () => {
+  const models = await api.fetchModels();
+
+  return {
+    response: models,
+  };
+});
+
 browser.runtime.onConnect.addListener((port) => {
   browser.tabs.onRemoved.addListener((tabId) => {
     deleteConversation(tabId);

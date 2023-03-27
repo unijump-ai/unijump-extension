@@ -1,4 +1,5 @@
 import type {
+  ChatGPTModel,
   ConversationParams,
   ConversationProperty,
   ConversationResponse,
@@ -26,6 +27,7 @@ export type MessagePayloadMap = {
   [Message.OPEN_TAB]: string;
   [Message.OPEN_OPTIONS_PAGE]: void;
   [Message.CHECK_USER]: void;
+  [Message.FETCH_MODELS]: void;
 };
 
 export type MessageResponseMap = {
@@ -36,6 +38,7 @@ export type MessageResponseMap = {
   [Message.SEND_EVENT]: void;
   [Message.GET_TOGGLE_SHORTCUT]: string;
   [Message.OPEN_TAB]: void;
+  [Message.FETCH_MODELS]: ChatGPTModel[];
 };
 
 export type ConnectionPayloadMap = {

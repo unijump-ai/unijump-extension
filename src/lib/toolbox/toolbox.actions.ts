@@ -30,8 +30,8 @@ function createParaphraseAction(
       const promptManager = new PromptManager(paraphraserConfig);
       const input = { element: toolboxInput, name: toolboxConfig.name };
 
-      appManager.openModal(OpenAppSource.TOOLBAR);
       pageAction.run(PageName.Paraphraser, promptManager.args, input, !!event.input);
+      appManager.openModal(OpenAppSource.TOOLBAR);
     },
   };
 }
@@ -52,10 +52,10 @@ function createToneAction(
       selectedText.set(event.input || '');
       promptManager.clearArgs();
       promptManager.addArg(tonesKey, event.selected);
-      appManager.openModal(OpenAppSource.TOOLBAR);
 
       const input = { element: toolboxInput, name: toolboxConfig.name };
       pageAction.run(PageName.Paraphraser, promptManager.args, input, !!event.input);
+      appManager.openModal(OpenAppSource.TOOLBAR);
     },
   };
 }
@@ -68,12 +68,12 @@ function createGrammarAction(
     type: ToolboxActionType.Button,
     label: 'Check Grammar',
     callback(event) {
-      appManager.openModal(OpenAppSource.TOOLBAR);
       const prompt = `Check grammar for:\n${event.input}`;
       const args = { chat: [{ value: prompt, label: '' }] };
       const input = { element: toolboxInput, name: toolboxConfig.name };
 
       pageAction.run(PageName.Chat, args, input, !!event.input);
+      appManager.openModal(OpenAppSource.TOOLBAR);
     },
   };
 }
