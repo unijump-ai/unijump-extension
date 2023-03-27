@@ -163,6 +163,7 @@
     <div class="grid grid-cols-2 h-full">
       <PromptBuilder
         config={paraphraserConfig}
+        {loading}
         bind:selectedPromptArgs
         bind:build={buildPrompt}
         bind:focus={focusPromptBuilder}

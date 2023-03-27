@@ -1,15 +1,18 @@
 <script lang="ts">
   import { Scroller } from '$components/elements';
+  import LoadingDots from '$components/elements/LoadingDots.svelte';
   import TagBuilder from '$components/elements/TagBuilder.svelte';
   import { bindKeyEvent } from '$lib/keyboard';
   import { PromptManager } from '$lib/prompt';
   import type { PromptArgItem, PromptConfig } from '$lib/prompt/prompt.types';
   import { errorStore, selectedText } from '$lib/store';
+  import { inlineClass } from '$lib/utils';
   import { createEventDispatcher, tick } from 'svelte';
   import PromptArgs from './PromptArgs.svelte';
 
   export let config: PromptConfig;
   export let selectedPromptArgs = PromptManager.createEmptyArgs(config);
+  export let loading = false;
   export const focus = async () => {
     await tick();
     inputEl?.focus();
@@ -26,6 +29,8 @@
   $: inputText = $selectedText;
 
   function buildPrompt() {
+    if (loading) return;
+
     if (!inputText) {
       alert('Please enter input text');
       focus();
@@ -88,8 +93,19 @@
   <div
     class="absolute w-full h-auto p-3 left-0 bottom-0 bg-white/8 backdrop-blur-[100px] no-backdrop-blur:bg-darkPurple-800"
   >
-    <button on:click={() => buildPrompt()} disabled={!!$errorStore} class="btn-primary"
-      >{config.ctaLabel || 'Run'}</button
+    <button
+      on:click={() => buildPrompt()}
+      disabled={!!$errorStore}
+      class="btn-primary relative"
     >
+      <span class={inlineClass({ 'opacity-0': loading })}>
+        {config.ctaLabel || 'Run'}
+      </span>
+      {#if loading}
+        <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+          <LoadingDots as="span" />
+        </span>
+      {/if}
+    </button>
   </div>
 </div>
