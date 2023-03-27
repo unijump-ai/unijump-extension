@@ -1,3 +1,4 @@
+import { sleep } from '$lib/utils';
 import type { ToolboxWebsiteConfig, ToolboxWebsitePlugin } from '../toolbox.types';
 
 export function createWhatsappConfig(): ToolboxWebsiteConfig {
@@ -22,6 +23,18 @@ function whatsAppContainerPlugin(): ToolboxWebsitePlugin {
       container.style.zIndex = '1';
 
       toolbox.setContainer(container);
+    },
+    async afterMount() {
+      await sleep(200);
+      const messagesNode = document.querySelector(
+        '[data-testid="conversation-panel-messages"]'
+      );
+      if (!messagesNode) {
+        console.log('cant find messagesnodes');
+        return;
+      }
+
+      messagesNode.scrollTop = messagesNode.scrollHeight;
     },
   };
 }
