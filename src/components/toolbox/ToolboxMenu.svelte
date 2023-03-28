@@ -17,7 +17,7 @@
     {
       label: 'Suggest New Idea',
       icon: IconIdea,
-      link: 'mailto:contact@unijump.ai&subject=New Idea for UniJump',
+      link: 'mailto:contact@unijump.ai&subject=New Idea for UniJump!',
     },
     {
       label: 'Hide UniJumpBar',
