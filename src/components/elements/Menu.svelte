@@ -38,11 +38,10 @@
 </script>
 
 <div class="{name} relative">
-  <!-- <slot name="button" /> -->
   <slot />
   {#if open}
     <div
-      class={inlineClass('absolute right-0 z-10', [
+      class={inlineClass('absolute right-0 z-max', [
         position === 'top' ? 'top-full pt-1' : 'bottom-full pb-1',
       ])}
       use:clickOutside={`.${name}`}
