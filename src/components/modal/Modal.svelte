@@ -46,7 +46,7 @@
     <div
       {id}
       class={inlineClass(
-        'fixed inset-0 p-4 flex items-center justify-center bg-white/30 transition-opacity z-max',
+        'font-sans fixed inset-0 p-4 flex items-center justify-center bg-white/30 transition-opacity z-max',
         {
           'text-center': center,
           'invisible opacity-0 pointer-events-none duration-100': !active,
