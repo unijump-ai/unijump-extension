@@ -2,6 +2,7 @@
   import {
     CloudflareException,
     ExpiredSessionException,
+    ModelCapExceededException,
     ServiceBusyException,
     UnauthorizedException,
   } from '$lib/exceptions';
@@ -9,6 +10,7 @@
   import type { SvelteComponent } from 'svelte';
   import { fade } from 'svelte/transition';
   import Busy from './Busy.svelte';
+  import ModelCap from './ModelCap.svelte';
   import Problem from './Problem.svelte';
   import Session from './Session.svelte';
 
@@ -26,6 +28,10 @@
       return Session;
     }
 
+    if (error instanceof ModelCapExceededException) {
+      return ModelCap;
+    }
+
     if (error instanceof ServiceBusyException) {
       return Busy;
     }
@@ -34,7 +40,7 @@
   }
 
   function onWarningChange(Warning: typeof SvelteComponent) {
-    if (!Warning || Warning === Session) return;
+    if (!Warning || Warning === Session || Warning === ModelCap) return;
 
     setTimeout(() => errorStore.set(null), 3000);
   }

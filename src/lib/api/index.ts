@@ -2,6 +2,7 @@ import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
   ExpiredSessionException,
+  ModelCapExceededException,
   ServiceBusyException,
   UnauthorizedException,
   UnknownException,
@@ -108,9 +109,15 @@ export class Api {
 
       const responseMessage = await response.json();
 
-      // TODO: Try to get status code
       if (responseMessage?.detail?.code === 'token_expired') {
         throw new ExpiredSessionException();
+      }
+
+      if (responseMessage?.detail?.code === 'model_cap_exceeded') {
+        const clearsIn = responseMessage.detail.clears_in as number;
+        const waitUntil = new Date(Date.now() + clearsIn * 1000).toLocaleTimeString();
+
+        throw new ModelCapExceededException(waitUntil);
       }
 
       throw new UnknownException();

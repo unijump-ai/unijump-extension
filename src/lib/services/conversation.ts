@@ -190,6 +190,7 @@ export class ConversationService extends StoreService<ConversationState> {
 
   destroy() {
     this.connectionHandler?.disconnect();
+    this.connectionHandler = null;
   }
 
   clear() {
