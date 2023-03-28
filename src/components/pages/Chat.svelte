@@ -51,24 +51,22 @@
 
   async function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
     if (!$appModalVisible || !isActivePage) return;
+    await sleep(200);
 
     if ($pageAction && $pageAction.page === PageName.Chat) {
       conversationService.clear();
-
       const message = $pageAction.args.chat[0].value;
+
       if ($pageAction.run) {
         inputText = '';
-        await sleep(200);
         send(message);
+        return;
       } else {
         inputText = message;
-        await sleep(200);
-        focusInput?.();
       }
-    } else {
-      await sleep(300);
-      focusInput?.();
     }
+
+    focusInput?.();
   }
 
   async function onConversationChange({ error }: ConversationState) {

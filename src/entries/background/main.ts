@@ -38,6 +38,11 @@ const toggleModal = async (tabId: number, source: OpenAppSource, open?: boolean)
   return response;
 };
 
+const openModalInWebView = (source: OpenAppSource) => {
+  browser.tabs.create({ url: config.visitUrl.browserAction });
+  events.send(UserEvent.APP_OPEN, { 'opened-from': source });
+};
+
 const createUninstallUrl = async () => {
   const url = new URL(config.visitUrl.uninstall);
   const { version, deviceId, userId } = await getExtensionInfo();
@@ -76,17 +81,16 @@ browser.runtime.onInstalled.addListener(async (details) => {
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== CONTEXT_MENU_ID) return;
 
-  toggleModal(tab.id, OpenAppSource.CONTEXT_MENU, true);
-});
-
-// Manifest v2/v3 differences
-(browser.action || browser.browserAction).onClicked.addListener(async (tab) => {
-  const opened = await toggleModal(tab.id, OpenAppSource.TOPBAR, true);
+  const opened = await toggleModal(tab.id, OpenAppSource.CONTEXT_MENU, true);
 
   if (opened) return;
 
-  browser.tabs.create({ url: config.visitUrl.browserAction });
-  events.send(UserEvent.APP_OPEN, { 'opened-from': OpenAppSource.TOPBAR });
+  openModalInWebView(OpenAppSource.CONTEXT_MENU);
+});
+
+// Manifest v2/v3 differences
+(browser.action || browser.browserAction).onClicked.addListener(async () => {
+  openModalInWebView(OpenAppSource.TOPBAR);
 });
 
 listenMessage(Message.CHECK_USER, async () => {

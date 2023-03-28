@@ -53,22 +53,18 @@
 
   async function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
     if (!$appModalVisible || !isActivePage) return;
+    await sleep(200);
 
     if ($pageAction && $pageAction.page === PageName.Paraphraser) {
       selectedPromptArgs = $pageAction.args;
 
       if ($pageAction.run) {
-        await sleep(200);
         buildPrompt();
-      } else {
-        await sleep(200);
-        focusPromptBuilder?.();
+        return;
       }
-    } else {
-      setTimeout(() => {
-        focusPromptBuilder?.();
-      }, 200);
     }
+
+    focusPromptBuilder?.();
   }
 
   async function onConversationChange(conversation: typeof $conversationStore) {
