@@ -37,7 +37,7 @@
         {$appStore.selectedModel.title}
       </span>
       <span class="-rotate-90 ml-2 text-zinc-300">
-        <IconArrowLeft width={14} />
+        <IconArrowLeft width={14} height={14} />
       </span>
     </Button>
   </Menu>

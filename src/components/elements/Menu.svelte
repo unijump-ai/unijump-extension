@@ -74,7 +74,7 @@
               <span class="flex-1 text-left">{item.label}</span>
               {#if activeItemLabel === item.label}
                 <span class="ml-2">
-                  <IconCheck width={14} />
+                  <IconCheck width={12} height={12} />
                 </span>
               {/if}
             </button>
