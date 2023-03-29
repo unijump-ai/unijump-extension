@@ -95,10 +95,10 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 listenMessage(Message.CHECK_USER, async () => {
   try {
-    await api.checkUser();
+    const account = await api.checkUser();
 
     return {
-      response: true,
+      response: account,
     };
   } catch (err) {
     return messageError(err);

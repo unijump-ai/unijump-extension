@@ -4,7 +4,7 @@
   import IconIdea from '$assets/icons/idea.svg?component';
   import IconOptions from '$assets/icons/options-outline.svg?component';
   import IconButton from '$components/elements/IconButton.svelte';
-  import Menu, { type MenuItem } from '$components/elements/Menu.svelte';
+  import Menu, { type MenuItem } from '$components/elements/menu/Menu.svelte';
   import { AppContext } from '$lib/context';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';

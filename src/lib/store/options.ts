@@ -1,3 +1,4 @@
+import config from '$config';
 import { ExtensionStorage } from '$lib/extension/storage';
 import { StorageKey } from '$lib/extension/storage/storage.constants';
 import { toggleInArray } from '$lib/utils';
@@ -11,9 +12,13 @@ interface OptionsState {
 
 const defaultOptions = {
   widgetDisabled: false,
-  disabledWidgetHosts: ['auth0.openai.com', 'chat.openai.com'],
+  disabledWidgetHosts: [config.chatGPT.authUrl, config.chatGPT.baseUrl].map(
+    (url) => new URL(url).hostname
+  ),
   disabledToolboxHosts: [],
 };
+
+console.log(defaultOptions);
 
 export const optionsStorage = new ExtensionStorage<OptionsState>(StorageKey.OPTIONS);
 

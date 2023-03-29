@@ -1,8 +1,9 @@
 import type {
-  ChatGPTModel,
+  ChatGPTAccount,
   ConversationParams,
   ConversationProperty,
   ConversationResponse,
+  ModelsResponse,
 } from '$lib/api';
 import type { Runtime } from 'webextension-polyfill';
 import type { UserEventMessage } from '../events/event.types';
@@ -38,7 +39,8 @@ export type MessageResponseMap = {
   [Message.SEND_EVENT]: void;
   [Message.GET_TOGGLE_SHORTCUT]: string;
   [Message.OPEN_TAB]: void;
-  [Message.FETCH_MODELS]: ChatGPTModel[];
+  [Message.CHECK_USER]: ChatGPTAccount;
+  [Message.FETCH_MODELS]: ModelsResponse;
 };
 
 export type ConnectionPayloadMap = {

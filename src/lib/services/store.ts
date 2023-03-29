@@ -1,7 +1,7 @@
 import { get, writable, type Writable } from 'svelte/store';
 
 export class StoreService<T> {
-  private store: Writable<T>;
+  store: Writable<T>;
 
   constructor(state: T) {
     this.store = writable(state);

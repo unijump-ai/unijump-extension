@@ -20,14 +20,17 @@ const selectedModelStorage = new ExtensionStorage<ChatGPTModel>('selected-model'
 interface AppStore {
   models: ChatGPTModel[];
   selectedModel: ChatGPTModel;
+  user: {
+    isPaid: boolean;
+  };
 }
 
 class AppManager extends StoreService<AppStore> {
   private $el: HTMLElement;
 
   constructor() {
-    super({ models: [], selectedModel: null });
-    this.checkSession();
+    super({ models: [], selectedModel: null, user: null });
+    this.checkUser();
   }
 
   set wrapperEl(el: HTMLElement) {
@@ -55,7 +58,7 @@ class AppManager extends StoreService<AppStore> {
         props: { 'opened-from': source },
       });
     }
-    this.checkSession();
+    this.checkUser();
   }
 
   closeModal() {
@@ -74,26 +77,41 @@ class AppManager extends StoreService<AppStore> {
     }
   }
 
-  async checkSession() {
-    const { error } = await sendMessage(Message.CHECK_USER, undefined);
+  async checkUser() {
+    const { error, response } = await sendMessage(Message.CHECK_USER, undefined);
 
     if (error) {
       errorStore.set(error);
       return;
     }
 
-    this.fetchModels();
+    const isPaid = !!response.account_plan.is_paid_subscription_active;
+
+    this.updateState({ user: { isPaid } });
+    this.fetchModels(isPaid);
   }
 
-  async fetchModels() {
+  async fetchModels(isPaidUser: boolean) {
     const { models } = this.getState();
 
     if (models.length) return;
 
     try {
-      const { response } = await sendMessage(Message.FETCH_MODELS, undefined);
-      const selectedModel = await selectedModelStorage.get();
-      this.setState({ models: response, selectedModel: selectedModel || response[0] });
+      const { response, error } = await sendMessage(Message.FETCH_MODELS, undefined);
+
+      if (error) {
+        return;
+      }
+
+      const previousSelectedModel = await selectedModelStorage.get();
+      const models = isPaidUser ? response.activeModels : response.defaultModels;
+      const savedModel = models.find(
+        (model) => model.slug === previousSelectedModel?.slug
+      );
+      const canSelectSavedModel = savedModel && (!savedModel.isPaid || isPaidUser);
+      const selectedModel = canSelectSavedModel ? savedModel : models[0];
+
+      this.updateState({ models, selectedModel });
     } catch (error) {}
   }
 

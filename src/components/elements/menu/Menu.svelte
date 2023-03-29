@@ -71,7 +71,12 @@
               {#if item.icon}
                 <svelte:component this={item.icon} class="mr-2.5" width={16} />
               {/if}
-              <span class="flex-1 text-left">{item.label}</span>
+              <span class="flex-1 flex items-center justify-between">
+                {item.label}
+                {#if $$slots['item-append']}
+                  <slot name="item-append" {item} />
+                {/if}
+              </span>
               {#if activeItemLabel === item.label}
                 <span class="ml-2">
                   <IconCheck width={12} height={12} />

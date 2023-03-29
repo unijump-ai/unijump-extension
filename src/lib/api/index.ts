@@ -1,3 +1,4 @@
+import config from '$config';
 import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
@@ -42,6 +43,18 @@ export interface ApiSession {
 export interface ChatGPTModel {
   slug: string;
   title: string;
+  isPaid?: boolean;
+}
+
+export interface ModelsResponse {
+  activeModels: ChatGPTModel[];
+  defaultModels: ChatGPTModel[];
+}
+
+export interface ChatGPTAccount {
+  account_plan: {
+    is_paid_subscription_active: boolean;
+  };
 }
 
 interface ConversationBody {
@@ -65,10 +78,16 @@ type OnMessageCallback<T> = (message: T, done: boolean) => void;
 
 export class Api {
   private abortController: AbortController;
-  private baseUrl = 'https://chat.openai.com';
+  private baseUrl = config.chatGPT.baseUrl;
   private defaultModel: ChatGPTModel = {
     title: 'Default (GPT-3.5)',
     slug: 'text-davinci-002-render-sha',
+    isPaid: false,
+  };
+  private paidModel: ChatGPTModel = {
+    title: 'GPT-4',
+    slug: 'gpt-4',
+    isPaid: true,
   };
 
   private getFullUrl(path: string) {
@@ -190,7 +209,7 @@ export class Api {
     return session;
   }
 
-  checkUser() {
+  checkUser(): Promise<ChatGPTAccount> {
     return this.fetch('/backend-api/accounts/check');
   }
 
@@ -198,15 +217,17 @@ export class Api {
     return this.patch(`/backend-api/conversation/${conversationId}`, props);
   }
 
-  async fetchModels() {
+  async fetchModels(): Promise<ModelsResponse> {
+    const defaultModels = [this.defaultModel, this.paidModel];
+
     try {
       const response = await this.fetch<{ models: ChatGPTModel[] }>(
         '/backend-api/models'
       );
 
-      return response.models;
+      return { activeModels: response.models, defaultModels };
     } catch (err) {
-      return [this.defaultModel];
+      return { activeModels: [], defaultModels };
     }
   }
 

@@ -1,10 +1,9 @@
 <script lang="ts">
+  import config from '$config';
   import { ExpiredSessionException, UnauthorizedException } from '$lib/exceptions';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
-
-  const chatGptUrl = 'https://chat.openai.com/chat';
 
   const messages = {
     [UnauthorizedException.name]: 'Please Login at',
@@ -16,7 +15,10 @@
   async function onChatGptClick(evt: MouseEvent) {
     evt.preventDefault();
 
-    const { response } = await sendMessage(Message.OPEN_CHATGPT_TAB, chatGptUrl);
+    const { response } = await sendMessage(
+      Message.OPEN_CHATGPT_TAB,
+      config.chatGPT.chatUrl
+    );
 
     if (response) {
       errorStore.set(null);
@@ -24,8 +26,13 @@
   }
 </script>
 
-<a href={chatGptUrl} target="_blank" rel="noreferrer" on:click={onChatGptClick}>
+<a
+  href={config.chatGPT.chatUrl}
+  target="_blank"
+  rel="noreferrer"
+  on:click={onChatGptClick}
+>
   <p>
-    {message} <span class="underline">chat.openai.com ↗</span> to continue using UniJump.
+    {message} <span class="underline">{config.chatGPT.baseUrl} ↗</span> to continue using UniJump.
   </p>
 </a>
