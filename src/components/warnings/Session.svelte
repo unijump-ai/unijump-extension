@@ -11,7 +11,7 @@
     [ExpiredSessionException.name]: 'Your session has expired. Please go to',
   };
 
-  $: message = messages[$errorStore.name] || 'You need to visit';
+  $: message = messages[$errorStore?.name] || 'You need to visit';
 
   async function onChatGptClick(evt: MouseEvent) {
     evt.preventDefault();
