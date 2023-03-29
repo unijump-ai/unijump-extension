@@ -6,6 +6,8 @@ const tabConversations = new ExtensionStorage<Record<number, string>>('tabConver
 export const addConversation = async (tabId: number, conversationId: string) => {
   const conversations = (await tabConversations.get()) || {};
 
+  if (conversations[tabId] === conversationId) return;
+
   conversations[tabId] = conversationId;
   await tabConversations.set(conversations);
 };
