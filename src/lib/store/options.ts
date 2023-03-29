@@ -18,8 +18,6 @@ const defaultOptions = {
   disabledToolboxHosts: [],
 };
 
-console.log(defaultOptions);
-
 export const optionsStorage = new ExtensionStorage<OptionsState>(StorageKey.OPTIONS);
 
 export const createOptionsStore = () => {
