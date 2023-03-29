@@ -86,6 +86,10 @@ class AppManager extends StoreService<AppStore> {
   }
 
   async fetchModels() {
+    const { models } = this.getState();
+
+    if (models.length) return;
+
     try {
       const { response } = await sendMessage(Message.FETCH_MODELS, undefined);
       const selectedModel = await selectedModelStorage.get();
