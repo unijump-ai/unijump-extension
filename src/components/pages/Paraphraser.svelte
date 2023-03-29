@@ -93,10 +93,11 @@
   }
 
   function onPromptBuilt(evt: CustomEvent<PromptEventPayload>) {
-    const { initial, args } = evt.detail;
+    const { initial, input, args } = evt.detail;
 
+    const message = aiMessage ? input : initial;
     conversationService.clear();
-    conversationService.sendMessage(initial, selectedModel);
+    conversationService.sendMessage(message, selectedModel);
 
     const tags = Object.values(args).reduce(
       (tags, argTags) => [...tags, ...argTags.map((a) => a.value)],
