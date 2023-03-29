@@ -18,6 +18,7 @@
   export let center = false;
   export let disableClose = false;
   export let mount = false;
+  export let curtain = true;
 
   const appRoot = (getContext(AppContext.Root) as HTMLElement) || document.body;
   const dispatch = createEventDispatcher();
@@ -46,11 +47,12 @@
     <div
       {id}
       class={inlineClass(
-        'font-sans fixed inset-0 p-4 flex items-center justify-center bg-white/30 transition-opacity z-max',
+        'fixed inset-0 z-max flex items-center justify-center p-4 font-sans transition-opacity',
         {
+          'bg-white/30': curtain,
           'text-center': center,
-          'invisible opacity-0 pointer-events-none duration-100': !active,
-          'visible opacity-100 pointer-events-auto duration-200': active,
+          'pointer-events-none invisible opacity-0 duration-100': !active,
+          'pointer-events-auto visible opacity-100 duration-200': active,
         }
       )}
       role="dialog"

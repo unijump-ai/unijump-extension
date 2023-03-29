@@ -19,7 +19,7 @@
   let draggablePosition: DraggablePosition = null;
   let toggleShortcut = '';
   let isWindowFullscreen = false;
-  let disableWidgetClose = false;
+  let isInWebView = false;
 
   onMount(async () => {
     draggablePosition = (await floatingWidgetPositionStorage.get()) || {
@@ -67,7 +67,7 @@
     });
 
     if (appManager.isInWebView()) {
-      disableWidgetClose = true;
+      isInWebView = true;
       appManager.openModal();
     }
 
@@ -101,7 +101,7 @@
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
       visible={!$appModalVisible && !isWindowFullscreen}
-      disableClose={disableWidgetClose}
+      disableClose={isInWebView}
       on:activate={() => appManager.openModal(OpenAppSource.FLOATING_WIDGET)}
       on:set-shortcut={onSetShortcut}
     />
@@ -112,9 +112,10 @@
   active={$appModalVisible}
   on:close={() => appManager.closeModal()}
   mount={appMounted}
+  curtain={!isInWebView}
 >
   <div
-    class="h-full w-full max-h-[800px] max-w-5xl mx-auto"
+    class="mx-auto h-full max-h-[800px] w-full max-w-5xl"
     bind:this={appManager.wrapperEl}
   >
     <App on:close={() => appManager.closeModal()} />
