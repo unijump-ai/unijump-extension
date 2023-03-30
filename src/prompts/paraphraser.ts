@@ -4,9 +4,11 @@ type ParaphraserArgs = 'modes' | 'tones';
 
 export default {
   name: 'Paraphraser',
+  userTags: true,
   ctaLabel: 'Paraphrase',
   addUserTagLabel: 'Add Your Own Tone',
-  initialPrompt: (input: string) => `Paraphrase following text ${input}`,
+  initialPrompt: (input: string) =>
+    `You're a paraphraser. Do not respond with anything except paraphrased text. ${input}`,
   input: (args, userInput) => {
     const { modes, tones, user } = args;
 
@@ -14,7 +16,7 @@ export default {
       .map((tag) => `more ${tag.value}`)
       .join(', ');
 
-    return `${formattedArgs}:\n ${userInput}`;
+    return `Paraphrase following text ${formattedArgs}:\n ${userInput}`;
   },
   args: [
     {

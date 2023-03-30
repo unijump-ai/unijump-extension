@@ -1,11 +1,13 @@
 <script lang="ts">
   import IconPlus from '$assets/icons/plus-circle.svg?component';
   import AppPage from '$components/app/AppPage.svelte';
+  import SelectModel from '$components/app/SelectModel.svelte';
   import ChatInput from '$components/chat/ChatInput.svelte';
   import Conversation from '$components/chat/Conversation.svelte';
   import { Button, Scroller } from '$components/elements';
   import type { ScrollerController } from '$components/elements/Scroller.controller';
   import PromptList from '$components/prompt/PromptList.svelte';
+  import { appManager } from '$lib/app';
   import { UserEvent } from '$lib/extension/events/event.constants';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
@@ -15,11 +17,19 @@
     type ConversationState,
   } from '$lib/services/conversation';
   import type { ListPrompt } from '$lib/services/prompt-list';
-  import { activePage, appModalVisible, errorStore, selectedText } from '$lib/store';
+  import {
+    activePage,
+    appModalVisible,
+    errorStore,
+    pageAction,
+    selectedText,
+  } from '$lib/store';
+  import { sleep } from '$lib/utils';
   import { onDestroy, tick } from 'svelte';
 
   const conversationService = new ConversationService();
   const { store: conversationStore } = conversationService;
+  const { store: appStore } = appManager;
 
   let focusInput: () => void;
   let scrollerController: ScrollerController | null = null;
@@ -39,12 +49,24 @@
     conversationService.destroy();
   }
 
-  function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
-    if ($appModalVisible && isActivePage) {
-      setTimeout(() => {
-        focusInput?.();
-      }, 100);
+  async function onVisibilityChange($appModalVisible: boolean, isActivePage: boolean) {
+    if (!$appModalVisible || !isActivePage) return;
+    await sleep(200);
+
+    if ($pageAction && $pageAction.page === PageName.Chat) {
+      conversationService.clear();
+      const message = $pageAction.args.chat[0].value;
+
+      if ($pageAction.run) {
+        inputText = '';
+        send(message);
+        return;
+      } else {
+        inputText = message;
+      }
     }
+
+    focusInput?.();
   }
 
   async function onConversationChange({ error }: ConversationState) {
@@ -64,8 +86,11 @@
 
   function onMessageSend(evt: CustomEvent<string>) {
     const text = evt.detail;
+    send(text);
+  }
 
-    conversationService.sendMessage(text);
+  function send(text: string) {
+    conversationService.sendMessage(text, $appStore.selectedModel);
 
     sendMessage(Message.SEND_EVENT, {
       type: UserEvent.MESSAGE_SENT,
@@ -97,7 +122,8 @@
 
 <AppPage title={$conversationStore.title || 'Chat'} on:close>
   <svelte:fragment slot="header-actions">
-    <Button size="sm" disabled={!!messaging} on:click={newChat}>
+    <SelectModel disabled={!!hasConversation} />
+    <Button class="" size="sm" disabled={!!messaging} on:click={newChat}>
       <IconPlus width={16} /> New Chat
     </Button>
   </svelte:fragment>

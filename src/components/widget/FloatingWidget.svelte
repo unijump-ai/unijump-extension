@@ -1,20 +1,21 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
-  import unijumpLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
-  import { bindKeyEvent } from '$lib/keyboard';
-  import { inlineClass } from '$lib/utils';
-  import Picture from '$components/elements/Picture.svelte';
   import IconClose from '$assets/icons/close.svg?component';
   import IconDraggerHandle from '$assets/icons/dragger-handle.svg?component';
-  import { Icon } from '@steeze-ui/svelte-icon';
+  import unijumpLogo from '$assets/logo.png?w=36;72&format=webp;png&picture';
+  import Picture from '$components/elements/Picture.svelte';
+  import { bindKeyEvent } from '$lib/keyboard';
+  import { inlineClass } from '$lib/utils';
   import { ExclamationCircle } from '@steeze-ui/heroicons';
-  import ShortcutModal from './ShortcutModal.svelte';
+  import { Icon } from '@steeze-ui/svelte-icon';
+  import { createEventDispatcher, onMount } from 'svelte';
   import CloseModal from './CloseModal.svelte';
+  import ShortcutModal from './ShortcutModal.svelte';
 
   export let direction: 'left' | 'right';
   export let expanded = false;
   export let visible = true;
   export let shortcut = '';
+  export let disableClose = false;
 
   const dispatch = createEventDispatcher();
 
@@ -55,10 +56,12 @@
 >
   <div
     class={inlineClass(
-      'relative p-3 text-white font-medium text-sm rounded-full cursor-pointer min-w-[44px] min-h-[44px] transition-all outline-none',
+      'relative p-3 text-white font-medium text-sm rounded-full cursor-pointer min-w-[44px] min-h-[44px] transition-all outline-none from-darkPurple-700 to-darkPurple-900 hover:bg-gradient-radial-to-b',
       [
         expand
-          ? `bg-darkPurple-800 ${direction === 'left' ? 'pr-12' : 'pl-12'}`
+          ? `bg-darkPurple-900 ring-1 ring-inset ring-offset-1 ring-offset-darkPurple-900 ring-white/20 ${
+              direction === 'left' ? 'pr-12' : 'pl-12'
+            }`
           : 'bg-transparent',
       ]
     )}
@@ -97,26 +100,28 @@
       {/if}
     </div>
   </div>
-  <button
-    class={inlineClass(
-      'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
-      [
-        'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
-      ]
-    )}
-    on:click={() => (isCloseModalActive = true)}
-  >
-    <IconDraggerHandle />
-    <span
+  {#if !disableClose}
+    <button
       class={inlineClass(
-        'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
-        []
+        'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
+        [
+          'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
+        ]
       )}
+      on:click={() => (isCloseModalActive = true)}
     >
-      <IconClose width={16} />
-    </span>
-    <span class="sr-only">Close widget</span>
-  </button>
+      <IconDraggerHandle width={44} height={17} />
+      <span
+        class={inlineClass(
+          'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
+          []
+        )}
+      >
+        <IconClose width={16} />
+      </span>
+      <span class="sr-only">Close widget</span>
+    </button>
+  {/if}
 </div>
 
 <CloseModal bind:active={isCloseModalActive} {shortcut} />

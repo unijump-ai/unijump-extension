@@ -25,11 +25,27 @@ export class UnknownException extends Error {
   }
 }
 
+export class ExpiredSessionException extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = ExpiredSessionException.name;
+  }
+}
+
+export class ModelCapExceededException extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = ModelCapExceededException.name;
+  }
+}
+
 const exceptions = [
   CloudflareException,
   UnauthorizedException,
   UnknownException,
   ServiceBusyException,
+  ExpiredSessionException,
+  ModelCapExceededException,
 ];
 
 export const getExceptionByName = (exceptionName: string) => {

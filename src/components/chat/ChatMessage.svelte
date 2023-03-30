@@ -1,8 +1,9 @@
 <script lang="ts">
-  import type { ConversationMessage } from '$lib/services/conversation';
-  import Markdown from '$components/elements/Markdown.svelte';
   import IconCopy from '$assets/icons/copy.svg?component';
+  import LoadingDots from '$components/elements/LoadingDots.svelte';
+  import Markdown from '$components/elements/Markdown.svelte';
   import Picture from '$components/elements/Picture.svelte';
+  import type { ConversationMessage } from '$lib/services/conversation';
 
   export let message: ConversationMessage;
 
@@ -26,15 +27,7 @@
       : 'bg-white/8'}"
   >
     {#if message.status === 'pending'}
-      <p class="flex gap-0.5">
-        <span
-          class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse animation-delay-500"
-        />
-        <span
-          class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse animation-delay-300"
-        />
-        <span class="inline-flex w-1 h-1 rounded-full bg-white animate-pulse" />
-      </p>
+      <LoadingDots as="p" />
     {:else}
       {#if message.sender.role !== 'user' && message.status === 'finished'}
         <button

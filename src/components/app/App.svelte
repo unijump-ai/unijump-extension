@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { PageName } from '$lib/navigation';
-  import { activePage } from '$lib/store';
   import Chat from '$components/pages/Chat.svelte';
   import Paraphraser from '$components/pages/Paraphraser.svelte';
-  import AppSidebar from './AppSidebar.svelte';
   import Warnings from '$components/warnings/Warnings.svelte';
+  import { PageName } from '$lib/navigation';
+  import { activePage } from '$lib/store';
+  import AppSidebar from './AppSidebar.svelte';
 </script>
 
 <div

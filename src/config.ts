@@ -4,7 +4,13 @@ export default {
   },
   visitUrl: {
     install: 'https://unijump.ai/welcome/index.html',
-    uninstall: 'https://bit.ly/unijump-uninstall',
+    uninstall: 'https://uninstall.unijump.ai/',
+    browserAction: 'https://unijump.ai/web/',
+  },
+  chatGPT: {
+    baseUrl: 'https://chat.openai.com',
+    chatUrl: 'https://chat.openai.com/chat',
+    authUrl: 'https://auth0.openai.com',
   },
   defaultShortcut: {
     mac: 'Command+J',

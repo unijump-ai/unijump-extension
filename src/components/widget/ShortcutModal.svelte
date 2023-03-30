@@ -33,10 +33,10 @@
 
   function listenShortcutChange() {
     shortcutChangeInterval = window.setInterval(async () => {
-      const { message } = await sendMessage(Message.GET_TOGGLE_SHORTCUT, undefined);
+      const { response } = await sendMessage(Message.GET_TOGGLE_SHORTCUT, undefined);
 
-      if (message) {
-        dispatch('set-shortcut', message);
+      if (response) {
+        dispatch('set-shortcut', response);
         window.clearInterval(shortcutChangeInterval);
         active = false;
       }

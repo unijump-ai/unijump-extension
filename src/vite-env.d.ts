@@ -3,6 +3,7 @@
 /// <reference types="@samrum/vite-plugin-web-extension/client" />
 
 declare const __MANIFEST_VERSION__: 2 | 3;
+declare const __DEV_MODE__: boolean;
 
 declare module '*svg?component' {
   import { ComponentType, SvelteComponentTyped } from 'svelte';
@@ -29,9 +30,15 @@ declare module '*&picture' {
 }
 
 interface ImportMetaEnv {
-  readonly CLIENT_AMPLITUDE_API_KEY: string;
+  readonly PUBLIC_AMPLITUDE_API_KEY: string;
 }
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+declare namespace svelte.JSX {
+  interface HTMLAttributes<T> {
+    onclickoutside: () => void;
+  }
 }

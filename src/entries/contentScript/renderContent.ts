@@ -3,18 +3,22 @@ import browser from 'webextension-polyfill';
 export interface ContentRendererOptions {
   cssPaths: string[];
   appContainer: HTMLElement;
+  rootClass: string;
 }
 
 export default async function renderContent(
   options: ContentRendererOptions,
   render: (appRoot: HTMLElement) => void
 ) {
-  const { appContainer, cssPaths } = options;
+  const { appContainer, cssPaths, rootClass } = options;
   const shadowRoot = appContainer.attachShadow({
     mode: import.meta.env.DEV ? 'open' : 'closed',
   });
   const appRoot = document.createElement('div');
-  appRoot.setAttribute('id', 'unijump-app');
+  appRoot.classList.add(rootClass);
+  appRoot.style.opacity = '0';
+  appRoot.style.visibility = 'hidden';
+  appRoot.style.transition = 'opacity 0.4s';
 
   if (import.meta.hot) {
     const { addViteStyleTarget } = await import(
@@ -32,7 +36,6 @@ export default async function renderContent(
   }
 
   shadowRoot.appendChild(appRoot);
-  document.body.appendChild(appContainer);
 
   render(appRoot);
 }

@@ -1,45 +1,38 @@
 <script lang="ts">
-  import { UnauthorizedException } from '$lib/exceptions';
+  import config from '$config';
+  import { ExpiredSessionException, UnauthorizedException } from '$lib/exceptions';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { errorStore } from '$lib/store';
-  import { onMount } from 'svelte';
 
-  const chatGptUrl = 'https://chat.openai.com/chat';
+  const messages = {
+    [UnauthorizedException.name]: 'Please Login at',
+    [ExpiredSessionException.name]: 'Your session has expired. Please go to',
+  };
 
-  $: message =
-    $errorStore instanceof UnauthorizedException
-      ? 'Please Login at'
-      : 'You need to visit';
+  $: message = messages[$errorStore?.name] || 'You need to visit';
 
-  onMount(() => {
-    const onVisibilityChange = async () => {
-      if (document.visibilityState !== 'visible') return;
-
-      const { error } = await sendMessage(Message.GET_SESSION, undefined);
-
-      if (error) {
-        return;
-      }
-
-      errorStore.set(null);
-    };
-
-    document.addEventListener('visibilitychange', onVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', onVisibilityChange);
-    };
-  });
-
-  function onChatGptClick(evt: MouseEvent) {
+  async function onChatGptClick(evt: MouseEvent) {
     evt.preventDefault();
-    sendMessage(Message.OPEN_CHATGPT_TAB, chatGptUrl);
+
+    const { response } = await sendMessage(
+      Message.OPEN_CHATGPT_TAB,
+      config.chatGPT.chatUrl
+    );
+
+    if (response) {
+      errorStore.set(null);
+    }
   }
 </script>
 
-<a href={chatGptUrl} target="_blank" rel="noreferrer" on:click={onChatGptClick}>
+<a
+  href={config.chatGPT.chatUrl}
+  target="_blank"
+  rel="noreferrer"
+  on:click={onChatGptClick}
+>
   <p>
-    {message} <span class="underline">chat.openai.com ↗</span> to continue using UniJump.
+    {message} <span class="underline">{config.chatGPT.baseUrl} ↗</span> to continue using UniJump.
   </p>
 </a>

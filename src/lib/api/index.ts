@@ -1,18 +1,22 @@
-import { v4 as uuidv4 } from 'uuid';
+import config from '$config';
 import { Cache } from '$lib/decorators/cache.method';
 import {
   CloudflareException,
+  ExpiredSessionException,
+  ModelCapExceededException,
   ServiceBusyException,
   UnauthorizedException,
   UnknownException,
 } from '$lib/exceptions';
 import { parseStream } from '$lib/sse';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ConversationParams {
   text: string;
   conversationId?: string;
   parentMessageId?: string;
   messageId?: string;
+  modelSlug?: string;
 }
 
 export interface ConversationResponse {
@@ -36,10 +40,27 @@ export interface ApiSession {
   };
 }
 
+export interface ChatGPTModel {
+  slug: string;
+  title: string;
+  isPaid?: boolean;
+}
+
+export interface ModelsResponse {
+  activeModels: ChatGPTModel[];
+  defaultModels: ChatGPTModel[];
+}
+
+export interface ChatGPTAccount {
+  account_plan: {
+    is_paid_subscription_active: boolean;
+  };
+}
+
 interface ConversationBody {
   conversation_id?: string;
   action: 'next';
-  model: 'text-davinci-002-render';
+  model: string;
   parent_message_id: string;
   messages: [ConversationMessage];
 }
@@ -57,7 +78,17 @@ type OnMessageCallback<T> = (message: T, done: boolean) => void;
 
 export class Api {
   private abortController: AbortController;
-  private baseUrl = 'https://chat.openai.com';
+  private baseUrl = config.chatGPT.baseUrl;
+  private defaultModel: ChatGPTModel = {
+    title: 'Default (GPT-3.5)',
+    slug: 'text-davinci-002-render-sha',
+    isPaid: false,
+  };
+  private paidModel: ChatGPTModel = {
+    title: 'GPT-4',
+    slug: 'gpt-4',
+    isPaid: true,
+  };
 
   private getFullUrl(path: string) {
     return `${this.baseUrl}${path}`;
@@ -67,7 +98,7 @@ export class Api {
     path: string,
     options: RequestInit = {},
     onSseMessage?: OnMessageCallback<Res>
-  ): Promise<void | Res> {
+  ): Promise<Res> {
     this.abortController = new AbortController();
     const { accessToken } = await this.getSession();
 
@@ -83,12 +114,29 @@ export class Api {
     const response = await fetch(this.getFullUrl(path), requestOptions);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        throw new UnauthorizedException();
+      }
+
       if (response.status === 403) {
         throw new CloudflareException();
       }
 
       if (response.status === 405) {
         throw new ServiceBusyException();
+      }
+
+      const responseMessage = await response.json();
+
+      if (responseMessage?.detail?.code === 'token_expired') {
+        throw new ExpiredSessionException();
+      }
+
+      if (responseMessage?.detail?.code === 'model_cap_exceeded') {
+        const clearsIn = responseMessage.detail.clears_in as number;
+        const waitUntil = new Date(Date.now() + clearsIn * 1000).toLocaleTimeString();
+
+        throw new ModelCapExceededException(waitUntil);
       }
 
       throw new UnknownException();
@@ -142,6 +190,13 @@ export class Api {
         throw new ServiceBusyException();
       }
 
+      const responseMessage = await response.json();
+
+      // TODO: Try to get status code
+      if (responseMessage?.detail?.code === 'token_expired') {
+        throw new ExpiredSessionException();
+      }
+
       throw new UnknownException();
     }
 
@@ -154,8 +209,26 @@ export class Api {
     return session;
   }
 
+  checkUser(): Promise<ChatGPTAccount> {
+    return this.fetch('/backend-api/accounts/check');
+  }
+
   setConversationProperty(conversationId: string, props: Partial<ConversationProperty>) {
     return this.patch(`/backend-api/conversation/${conversationId}`, props);
+  }
+
+  async fetchModels(): Promise<ModelsResponse> {
+    const defaultModels = [this.defaultModel, this.paidModel];
+
+    try {
+      const response = await this.fetch<{ models: ChatGPTModel[] }>(
+        '/backend-api/models'
+      );
+
+      return { activeModels: response.models, defaultModels };
+    } catch (err) {
+      return { activeModels: [], defaultModels };
+    }
   }
 
   conversation(
@@ -164,7 +237,7 @@ export class Api {
   ) {
     const conversationBody: ConversationBody = {
       action: 'next',
-      model: 'text-davinci-002-render',
+      model: params.modelSlug || this.defaultModel.slug,
       parent_message_id: params.parentMessageId || uuidv4(),
       messages: [
         {

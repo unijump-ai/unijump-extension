@@ -5,6 +5,7 @@ export enum UserEvent {
   PROMPT_SAVE = 'PROMPT_SAVE',
   PROMPT_UNSAVE = 'PROMPT_UNSAVE',
   MESSAGE_SENT = 'MESSAGE_SENT',
+  EXTENSION_UNINSTALL = 'EXTENSION_UNINSTALL',
 }
 
 export enum OpenAppSource {
@@ -12,4 +13,5 @@ export enum OpenAppSource {
   CONTEXT_MENU = 'context-menu',
   FLOATING_WIDGET = 'floating-widget',
   SHORTCUT = 'shortcut',
+  TOOLBAR = 'toolbar',
 }

@@ -7,10 +7,10 @@ export class ExtensionStorage<T> {
     this.storage = browser.storage[area] || browser.storage.local; // Opera doesn't suppport sync storage
   }
 
-  async get(): Promise<T | void> {
+  async get(): Promise<T | null> {
     const values = await this.storage.get(this.key);
 
-    return values[this.key];
+    return values[this.key] || null;
   }
 
   async set(value: T): Promise<void> {

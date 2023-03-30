@@ -25,18 +25,22 @@
     @apply font-bold;
   }
 
-  #unijump-app {
-    @apply antialiased font-sans;
+  .unijump-app {
+    @apply !visible text-left font-sans antialiased !opacity-100;
+  }
+
+  .unijump-toolbox {
+    @apply !visible !opacity-100;
   }
 
   #unijump-options {
-    @apply antialiased h-full font-sans;
+    @apply h-full font-sans antialiased;
   }
 }
 
 @layer components {
   .tag {
-    @apply bg-white/8 text-zinc-300 px-2 py-1 text-xs font-medium rounded-md whitespace-nowrap select-none;
+    @apply select-none whitespace-nowrap rounded-md bg-white/8 px-2 py-1 text-xs font-medium text-zinc-300;
   }
 
   .tag-selected {
@@ -44,7 +48,7 @@
   }
 
   .seperator {
-    @apply w-full h-[1px] bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-40;
+    @apply h-[1px] w-full bg-gradient-to-r from-white/0 via-white/50 to-white/0 opacity-40;
   }
 
   .seperator-vertical {
@@ -62,7 +66,7 @@
   }
 
   .btn-primary {
-    @apply relative rounded-lg p-3 block w-full border text-sm border-white/10 text-zinc-50 font-semibold transition-all;
+    @apply relative block w-full rounded-lg border border-white/10 p-3 text-sm font-semibold text-zinc-50 transition-all;
     /* border: 1px solid rgba(255, 255, 255, 0.08); */
     background: radial-gradient(
           59.99% 298.08% at 55.32% 100%,
@@ -105,7 +109,7 @@
   }
 
   .btn-primary-icon {
-    @apply p-[7px] rounded-lg border border-white/10;
+    @apply rounded-lg border border-white/10 p-[7px];
     background: radial-gradient(
           100.1% 128.12% at 55.32% 100%,
           rgba(143, 49, 238, 0.58) 0%,
@@ -156,6 +160,12 @@
   }
 
   .tooltip {
-    @apply !absolute !py-0.5 !px-2 text-xs left-full top-1/2 -translate-y-1/2 rounded-sm z-20 bg-white text-zinc-900 font-sans font-medium sr-only group-hover/tooltip:not-sr-only;
+    @apply sr-only !absolute left-full top-1/2 z-20 -translate-y-1/2 rounded-sm bg-white !py-0.5 !px-2 font-sans text-xs font-medium text-zinc-900 group-hover/tooltip:not-sr-only;
+  }
+
+  .toolbox-action {
+    @apply cursor-pointer rounded-md bg-gradient-to-b from-white/12 to-white/2 px-2 py-1 text-xs font-medium text-zinc-50 shadow-sm transition-all hover:bg-white/12;
+    box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1) inset,
+      0px 1px 1px rgba(0, 0, 0, 0.12);
   }
 }

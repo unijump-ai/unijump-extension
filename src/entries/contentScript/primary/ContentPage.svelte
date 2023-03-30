@@ -6,28 +6,20 @@
   import { closeModals, Modal } from '$components/modal';
   import FloatingWidget from '$components/widget/FloatingWidget.svelte';
   import { floatingWidgetPositionStorage } from '$components/widget/floatingWidgetStorage';
-  import type { ApiSession } from '$lib/api';
-  import { OpenAppSource, UserEvent } from '$lib/extension/events/event.constants';
+  import { appManager } from '$lib/app';
+  import { OpenAppSource } from '$lib/extension/events/event.constants';
   import { listenMessage, sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import { registerShortcut, ShortcutName } from '$lib/keyboard';
-  import { PageName } from '$lib/navigation';
-  import {
-    activePage,
-    appModalVisible,
-    errorStore,
-    options,
-    selectedText,
-    user,
-  } from '$lib/store';
+  import { appModalVisible, options } from '$lib/store';
   import { onMount } from 'svelte';
   import '../../../app.css';
 
   let appMounted = false;
-  let appWrapperEl: HTMLDivElement;
   let draggablePosition: DraggablePosition = null;
   let toggleShortcut = '';
   let isWindowFullscreen = false;
+  let isInWebView = false;
 
   onMount(async () => {
     draggablePosition = (await floatingWidgetPositionStorage.get()) || {
@@ -35,10 +27,10 @@
       right: 6,
     };
 
-    const { message } = await sendMessage(Message.GET_TOGGLE_SHORTCUT, undefined);
+    const { response } = await sendMessage(Message.GET_TOGGLE_SHORTCUT, undefined);
 
-    if (message) {
-      toggleShortcut = message;
+    if (response) {
+      toggleShortcut = response;
     }
 
     registerShortcut(ShortcutName.CloseModal, {
@@ -46,65 +38,43 @@
       listen: true,
       keyOptions: {
         key: 'Escape',
-        onEvent() {
+        onEvent(evt: KeyboardEvent) {
+          evt.preventDefault();
+          evt.stopPropagation();
           closeModals();
         },
       },
     });
 
     listenMessage(Message.OPEN_MODAL, async () => {
-      openModal();
+      appManager.openModal();
 
-      return true;
+      return {
+        response: true,
+      };
     });
 
     listenMessage(Message.TOGGLE_MODAL, async () => {
-      toggleModal();
+      appManager.toggleModal();
 
-      return $appModalVisible;
+      return {
+        response: $appModalVisible,
+      };
     });
 
     document.addEventListener('fullscreenchange', () => {
       isWindowFullscreen = !!document.fullscreenElement;
     });
 
+    if (appManager.isInWebView()) {
+      isInWebView = true;
+      appManager.openModal();
+    }
+
     setTimeout(() => {
       appMounted = true;
     }, 1000);
   });
-
-  function openModal(source?: OpenAppSource) {
-    const selection = window.getSelection().toString();
-    selectedText.set(selection || '');
-
-    if (selection) {
-      activePage.set(PageName.Paraphraser);
-    }
-
-    $appModalVisible = true;
-    appWrapperEl?.focus();
-
-    if (source) {
-      sendMessage(Message.SEND_EVENT, {
-        type: UserEvent.APP_OPEN,
-        props: { 'opened-from': source },
-      });
-    }
-    checkSession();
-  }
-
-  function closeModal() {
-    $appModalVisible = false;
-    errorStore.set(null);
-  }
-
-  function toggleModal() {
-    if ($appModalVisible) {
-      closeModal();
-    } else {
-      openModal();
-    }
-  }
 
   function onSetShortcut(evt: CustomEvent<string>) {
     const shortcut = evt.detail;
@@ -112,18 +82,6 @@
     if (!shortcut) return;
 
     toggleShortcut = shortcut;
-  }
-
-  async function checkSession() {
-    const { message, error } = await sendMessage(Message.GET_SESSION, undefined);
-
-    if (error) {
-      errorStore.set(error);
-      return;
-    }
-
-    const session = message as ApiSession;
-    user.set(session.user);
   }
 </script>
 
@@ -143,7 +101,8 @@
       direction={!!draggablePosition.left ? 'right' : 'left'}
       expanded={hovered || dragging}
       visible={!$appModalVisible && !isWindowFullscreen}
-      on:activate={() => openModal(OpenAppSource.FLOATING_WIDGET)}
+      disableClose={isInWebView}
+      on:activate={() => appManager.openModal(OpenAppSource.FLOATING_WIDGET)}
       on:set-shortcut={onSetShortcut}
     />
   </Draggable>
@@ -151,10 +110,14 @@
 <Modal
   id="unijump-modal"
   active={$appModalVisible}
-  on:close={closeModal}
+  on:close={() => appManager.closeModal()}
   mount={appMounted}
+  curtain={!isInWebView}
 >
-  <div class="h-full w-full max-h-[800px] max-w-5xl mx-auto" bind:this={appWrapperEl}>
-    <App on:close={closeModal} />
+  <div
+    class="mx-auto h-full max-h-[800px] w-full max-w-5xl"
+    bind:this={appManager.wrapperEl}
+  >
+    <App on:close={() => appManager.closeModal()} />
   </div>
 </Modal>

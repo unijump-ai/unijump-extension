@@ -23,7 +23,7 @@ export const inlineClass = (...classNames: ClassNameType[]) => {
   return classArray.join(' ');
 };
 
-export const inlineStyle = (styleObject: Partial<CSSStyleDeclaration>): string => {
+export const inlineStyle = (styleObject: Record<string, string>): string => {
   const validStyles = [];
 
   Object.keys(styleObject).forEach((key) => {
@@ -46,4 +46,10 @@ export const isMac = () => {
 
 export const isPromise = (obj: any): boolean => {
   return obj && typeof obj.then === 'function';
+};
+
+export const toggleInArray = <T>(array: T[], item: T): T[] => {
+  return array.includes(item)
+    ? array.filter((_item) => _item !== item)
+    : [...array, item];
 };

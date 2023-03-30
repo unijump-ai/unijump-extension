@@ -1,9 +1,9 @@
-import type { EventAdapter, ExtensionInfo } from './event.types';
-import { v4 as uuidv4 } from 'uuid';
 import { userAgent } from '$lib/user-agent';
+import { v4 as uuidv4 } from 'uuid';
 import { ExtensionStorage } from '../storage';
-import { getExtensionManifest } from '../utils';
 import { StorageArea, StorageKey } from '../storage/storage.constants';
+import { getExtensionManifest } from '../utils';
+import type { EventAdapter, ExtensionInfo } from './event.types';
 
 interface EventConfig {
   adapter: EventAdapter;
@@ -15,30 +15,30 @@ const deviceIdStorage = new ExtensionStorage<string>(
   StorageArea.LOCAL
 );
 
+export const getExtensionInfo = async (): Promise<ExtensionInfo> => {
+  let userId = await userIdStorage.get();
+  let deviceId = await deviceIdStorage.get();
+
+  if (!userId) {
+    userId = uuidv4();
+    await userIdStorage.set(userId);
+  }
+
+  if (!deviceId) {
+    deviceId = uuidv4();
+    await deviceIdStorage.set(deviceId);
+  }
+
+  return {
+    version: getExtensionManifest('version') as string,
+    deviceId,
+    userId,
+    ua: userAgent.getResult(),
+  };
+};
+
 export function createEventModule(eventConfig?: EventConfig) {
   let config = eventConfig;
-
-  const getExtensionInfo = async (): Promise<ExtensionInfo> => {
-    let userId = await userIdStorage.get();
-    let deviceId = await deviceIdStorage.get();
-
-    if (!userId) {
-      userId = uuidv4();
-      await userIdStorage.set(userId);
-    }
-
-    if (!deviceId) {
-      deviceId = uuidv4();
-      await deviceIdStorage.set(deviceId);
-    }
-
-    return {
-      version: getExtensionManifest('version') as string,
-      deviceId,
-      userId,
-      ua: userAgent.getResult(),
-    };
-  };
 
   const init = (eventConfig: EventConfig) => {
     if (config) {

@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
       }),
       imagetools(),
     ],
-    envPrefix: 'CLIENT_',
+    envPrefix: 'PUBLIC_',
   } satisfies UserConfigExport;
 
   if (envDevelopment) {
@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       __MANIFEST_VERSION__: manifestVersion,
+      __DEV_MODE__: modeDevelopment,
     },
     server: {
       hmr: false,
