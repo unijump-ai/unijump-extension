@@ -17,6 +17,7 @@ import browser from 'webextension-polyfill';
 const CONTEXT_MENU_ID = 'UniJump.ai';
 const TOGGLE_SHORTCUT_NAME =
   __MANIFEST_VERSION__ === 2 ? '_execute_browser_action' : '_execute_action';
+const isDevMode = !!__DEV_MODE__;
 
 events.init({
   adapter: adapter({
@@ -51,10 +52,6 @@ const createUninstallUrl = async () => {
   browser.runtime.setUninstallURL(url.toString());
 };
 
-if (config.visitUrl.uninstall) {
-  createUninstallUrl();
-}
-
 browser.runtime.onInstalled.addListener(async (details) => {
   const installReason = details.reason;
   console.debug(`UniJump Installed: ${installReason}`);
@@ -69,6 +66,10 @@ browser.runtime.onInstalled.addListener(async (details) => {
 
   if (installReason === 'update') {
     events.send(UserEvent.EXTENSION_UPDATE);
+  }
+
+  if (config.visitUrl.uninstall && !isDevMode) {
+    createUninstallUrl();
   }
 
   browser.contextMenus.create({

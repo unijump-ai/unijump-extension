@@ -91,6 +91,7 @@ export default defineConfig(({ mode }) => {
     },
     define: {
       __MANIFEST_VERSION__: manifestVersion,
+      __DEV_MODE__: modeDevelopment,
     },
     server: {
       hmr: false,
