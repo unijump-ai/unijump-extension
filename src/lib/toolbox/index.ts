@@ -22,6 +22,8 @@ const toolboxEnabledWebsites = new Map<string, ToolboxWebsiteConfig>(
 export const getToolboxConfigForHost = (host: string) => {
   const toolboxConfig = toolboxEnabledWebsites.get(host);
 
+  if (!toolboxConfig) return null;
+
   return {
     ...defaultConfig,
     ...toolboxConfig,
