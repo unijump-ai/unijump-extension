@@ -90,7 +90,11 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 });
 
 // Manifest v2/v3 differences
-(browser.action || browser.browserAction).onClicked.addListener(async () => {
+(browser.action || browser.browserAction).onClicked.addListener(async (tab, info) => {
+  const opened = await toggleModal(tab.id, OpenAppSource.TOPBAR);
+
+  if (opened !== undefined) return;
+
   openModalInWebView(OpenAppSource.TOPBAR);
 });
 
