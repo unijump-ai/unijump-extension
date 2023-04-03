@@ -26,7 +26,7 @@
 </script>
 
 <div class="marked-own w-full">
-  <SvelteMarkdown source={transformedSource} {renderers} />
+  <SvelteMarkdown source={transformedSource} {renderers} options={{ mangle: false }} />
 </div>
 
 <style lang="postcss" global>
@@ -86,7 +86,7 @@
   }
 
   .marked-own table {
-    @apply border border-white/20 border-collapse w-full table-auto rounded-md;
+    @apply w-full table-auto border-collapse rounded-md border border-white/20;
   }
 
   .marked-own th,
@@ -95,6 +95,6 @@
   }
 
   .marked-own code:not(.hljs) {
-    @apply bg-white/10 border border-white/10 px-1 rounded-md text-xs font-semibold;
+    @apply rounded-md border border-white/10 bg-white/10 px-1 text-xs font-semibold;
   }
 </style>
