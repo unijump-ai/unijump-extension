@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import type { SvelteComponent } from 'svelte';
+  import { createEventDispatcher, type SvelteComponent } from 'svelte';
 
   export interface MenuItem {
     label: string;
@@ -21,6 +21,8 @@
   export let activeItemLabel: string = '';
   export let style: 'modal' | 'default' = 'default';
 
+  const dispatch = createEventDispatcher();
+
   function toggleMenu() {
     open = !open;
   }
@@ -30,10 +32,10 @@
 
     if (item.link) {
       window.open(item.link, '_blank');
-      return;
     }
 
     item.onClick?.(evt);
+    dispatch('item-click', item);
   }
 </script>
 
@@ -49,7 +51,7 @@
     >
       <ul
         class={inlineClass(
-          'min-w-[186px] p-2 text-zinc-300 border border-white/20 rounded-xl shadow-lg',
+          'min-w-[186px] rounded-xl border border-white/20 p-2 text-zinc-300 shadow-lg',
           [
             style === 'modal'
               ? 'bg-black/20 backdrop-blur-[40px] no-backdrop-blur:bg-darkPurple-800'
@@ -61,7 +63,7 @@
           <li class="w-full">
             <button
               class={inlineClass(
-                'flex w-full items-center text-xs font-medium p-2.5 rounded-lg hover:bg-white/8 hover:text-white focus:bg-white/8 focus:text-white transition-all',
+                'flex w-full items-center rounded-lg p-2.5 text-xs font-medium transition-all hover:bg-white/8 hover:text-white focus:bg-white/8 focus:text-white',
                 {
                   'text-white': activeItemLabel === item.label,
                 }
@@ -71,7 +73,7 @@
               {#if item.icon}
                 <svelte:component this={item.icon} class="mr-2.5" width={16} />
               {/if}
-              <span class="flex-1 flex items-center justify-between">
+              <span class="flex flex-1 items-center justify-between">
                 {item.label}
                 {#if $$slots['item-append']}
                   <slot name="item-append" {item} />

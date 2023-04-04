@@ -1,8 +1,11 @@
 import config from '$config';
+import { UserEvent } from '$lib/extension/events/event.constants';
+import { sendMessage } from '$lib/extension/messaging';
+import { Message } from '$lib/extension/messaging/messaging.constants';
 import { ExtensionStorage } from '$lib/extension/storage';
 import { StorageKey } from '$lib/extension/storage/storage.constants';
 import { toggleInArray } from '$lib/utils';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 interface OptionsState {
   widgetDisabled: boolean;
@@ -50,9 +53,21 @@ export const createOptionsStore = () => {
   };
 
   const toggleToolboxHost = (host: string) => {
+    const state = get(optionsStore);
+    const disabledToolboxHosts = toggleInArray(state.disabledToolboxHosts, host);
+    const action = disabledToolboxHosts.includes(host) ? 'disable' : 'enable';
+
+    sendMessage(Message.SEND_EVENT, {
+      type: UserEvent.TOOLBOX_WEBSITE_TOGGLE,
+      props: {
+        host,
+        action,
+      },
+    });
+
     optionsStore.update((optionsState) => ({
       ...optionsState,
-      disabledToolboxHosts: toggleInArray(optionsState.disabledToolboxHosts, host),
+      disabledToolboxHosts,
     }));
   };
 

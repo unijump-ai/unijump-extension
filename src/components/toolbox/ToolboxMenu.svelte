@@ -6,6 +6,7 @@
   import IconButton from '$components/elements/IconButton.svelte';
   import Menu, { type MenuItem } from '$components/elements/menu/Menu.svelte';
   import { AppContext } from '$lib/context';
+  import { UserEvent } from '$lib/extension/events/event.constants';
   import { sendMessage } from '$lib/extension/messaging';
   import { Message } from '$lib/extension/messaging/messaging.constants';
   import type { ToolboxWebsiteConfig } from '$lib/toolbox/toolbox.types';
@@ -36,6 +37,18 @@
   ];
 
   let isMenuOpen = false;
+
+  function onItemClick(evt: CustomEvent<MenuItem>) {
+    const item = evt.detail;
+
+    sendMessage(Message.SEND_EVENT, {
+      type: UserEvent.TOOLBOX_MENU_CLICK,
+      props: {
+        host: toolboxConfig.host,
+        action: item.label,
+      },
+    });
+  }
 </script>
 
 <Menu
@@ -43,6 +56,7 @@
   name="toolbox-menu"
   {items}
   position={toolboxConfig.position}
+  on:item-click={onItemClick}
 >
   <IconButton
     class="toolbox-menu-button"

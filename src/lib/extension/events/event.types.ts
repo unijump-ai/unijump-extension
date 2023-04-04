@@ -38,4 +38,19 @@ export type UserEventMessage =
         action?: string;
         tags?: string[];
       };
+    }
+  | {
+      type: UserEvent.TOOLBOX_ACTION | UserEvent.TOOLBOX_MENU_CLICK;
+      props: {
+        host: string;
+        action: string;
+        selected?: string;
+      };
+    }
+  | {
+      type: UserEvent.TOOLBOX_WEBSITE_TOGGLE;
+      props: {
+        host: string;
+        action: 'enable' | 'disable';
+      };
     };

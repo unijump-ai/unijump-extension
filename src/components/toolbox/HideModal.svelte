@@ -29,11 +29,11 @@
     <ModalDescription
       >You are about to hide the UniJump toolbar for {websiteName}. However, you have the
       option to turn it back on by accessing the
-      <button class="underline text-white" on:click={() => openOptionsPage()}
+      <button class="text-white underline" on:click={() => openOptionsPage()}
         >UniJump Options</button
       > page.</ModalDescription
     >
-    <div class="grid grid-cols-2 gap-2 mt-6">
+    <div class="mt-6 grid grid-cols-2 gap-2">
       <Button on:click={() => hideToolbox()}>Hide</Button>
       <Button on:click={() => closeModal()} clean>Cancel</Button>
     </div>
