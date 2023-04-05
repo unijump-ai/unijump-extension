@@ -11,7 +11,7 @@
     ToolboxActionMenuItem,
     ToolboxWebsiteConfig,
   } from '$lib/toolbox/toolbox.types';
-  import { inlineClass } from '$lib/utils';
+  import { inlineClass, sleep } from '$lib/utils';
   import { getContext } from 'svelte';
 
   export let actionConfig: ToolboxActionConfig;
@@ -19,12 +19,24 @@
   const toolboxInput = getContext(AppContext.ToolboxInput) as HTMLElement;
   const toolboxConfig = getContext(AppContext.ToolboxConfig) as ToolboxWebsiteConfig;
 
-  function runAction(item?: ToolboxActionMenuItem) {
-    const inputValue = getInputValue(toolboxInput);
-    const selectedText = window.getSelection().toString();
-    const input = inputValue || selectedText;
+  let hideMenu = false;
 
-    actionConfig.callback({ input, selected: item });
+  function runAction(item?: ToolboxActionMenuItem) {
+    const inputText = getInputValue(toolboxInput);
+
+    if (item) {
+      hideMenu = true;
+      sleep(200).then(() => {
+        hideMenu = false;
+      });
+    }
+
+    if (!inputText) {
+      toolboxInput?.focus();
+      return;
+    }
+
+    actionConfig.callback({ input: inputText, selected: item });
     sendMessage(Message.SEND_EVENT, {
       type: UserEvent.TOOLBOX_ACTION,
       props: {
@@ -40,12 +52,17 @@
   <button class="toolbox-action" on:click={() => runAction()}>{actionConfig.label}</button
   >
 {:else if actionConfig.type === ToolboxActionType.Menu}
-  <div class="toolbox-action group relative flex items-center">
+  <div
+    class={inlineClass('toolbox-action pointer-events-none relative flex items-center', {
+      'group pointer-events-auto': !hideMenu,
+    })}
+  >
     {actionConfig.label}
     <span class={inlineClass('ml-1 -rotate-90')}><IconArrowLeft width={12} /></span>
     <div
       class={inlineClass(
-        'invisible absolute left-0 z-max min-w-[167px] opacity-0 group-hover:visible group-hover:opacity-100',
+        'invisible absolute left-0 z-max min-w-[167px] opacity-0',
+        { 'group-hover:visible group-hover:opacity-100': !hideMenu },
         [toolboxConfig.position === 'top' ? 'top-full pt-1.5' : 'bottom-full pb-1.5']
       )}
     >
