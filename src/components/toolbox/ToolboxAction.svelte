@@ -11,15 +11,20 @@
     ToolboxActionMenuItem,
     ToolboxWebsiteConfig,
   } from '$lib/toolbox/toolbox.types';
-  import { inlineClass, sleep } from '$lib/utils';
-  import { getContext } from 'svelte';
+  import { inlineClass, inlineStyle, sleep } from '$lib/utils';
+  import { getContext, tick } from 'svelte';
+  import SveltePortal from 'svelte-portal';
 
   export let actionConfig: ToolboxActionConfig;
 
   const toolboxInput = getContext(AppContext.ToolboxInput) as HTMLElement;
   const toolboxConfig = getContext(AppContext.ToolboxConfig) as ToolboxWebsiteConfig;
+  const appRoot = getContext(AppContext.Root) as HTMLElement;
 
   let hideMenu = false;
+  let inputWarningEl: HTMLDivElement;
+  let showInputWarning = false;
+  let warningStyles = '';
 
   function runAction(item?: ToolboxActionMenuItem) {
     const inputText = getInputValue(toolboxInput);
@@ -33,6 +38,7 @@
 
     if (!inputText) {
       toolboxInput?.focus();
+      showWarning();
       return;
     }
 
@@ -45,6 +51,39 @@
         selected: item?.value,
       },
     });
+  }
+
+  async function showWarning() {
+    if (!toolboxInput) return;
+
+    showInputWarning = true;
+    await tick();
+
+    const renderWarning = () => {
+      if (!inputWarningEl) {
+        setTimeout(() => renderWarning(), 200);
+      }
+
+      const inputRectangle = toolboxInput.getBoundingClientRect();
+      const warningRectangle = inputWarningEl.getBoundingClientRect();
+      const left = inputRectangle.left - warningRectangle.left;
+      const top =
+        inputRectangle.top - warningRectangle.top - (warningRectangle.height + 8);
+
+      warningStyles = inlineStyle({
+        left: `${left}px`,
+        top: `${top}px`,
+        opacity: '1',
+        visibility: 'visible',
+      });
+
+      setTimeout(() => {
+        showInputWarning = false;
+        warningStyles = '';
+      }, 3000);
+    };
+
+    renderWarning();
   }
 </script>
 
@@ -78,6 +117,18 @@
       </ul>
     </div>
   </div>
+{/if}
+
+{#if showInputWarning}
+  <SveltePortal target={appRoot}>
+    <div
+      class="invisible fixed left-0 top-0 z-max rounded-md border border-amber-400 bg-amber-300 p-2 font-sans text-xs font-medium text-amber-900 opacity-0 shadow-md"
+      style={warningStyles}
+      bind:this={inputWarningEl}
+    >
+      Please enter text first
+    </div>
+  </SveltePortal>
 {/if}
 
 <style>
