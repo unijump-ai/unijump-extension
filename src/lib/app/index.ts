@@ -104,7 +104,9 @@ class AppManager extends StoreService<AppStore> {
       }
 
       const previousSelectedModel = await selectedModelStorage.get();
-      const models = isPaidUser ? response.activeModels : response.defaultModels;
+      const models = (isPaidUser ? response.activeModels : response.defaultModels).filter(
+        (model) => model.title !== 'Plugins'
+      );
       const savedModel = models.find(
         (model) => model.slug === previousSelectedModel?.slug
       );
