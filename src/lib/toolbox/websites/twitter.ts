@@ -1,3 +1,4 @@
+import { MAX_Z_INDEX } from '$lib/style';
 import type { ToolboxWebsiteConfig } from '../toolbox.types';
 
 export function createTwitterConfig(): ToolboxWebsiteConfig {
@@ -19,6 +20,11 @@ export function createTwitterConfig(): ToolboxWebsiteConfig {
           container.style.marginTop = '12px';
 
           toolbox.setContainer(container);
+        },
+        afterMount(toolbox) {
+          const container = toolbox.getContainer();
+          const parent = container.parentNode as HTMLElement;
+          parent.style.zIndex = MAX_Z_INDEX;
         },
       },
     ],
