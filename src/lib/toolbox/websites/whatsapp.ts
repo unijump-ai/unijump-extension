@@ -1,3 +1,4 @@
+import { MAX_Z_INDEX } from '$lib/style';
 import { sleep } from '$lib/utils';
 import type { ToolboxWebsiteConfig, ToolboxWebsitePlugin } from '../toolbox.types';
 
@@ -20,7 +21,7 @@ function whatsAppContainerPlugin(): ToolboxWebsitePlugin {
     beforeMount(toolbox) {
       const container = document.createElement('div');
       container.style.order = '2';
-      container.style.zIndex = '2';
+      container.style.zIndex = MAX_Z_INDEX;
 
       toolbox.setContainer(container);
     },
