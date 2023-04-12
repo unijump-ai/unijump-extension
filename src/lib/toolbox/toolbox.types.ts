@@ -16,6 +16,7 @@ export interface ToolboxWebsiteConfig {
   style?: 'flat' | 'rounded';
   disabled?: boolean;
   toolboxStyles?: string;
+  actionMenuHeight?: string;
 }
 
 export interface ToolboxActionMenuItem {

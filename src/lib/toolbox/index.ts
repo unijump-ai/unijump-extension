@@ -10,6 +10,7 @@ import { toolboxWebsites } from './toolbox.websites';
 const defaultConfig: Partial<ToolboxWebsiteConfig> = {
   position: 'bottom',
   style: 'flat',
+  actionMenuHeight: 'auto',
 };
 
 const toolboxEnabledWebsites = new Map<string, ToolboxWebsiteConfig>(
