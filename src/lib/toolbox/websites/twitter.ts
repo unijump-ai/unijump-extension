@@ -25,6 +25,12 @@ export function createTwitterConfig(): ToolboxWebsiteConfig {
           const container = toolbox.getContainer();
           const parent = container.parentNode as HTMLElement;
           parent.style.zIndex = MAX_Z_INDEX;
+
+          const isInDialog = container.closest('[role="dialog"]');
+
+          if (isInDialog) {
+            toolbox.setConfig({ position: 'bottom', actionMenuHeight: '250px' });
+          }
         },
       },
     ],

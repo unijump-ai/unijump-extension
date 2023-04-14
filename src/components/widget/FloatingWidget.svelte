@@ -51,20 +51,21 @@
 
 <div
   class={inlineClass('group/floating relative transition-all', [
-    visible ? 'opacity-100 visible' : 'opacity-0 invisible',
+    visible ? 'visible opacity-100' : 'invisible opacity-0',
   ])}
 >
   <div
     class={inlineClass(
-      'relative p-3 text-white font-medium text-sm rounded-full cursor-pointer min-w-[44px] min-h-[44px] transition-all outline-none from-darkPurple-700 to-darkPurple-900 hover:bg-gradient-radial-to-b',
+      'relative min-h-[44px] min-w-[44px] cursor-pointer rounded-full from-darkPurple-700 to-darkPurple-900 p-3 text-sm font-medium text-white outline-none transition-all hover:bg-gradient-radial-to-b',
       [
         expand
-          ? `bg-darkPurple-900 ring-1 ring-inset ring-offset-1 ring-offset-darkPurple-900 ring-white/20 ${
+          ? `bg-darkPurple-900 ring-1 ring-inset ring-white/20 ring-offset-1 ring-offset-darkPurple-900 ${
               direction === 'left' ? 'pr-12' : 'pl-12'
             }`
           : 'bg-transparent',
       ]
     )}
+    style="--radial-size: 100% 100%;"
     role="button"
     tabindex="0"
     on:focus={() => (expanded = true)}
@@ -76,14 +77,14 @@
     )}
   >
     <div
-      class={inlineClass('icon absolute top-1 pointer-events-none', [
+      class={inlineClass('icon pointer-events-none absolute top-1', [
         direction === 'left' ? 'right-1' : 'left-1',
       ])}
     >
       <Picture image={unijumpLogo} width={36} alt="UniJump icon" />
     </div>
     <div
-      class={inlineClass('text-sm flex items-center font-medium uppercase', {
+      class={inlineClass('flex items-center text-sm font-medium uppercase', {
         'w-auto text-white': expand,
         'absolute w-0 text-transparent': !expand,
       })}
@@ -103,9 +104,9 @@
   {#if !disableClose}
     <button
       class={inlineClass(
-        'group/close absolute text-zinc-100 left-1/2 -translate-x-1/2 translate-y-1/2 -rotate-180 bottom-full opacity-0 invisible transition-none -z-10',
+        'group/close invisible absolute left-1/2 bottom-full -z-10 -translate-x-1/2 translate-y-1/2 -rotate-180 text-zinc-100 opacity-0 transition-none',
         [
-          'group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:visible group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
+          'group-hover/floating:visible group-hover/floating:translate-y-0 group-hover/floating:opacity-100 group-hover/floating:transition-all group-hover/floating:delay-[700ms]',
         ]
       )}
       on:click={() => (isCloseModalActive = true)}
@@ -113,7 +114,7 @@
       <IconDraggerHandle width={44} height={17} />
       <span
         class={inlineClass(
-          'absolute text-zinc-500 top-0 left-1/2 -translate-x-1/2 group-hover/close:text-zinc-700',
+          'absolute top-0 left-1/2 -translate-x-1/2 text-zinc-500 group-hover/close:text-zinc-700',
           []
         )}
       >

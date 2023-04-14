@@ -45,3 +45,17 @@ export const clickOutside = (node: HTMLElement, ignore?: string) => {
     },
   };
 };
+
+export const autoHeight = (
+  node: HTMLElement,
+  { watch, emptyHeight }: { watch: any; emptyHeight: number }
+) => {
+  return {
+    async update() {
+      node.style.height = `${emptyHeight}px`;
+      const height = node.scrollHeight;
+      node.style.height = `${height}px`;
+      node.scrollTop = height;
+    },
+  };
+};

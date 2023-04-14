@@ -26,6 +26,10 @@
   let showInputWarning = false;
   let warningStyles = '';
 
+  $: toolboxMenuStyles = inlineStyle({
+    'max-height': toolboxConfig.actionMenuHeight,
+  });
+
   function runAction(item?: ToolboxActionMenuItem) {
     const inputText = getInputValue(toolboxInput);
 
@@ -105,7 +109,7 @@
         [toolboxConfig.position === 'top' ? 'top-full pt-1.5' : 'bottom-full pb-1.5']
       )}
     >
-      <ul class="toolbox-menu rounded-lg p-1.5">
+      <ul class="toolbox-menu overflow-y-auto rounded-lg p-1.5" style={toolboxMenuStyles}>
         {#each actionConfig.items as item (item.value)}
           <li class="block w-full">
             <button

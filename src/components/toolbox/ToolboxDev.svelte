@@ -10,6 +10,7 @@
     name: 'UniJump Dev',
     host: window.location.host,
     style: 'rounded',
+    actionMenuHeight: '250px',
   };
 
   setContext(AppContext.ToolboxConfig, toolboxConfig);

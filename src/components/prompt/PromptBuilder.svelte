@@ -55,13 +55,13 @@
   }
 </script>
 
-<div class="h-full relative overflow-hidden">
+<div class="relative h-full overflow-hidden">
   <Scroller class="p-6 pb-20">
-    <h3 class="text-sm mb-4">Input</h3>
+    <h3 class="mb-4 text-sm">Input</h3>
     <textarea
       bind:this={inputEl}
       bind:value={inputText}
-      class="block h-36 mb-6 w-full text-white px-4 py-3 text-sm font-medium bg-white/8 border border-white/10 rounded-md resize-none focus:ring-1 focus:ring-white/80 focus:outline-none"
+      class="mb-6 block h-36 w-full rounded-lg border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-white hover:border-white/25 focus:outline-none focus:ring-1 focus:ring-white/80"
       on:keydown|stopPropagation={bindKeyEvent({
         key: 'Escape',
         onEvent: () => inputEl.blur(),
@@ -71,14 +71,14 @@
     {#each config.args as arg}
       <PromptArgs {arg} bind:selectedValues={selectedPromptArgs[arg.key]} />
     {/each}
-    <h5 class="text-sm mb-3">Selected Tags</h5>
+    <h5 class="mb-3 text-sm">Selected Tags</h5>
     <div
-      class="flex flex-wrap p-3 pb-2 pr-2 mb-5 bg-white/8 border border-white/10 rounded-md"
+      class="mb-5 flex flex-wrap rounded-lg border border-white/10 bg-white/8 p-3 pb-2 pr-2"
     >
       {#each Object.entries(selectedPromptArgs) as [argKey, argItems]}
         {#each argItems as argItem}
           <button
-            class="tag-selected inline-flex mr-1 mb-1"
+            class="tag-selected mr-1 mb-1 inline-flex"
             on:click={() => removeArg(argKey, argItem)}>{argItem.label}</button
           >
         {/each}
@@ -91,7 +91,7 @@
     </div>
   </Scroller>
   <div
-    class="absolute w-full h-auto p-3 left-0 bottom-0 bg-white/8 backdrop-blur-[100px] no-backdrop-blur:bg-darkPurple-800"
+    class="absolute left-0 bottom-0 h-auto w-full bg-white/8 p-3 backdrop-blur-[100px] no-backdrop-blur:bg-darkPurple-800"
   >
     <button
       on:click={() => buildPrompt()}
@@ -102,7 +102,7 @@
         {config.ctaLabel || 'Run'}
       </span>
       {#if loading}
-        <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+        <span class="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
           <LoadingDots as="span" />
         </span>
       {/if}
