@@ -61,7 +61,7 @@
     <textarea
       bind:this={inputEl}
       bind:value={inputText}
-      class="mb-6 block h-36 w-full rounded-md border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-white focus:outline-none focus:ring-1 focus:ring-white/80"
+      class="mb-6 block h-36 w-full rounded-lg border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-white hover:border-white/25 focus:outline-none focus:ring-1 focus:ring-white/80"
       on:keydown|stopPropagation={bindKeyEvent({
         key: 'Escape',
         onEvent: () => inputEl.blur(),
@@ -73,7 +73,7 @@
     {/each}
     <h5 class="mb-3 text-sm">Selected Tags</h5>
     <div
-      class="mb-5 flex flex-wrap rounded-md border border-white/10 bg-white/8 p-3 pb-2 pr-2"
+      class="mb-5 flex flex-wrap rounded-lg border border-white/10 bg-white/8 p-3 pb-2 pr-2"
     >
       {#each Object.entries(selectedPromptArgs) as [argKey, argItems]}
         {#each argItems as argItem}
