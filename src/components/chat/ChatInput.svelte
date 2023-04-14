@@ -1,29 +1,18 @@
 <script lang="ts">
   import IconSend from '$assets/icons/send.svg?component';
+  import { autoHeight } from '$lib/actions';
   import { bindKeyEvent, ModifierKey } from '$lib/keyboard';
-  import { inlineStyle, sleep } from '$lib/utils';
-  import { createEventDispatcher, tick } from 'svelte';
+  import { sleep } from '$lib/utils';
+  import { createEventDispatcher } from 'svelte';
 
   export let disabled = false;
   export let inputText = '';
   export const focus = focusInput;
 
   const dispatch = createEventDispatcher();
-  let inputHeight = 24;
   let chatInput: HTMLTextAreaElement;
 
   $: disableSend = disabled || !inputText;
-  $: onInputTextChange(inputText);
-
-  async function onInputTextChange(inputText: string) {
-    inputHeight = 24;
-    await tick();
-
-    if (!inputText || !chatInput) return;
-
-    inputHeight = chatInput.scrollHeight;
-    chatInput.scrollTop = chatInput.scrollHeight;
-  }
 
   function focusInput() {
     chatInput.focus();
@@ -47,18 +36,15 @@
 </script>
 
 <div
-  class="absolute bottom-0 left-0 w-full h-auto bg-black/20 px-6 py-4 backdrop-blur-[100px] no-backdrop-blur:bg-darkPurple-800 transition-all {disabled
+  class="absolute bottom-0 left-0 h-auto w-full bg-black/20 px-6 py-4 backdrop-blur-[100px] transition-all no-backdrop-blur:bg-darkPurple-800 {disabled
     ? 'pointer-events-none'
     : ''}"
 >
   <div
-    class="flex bg-white/8 border p-[7px] pl-3 border-white/10 rounded-[10px] focus-within:ring-1 focus-within:ring-white/80"
+    class="flex rounded-[10px] border border-white/10 bg-white/8 p-[7px] pl-3 focus-within:ring-1 focus-within:ring-white/80"
   >
     <textarea
-      class="flex-1 mt-1 h-8 bg-transparent outline-none font-medium text-sm  placeholder-zinc-500 resize-none max-h-48 self-center"
-      style={inlineStyle({
-        height: `${inputHeight}px`,
-      })}
+      class="mt-1 h-6 max-h-48 flex-1 resize-none self-center bg-transparent  text-sm font-medium placeholder-zinc-500 outline-none"
       rows={1}
       placeholder="Write your message..."
       bind:this={chatInput}
@@ -76,6 +62,7 @@
         },
       })}
       on:focus={onChatInputFocus}
+      use:autoHeight={{ watch: inputText, emptyHeight: 24 }}
     />
     <button
       class="btn-primary-icon self-end"

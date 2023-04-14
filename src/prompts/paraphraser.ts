@@ -7,6 +7,7 @@ export default {
   userTags: true,
   ctaLabel: 'Paraphrase',
   addUserTagLabel: 'Add Your Own Tone',
+  outputType: 'text',
   initialPrompt: (input: string) =>
     `You're a paraphraser. Do not respond with anything except paraphrased text. ${input}`,
   input: (args, userInput) => {

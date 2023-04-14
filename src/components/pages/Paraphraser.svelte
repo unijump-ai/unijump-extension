@@ -169,7 +169,7 @@
     <SelectModel />
   </svelte:fragment>
   {#if $conversationStore}
-    <div class="grid grid-cols-2 h-full">
+    <div class="grid h-full grid-cols-2">
       <PromptBuilder
         config={paraphraserConfig}
         {loading}
@@ -179,10 +179,10 @@
         on:prompt={onPromptBuilt}
       />
       <div class="relative h-full overflow-hidden">
-        <div class="absolute left-0 top-0 seperator-vertical" />
+        <div class="seperator-vertical absolute left-0 top-0" />
         <Scroller bind:scrollerController={outputScroller}>
           <div class="p-6">
-            <Output type="markdown" {output} {loading} />
+            <Output type={paraphraserConfig.outputType} {output} {loading} />
             {#if aiMessage && !$conversationStore.incomingMessage}
               <div class="mt-4" in:fade={{ duration: 100 }}>
                 <TextOutputActions {output} on:action={onOutputAction} />
