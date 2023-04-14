@@ -70,14 +70,3 @@
     <IconDots width={16} />
   </IconButton>
 </Menu>
-
-<style>
-  :global(.toolbox-menu-button:active) {
-    background: radial-gradient(
-        62.5% 62.5% at 50% 0%,
-        rgba(255, 255, 255, 0.32) 0%,
-        rgba(255, 255, 255, 0) 100%
-      ),
-      rgba(255, 255, 255, 0.16);
-  }
-</style>

@@ -40,11 +40,11 @@
 
 @layer components {
   .tag {
-    @apply select-none whitespace-nowrap rounded-md bg-white/8 px-2 py-1 text-xs font-medium text-zinc-300;
+    @apply select-none whitespace-nowrap rounded-md bg-white/8 from-white/32 to-white/0 px-2 py-1 text-xs font-medium text-zinc-300 transition-all hover:bg-white/15 active:bg-gradient-radial-to-b;
   }
 
   .tag-selected {
-    @apply tag bg-white text-zinc-900;
+    @apply tag bg-white text-zinc-900 hover:bg-white;
   }
 
   .seperator {
@@ -164,7 +164,7 @@
   }
 
   .toolbox-action {
-    @apply cursor-pointer rounded-md bg-gradient-to-b from-white/12 to-white/2 px-2 py-1 text-xs font-medium text-zinc-50 shadow-sm transition-all hover:bg-white/12;
+    @apply cursor-pointer rounded-md bg-gradient-to-b from-white/12 to-white/2 px-2 py-1 text-xs font-medium text-zinc-50 shadow-sm transition-all hover:bg-white/12 active:bg-gradient-radial-to-b active:from-white/30 active:to-white/0;
     box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1) inset,
       0px 1px 1px rgba(0, 0, 0, 0.12);
   }
