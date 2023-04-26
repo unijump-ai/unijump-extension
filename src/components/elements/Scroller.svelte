@@ -3,7 +3,7 @@
   import { ScrollerController } from './Scroller.controller';
 
   export let scrollerController: ScrollerController | null = null;
-  let scrollElement: HTMLDivElement;
+  export let scrollElement: HTMLDivElement | null = null;
 
   onMount(() => {
     scrollerController = new ScrollerController(scrollElement);
