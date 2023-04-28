@@ -32,7 +32,6 @@
   const { store: appStore } = appManager;
 
   let focusInput: () => void;
-  let scrollElement: HTMLDivElement | null = null;
   let scrollerController: ScrollerController | null = null;
   let inputText = $selectedText || '';
   let selectedPrompt: ListPrompt | null = null;
@@ -73,10 +72,6 @@
   async function onConversationChange({ error }: ConversationState) {
     if (error) {
       errorStore.set(error);
-      return;
-    }
-
-    if (scrollElement?.scrollTop != scrollElement?.scrollHeight - scrollElement?.clientHeight) {
       return;
     }
 
@@ -136,7 +131,7 @@
   </svelte:fragment>
   {#if $conversationStore}
     <div class="h-full w-full relative">
-      <Scroller bind:scrollElement bind:scrollerController>
+      <Scroller bind:scrollerController>
         <div class="p-6 pb-24">
           {#if hasConversation}
             <Conversation
