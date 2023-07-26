@@ -14,6 +14,11 @@ export const parseStream = async <Res>(
       } else {
         try {
           const parsed = JSON.parse(response);
+
+          if (!parsed.message) {
+            return;
+          }
+
           onMessage(parsed, false);
         } catch (error) {} //  We're getting timestamp strings sometimes
       }
