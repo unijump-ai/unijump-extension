@@ -75,6 +75,8 @@
       return;
     }
 
+    scrollerController.preventScrollToBottomIfNotAtBottom();
+
     await tick();
 
     if (hasConversation) {
